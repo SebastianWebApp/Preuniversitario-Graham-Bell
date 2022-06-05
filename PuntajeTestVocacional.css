@@ -316,3 +316,11 @@ button {
        background-color: #35dba4;
        color: #ffffff;
    }
+
+ @media screen  and (max-width:750px){
+
+    #NuevoPeriodo{
+        display: none;
+    }
+
+}
