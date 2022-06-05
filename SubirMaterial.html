@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="SubirMaterial.css">
+    <meta name="description" content="Encuentra todos tus cursos al mejor precio, el futuro está en tus manos">
+    <meta name="keywords" content="Cursos, Programación, Tutorias, Capacitación, Diseño">
+    <meta name="author" content="IDE Programming">
+    <link rel="shortcut icon" href="iconoWebC.png">
+    <title>Subir Documentos</title>
+</head>
+<body>
+
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+  />
+
+
+<div class="Contenido">
+    <div id="formulario">
+        <h1>Subir Material</h1>
+        <input  class="Entry" id="curso" type="text" maxlength="41" placeholder="Ingrese el nombre del material">
+        <input  class="Entry" id="link" type="text" placeholder="Ingrese el link">
+        <select class="Combobox" id="combobox1">      
+            <option>Seleccione el tipo de material</option>
+            <option>Links de Video</option>
+            <option>Documento pdf</option>
+            <option>Links</option>
+        </select>
+        <br>
+        <select class="Combobox" id="combobox">            
+          </select>
+          <br>
+        <button id="Seleccionar">Seleccionar Contenido</button>
+        <br>
+        <button id="Acceder" class="cta">
+            <span>Subir Material a la plataforma</span>
+            <svg viewBox="0 0 13 10" height="10px" width="15px">
+              <path d="M1,5 L11,5"></path>
+              <polyline points="8 1 12 5 8 9"></polyline>
+            </svg>
+        </button>      
+
+        <br>
+
+        <div class="Menu">
+            <a href="Registro_Alumno.html">
+                <img class="iconMenu"src="registro1.png"/>
+            </a>
+            <a href="newCurso.html">
+                <img class="iconMenu"src="plus1.png"/>
+            </a>
+            <a href="LoginContenido.html">
+                <img class="iconMenu"src="home1.png"/>
+            </a>           
+            <a href="Edicion.html">
+                <img class="iconMenu"src="edit1.png"/>
+            </a>
+        </div>
+
+       
+
+
+
+    </div>
+    <div id="Documento">
+
+
+        <embed type="application/pdf" id="myimg">
+        <iframe id="mylink"></iframe>
+        <img id="imagen" src="linkvideo.png">
+        <iframe id="gifSubir" src="https://embed.lottiefiles.com/animation/95241" frameborder="0"></iframe>
+
+        </div>
+</div>
+
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-analytics.js";
+    import { getStorage, ref as sRef, uploadBytes, getDownloadURL,uploadBytesResumable } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-storage.js";
+    const firebaseConfig = {
+        apiKey: "AIzaSyBJCFtSu0OJlqg5rwc1feATIBejX3D0E7Y",
+        authDomain: "nombre-del-proyecto-2321c.firebaseapp.com",
+        databaseURL: "https://nombre-del-proyecto-2321c-default-rtdb.firebaseio.com",
+        projectId: "nombre-del-proyecto-2321c",
+        storageBucket: "nombre-del-proyecto-2321c.appspot.com",
+        messagingSenderId: "672829934203",
+        appId: "1:672829934203:web:12a7ca900dc920f67cb0de",
+        measurementId: "G-5G31BN19HV"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+
+    import {getDatabase,ref,set,child,update,remove,get,push}
+    from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+    const db =getDatabase();
+
+    var files = [];
+    var ImgName, ImgUrl;
+    var reader = new FileReader();
+    var FormatoSeleccion = document.getElementById('combobox1');
+    var Curso = document.getElementById('combobox');
+    var nombre = document.getElementById('curso');
+    var ListaContenido = "";
+    var LinkContenido = document.getElementById("link");
+    var NombreRepositorios = [];
+    var CursoImagenSubida = [];
+
+    LlenarCombobox();
+
+
+    function LlenarCombobox() {
+        const dbRef = ref(getDatabase());
+        get(child(dbRef,"Cursos/Lista Cursos")).then((snapshot) => {
+        if(snapshot.exists()) {
+            var cursos = snapshot.val().Lista;
+            NombreRepositorios = cursos.split(",");
+            var combo = document.getElementById("combobox");
+            var option = document.createElement('option');
+            combo.options.add(option, 0);
+            combo.options[0].innerText = "Seleccione un curso";
+            for (var i=0; i < NombreRepositorios.length; i++) {
+                get(child(dbRef,"Cursos/"+NombreRepositorios[i]+"/Informe")).then((snapshot) => {
+                if(snapshot.exists()) {
+                    var cursos = snapshot.val().Nombre;
+                    CursoImagenSubida.push(snapshot.val().Imagen);
+                    for (var i=0; i < 1; i++) {
+                        var combo = document.getElementById("combobox");
+                        var option = document.createElement('option');
+                        combo.options.add(option, i+1);
+                        combo.options[i+1].innerText = cursos;
+                    }
+                }
+                else {
+                        alert("No existe ningún curso disponible")
+                }
+                }).catch((error) => {
+
+                });
+            }
+        }
+        else {
+                alert("No existe ningún curso disponible")
+        }
+        }).catch((error) => {
+
+        });
+    }
+
+
+
+
+
+    function RecuperarLista(valor,tipo,nombre){
+        const dbRef = ref(getDatabase());
+
+        var DireccionNombre = NombreRepositorios[NombreRepositorios.length - Curso.selectedIndex];
+
+        
+        get(child(dbRef,"Cursos/"+DireccionNombre+"/Material")).then((snapshot) => {
+        if (snapshot.exists()) {
+
+            if(tipo == "Documentos"){
+                ListaContenido = snapshot.val().Documentos
+                if(ListaContenido == "0"){
+                    SubirDato(valor,tipo,nombre,nombre);
+                }
+                else{
+                    SubirDato(valor,tipo,nombre,ListaContenido+","+nombre);
+                }
+
+            }
+            if(tipo == "Links"){
+                ListaContenido = snapshot.val().Links
+                if(ListaContenido == "0"){
+                    SubirDato(valor,tipo,nombre,nombre);
+                }
+                else{
+                    SubirDato(valor,tipo,nombre,ListaContenido+","+nombre);
+                }
+
+            }
+            if(tipo == "Videos"){
+                ListaContenido = snapshot.val().Videos
+                if(ListaContenido == "0"){
+                    SubirDato(valor,tipo,nombre,nombre);
+                }
+                else{
+                    SubirDato(valor,tipo,nombre,ListaContenido+","+nombre);
+                }
+
+            }
+
+        }
+        }).catch((error) => {
+
+        });
+    }
+
+
+
+    function SubirDato(valor,tipo,nombre,lista){
+
+        var DireccionNombre = NombreRepositorios[NombreRepositorios.length - Curso.selectedIndex];
+        
+        if(tipo == "Documentos"){
+            update(ref(db,"Cursos/"+DireccionNombre+"/Material"),{
+            Documentos: lista
+            })
+            update(ref(db,"Cursos/"+DireccionNombre+"/"+tipo+"/"+nombre),{
+                Contenido:valor,
+                Nombre:document.getElementById('curso').value,
+                Imagen:CursoImagenSubida[CursoImagenSubida.length - Curso.selectedIndex]
+            })
+            .then(()=>{
+                location.reload()
+                alert("El material se subió correctamente")
+            })
+            .catch((error)=>{
+                location.reload()
+                alert("Intente de nuevo")
+            });
+        }
+        if(tipo == "Links"){
+            update(ref(db,"Cursos/"+DireccionNombre+"/Material"),{
+            Links: lista
+            })
+            update(ref(db,"Cursos/"+DireccionNombre+"/"+tipo+"/"+nombre),{
+                Contenido:valor,
+                Nombre:document.getElementById('curso').value,
+                Imagen:CursoImagenSubida[CursoImagenSubida.length - Curso.selectedIndex]
+            })
+            .then(()=>{
+                location.reload()
+                alert("El material se subió correctamente")
+            })
+            .catch((error)=>{
+                location.reload()
+                alert("Intente de nuevo")
+            });
+        }
+        if(tipo == "Videos"){
+            update(ref(db,"Cursos/"+DireccionNombre+"/Material"),{
+            Videos: lista
+            })
+            update(ref(db,"Cursos/"+DireccionNombre+"/"+tipo+"/"+nombre),{
+                Contenido:valor,
+                Nombre:document.getElementById('curso').value,
+                Imagen:CursoImagenSubida[CursoImagenSubida.length - Curso.selectedIndex]
+            })
+            .then(()=>{
+                location.reload()
+                alert("El material se subió correctamente")
+            })
+            .catch((error)=>{
+                location.reload()
+                alert("Intente de nuevo")
+            });
+        }
+
+
+        
+    }
+
+    document.getElementById("Acceder").onclick = function(e){
+
+
+        var f = new Date();
+        if(nombre.value != "" && Curso.value != "Seleccione un curso" && FormatoSeleccion.value != "Seleccione el tipo de material"){
+
+            var contenidoEntry = nombre.value;
+            contenidoEntry = contenidoEntry.replace(/,/g,"-");
+            if(files[0]==null){
+
+                if(LinkContenido.value != ""){
+
+                    document.getElementById("myimg").style.display = "none"
+                    document.getElementById("mylink").style.display = "none"
+                    document.getElementById("imagen").style.display = "none"
+                    document.getElementById("gifSubir").style.display = "inline"
+
+                    if(FormatoSeleccion.value == "Links"){
+                        RecuperarLista(LinkContenido.value,"Links",contenidoEntry+" Fecha: "+f.getDate() + "-"+ f.getMonth()+ "-" +f.getFullYear());
+                    }
+                    if(FormatoSeleccion.value == "Links de Video"){
+                        RecuperarLista(LinkContenido.value,"Videos",contenidoEntry+" Fecha: "+f.getDate() + "-"+ f.getMonth()+ "-" +f.getFullYear());
+                    }
+
+                }
+                else{
+                    alert("Llene todos los campos");
+                }
+
+            }
+            else{
+
+                document.getElementById("myimg").style.display = "none"
+                document.getElementById("mylink").style.display = "none"
+                document.getElementById("imagen").style.display = "none"
+                document.getElementById("gifSubir").style.display = "inline"
+                var DireccionNombre = NombreRepositorios[NombreRepositorios.length - Curso.selectedIndex];
+
+
+                const storage = getStorage();
+                const storageRef = sRef(storage, DireccionNombre+'/'+contenidoEntry+" Fecha: "+f.getDate() + "-"+ f.getMonth()+ "-" +f.getFullYear());
+                const uploadTask = uploadBytesResumable(storageRef, files[0]);
+
+                uploadTask.on('state_changed',
+                (snapshot) => {
+                    
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    console.log('Upload is ' + progress + '% done');
+                    switch (snapshot.state) {
+                    case 'paused':
+                        console.log('Upload is paused');
+                        break;
+                    case 'running':
+                        console.log('Upload is running');
+                        break;
+                    }
+                },
+                (error) => {
+                    location.reload()
+                    alert("Intente de nuevo")
+                },
+                () => {
+                    getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                        RecuperarLista(downloadURL,"Documentos",contenidoEntry+" Fecha: "+f.getDate() + "-"+ f.getMonth()+ "-" +f.getFullYear());
+                        console.log(downloadURL);            
+                    });
+                }
+                );
+
+            }
+        }
+        else{
+            alert("Llene todos los campos");
+        }
+    }
+
+ 
+
+
+    document.getElementById("Seleccionar").onclick = function(e){
+
+        if(FormatoSeleccion.value == "Seleccione el tipo de material" ){
+            alert("Llene todos los campos");
+        }
+        else{
+            if(FormatoSeleccion.value == "Links"){
+                    document.getElementById("link").style.display = "inline"
+                    document.getElementById("myimg").style.display = "none"
+                    document.getElementById("mylink").src = document.getElementById("link").value;
+                    document.getElementById("mylink").style.display = "inline"
+                    document.getElementById("imagen").style.display = "none"
+
+            }
+
+            if(FormatoSeleccion.value == "Links de Video"){
+                    document.getElementById("link").style.display = "inline"
+                    document.getElementById("myimg").style.display = "none"
+                    document.getElementById("mylink").style.display = "none"
+                    document.getElementById("imagen").src = "linkvideo1.png";
+                    document.getElementById("imagen").style.display = "inline"
+            }
+
+            if(FormatoSeleccion.value != "Links de Video" && FormatoSeleccion.value != "Links"){
+
+                var input = document.createElement('input');
+                input.type = 'file';
+                input.onchange = e => {
+                files = e.target.files;
+                reader = new FileReader();
+                reader.onload = function(){
+                if(FormatoSeleccion.value == "Documento pdf"){
+                    document.getElementById("myimg").src = reader.result;
+                    document.getElementById("myimg").style.display = "inline"
+                    document.getElementById("mylink").style.display = "none"
+                    document.getElementById("link").style.display = "none"
+                    document.getElementById("imagen").style.display = "none"
+                }
+                
+                }
+                reader.readAsDataURL(files[0]);
+
+            }
+            input.click();
+            }
+
+        }
+       
+    }
+
+    
+
+    
+
+</script>
+
+
+    
+</body>
+</html>

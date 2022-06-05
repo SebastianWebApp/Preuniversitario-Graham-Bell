@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Encuentra todos tus cursos al mejor precio, el futuro está en tus manos">
+    <meta name="keywords" content="Cursos, Programación, Tutorias, Capacitación, Diseño">
+    <meta name="author" content="IDE Programming">
+    <link rel="shortcut icon" href="iconoWebC.png">
+    <link rel="stylesheet" type="text/css" href="PantallaContenido.css">  
+
+    <title>Contenido</title>
+</head>
+<body>
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3019961485830766"
+    crossorigin="anonymous"></script>
+
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+  />
+
+    <section class="Menu">
+        <div id="Menu">
+            <div>
+                <button id="Documentos" class="button"> Documentos</button>                
+                <button id="Videos" class="button"> Videos</button>
+                <button id="Links" class="button"> Material Extra</button>
+            </div>
+        </div>
+        <div id="Contenido">
+          
+
+            <div class="MenuT" id="MenuTelefonos">
+                <button id="DocumentosTele" class="button"> Documentos</button>                
+                <button id="VideosTele" class="button"> Videos</button>
+                <button id="LinksTele" class="button"> Material Extra</button>             
+            </div>
+            <div id="ContenedorCursos">
+            </div>
+            <div id="ContenedorCursos1">
+            </div>
+            <div id="ContenedorCursos2">
+            </div>
+        </div>                       
+        </div>
+    </section>
+    
+</body>
+</html>
+
+<script type="module">
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-analytics.js";
+    import {getDatabase,ref,set,child,update,remove,get,push} from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBJCFtSu0OJlqg5rwc1feATIBejX3D0E7Y",
+        authDomain: "nombre-del-proyecto-2321c.firebaseapp.com",
+        databaseURL: "https://nombre-del-proyecto-2321c-default-rtdb.firebaseio.com",
+        projectId: "nombre-del-proyecto-2321c",
+        storageBucket: "nombre-del-proyecto-2321c.appspot.com",
+        messagingSenderId: "672829934203",
+        appId: "1:672829934203:web:12a7ca900dc920f67cb0de",
+        measurementId: "G-5G31BN19HV"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const db =getDatabase();
+
+
+
+    var BuscarParametro = window.location.search;
+    var ParametroUrl = new URLSearchParams(BuscarParametro);
+    var DatoPasado = ParametroUrl.get('Curso');
+    if(DatoPasado == null){
+        location.href="LoginContenido.html";    
+    }
+
+
+
+    var ListaDocumentos = [];
+    var ListaLinks = [];
+    var ListaVideos = [];
+
+    LeerBaseDatos("Documentos");
+    LeerBaseDatos("Videos");
+    LeerBaseDatos("Links");
+
+    function LeerBaseDatos(Tipo){
+        const dbRef = ref(getDatabase());
+
+        get(child(dbRef,"Cursos/"+DatoPasado+"/Material")).then((snapshot) => {
+
+        if (snapshot.exists()) {
+            var documentos = snapshot.val().Documentos;
+            var links = snapshot.val().Links;
+            var videos = snapshot.val().Videos;
+            ListaDocumentos = documentos.split(",");
+            ListaLinks = links.split(",");
+            ListaVideos = videos.split(",");
+
+            for(var i = 0; i<ListaVideos.length; i++){
+
+                const dbRef = ref(getDatabase());
+                get(child(dbRef,"Cursos/"+DatoPasado+"/"+Tipo+"/"+ListaVideos[i])).then((snapshot) => {
+
+                if (snapshot.exists()) {                
+                    var Titulo = snapshot.val().Nombre;
+                    var contenido = snapshot.val().Contenido;
+                    var imagen = snapshot.val().Imagen;
+
+                    if(imagen == "0"){
+                        crearElementos(Tipo,Titulo,contenido,"cursosinimagen.png");
+
+                    }
+                    else{
+                        crearElementos(Tipo,Titulo,contenido,imagen);
+
+                    }
+                } 
+                }).catch((error) => {
+                    location.href="PantallaPrincipalCursos.html?Curso="+DatoPasado;                                               
+
+                });
+
+
+            }
+            for(var i = 0; i<ListaDocumentos.length; i++){
+                const dbRef = ref(getDatabase());
+                get(child(dbRef,"Cursos/"+DatoPasado+"/"+Tipo+"/"+ListaDocumentos[i])).then((snapshot) => {
+
+                if (snapshot.exists()) {                
+                    var Titulo = snapshot.val().Nombre;
+                    var contenido = snapshot.val().Contenido;
+                    var imagen = snapshot.val().Imagen;
+
+                    if(imagen == "0"){
+                        crearElementos(Tipo,Titulo,contenido,"cursosinimagen.png");
+
+                    }
+                    else{
+                        crearElementos(Tipo,Titulo,contenido,imagen);
+
+                    }
+                } 
+                }).catch((error) => {
+                    alert("Intente de nuevo");  
+                });
+
+
+            }
+            for(var i = 0; i<ListaLinks.length; i++){
+
+                const dbRef = ref(getDatabase());
+                get(child(dbRef,"Cursos/"+DatoPasado+"/"+Tipo+"/"+ListaLinks[i])).then((snapshot) => {
+
+                if (snapshot.exists()) {                
+                    var Titulo = snapshot.val().Nombre;
+                    var contenido = snapshot.val().Contenido;
+                    var imagen = snapshot.val().Imagen;
+
+                    if(imagen == "0"){
+                        crearElementos(Tipo,Titulo,contenido,"cursosinimagen.png");
+
+                    }
+                    else{
+                        crearElementos(Tipo,Titulo,contenido,imagen);
+
+                    }
+                } 
+                }).catch((error) => {
+                    location.href="PantallaPrincipalCursos.html?Curso="+DatoPasado;                                               
+
+                });
+
+
+            }
+
+
+        } 
+        }).catch((error) => {
+            location.href="PantallaPrincipalCursos.html?Curso="+DatoPasado;                                               
+        });                          
+    }
+
+    function crearElementos(Tipo,Nombre,contenido,Imagen){
+
+        if(Tipo=="Videos"){
+            var LeerDiv = document.getElementById("ContenedorCursos");
+        }
+        if(Tipo=="Documentos"){
+            var LeerDiv = document.getElementById("ContenedorCursos1");
+        }
+        if(Tipo=="Links"){
+            var LeerDiv = document.getElementById("ContenedorCursos2");
+        }
+        var enlace = document.createElement("a");
+        enlace.href = contenido;
+        enlace.target = "_blank";
+        var nuevoDiv = document.createElement("div");       
+        nuevoDiv.className = "ContenedorEnlace";
+        var imagen = document.createElement("img");
+        imagen.src = Imagen;
+        imagen.className = "ImagenCurso";
+        var Titulo = document.createElement("h1");
+        Titulo.textContent = Nombre;       
+        nuevoDiv.appendChild(imagen);
+        nuevoDiv.appendChild(Titulo);
+        enlace.appendChild(nuevoDiv);
+        LeerDiv.appendChild(enlace);
+       
+    }
+
+
+    document.getElementById("Documentos").onclick = function(e){
+        document.getElementById("ContenedorCursos").style.display = "none";
+        document.getElementById("ContenedorCursos2").style.display = "none";
+        document.getElementById("ContenedorCursos1").style.display = "inline-block";
+
+    }
+    document.getElementById("Videos").onclick = function(e){
+        document.getElementById("ContenedorCursos1").style.display = "none";
+        document.getElementById("ContenedorCursos2").style.display = "none";
+        document.getElementById("ContenedorCursos").style.display = "inline-block";
+
+    }
+    document.getElementById("Links").onclick = function(e){
+        document.getElementById("ContenedorCursos").style.display = "none";
+        document.getElementById("ContenedorCursos1").style.display = "none";
+        document.getElementById("ContenedorCursos2").style.display = "inline-block";
+
+    }
+    document.getElementById("DocumentosTele").onclick = function(e){
+        document.getElementById("ContenedorCursos").style.display = "none";
+        document.getElementById("ContenedorCursos2").style.display = "none";
+        document.getElementById("ContenedorCursos1").style.display = "inline-block";
+
+    }
+    document.getElementById("VideosTele").onclick = function(e){
+        document.getElementById("ContenedorCursos1").style.display = "none";
+        document.getElementById("ContenedorCursos2").style.display = "none";
+        document.getElementById("ContenedorCursos").style.display = "inline-block";
+
+    }
+    document.getElementById("LinksTele").onclick = function(e){
+        document.getElementById("ContenedorCursos").style.display = "none";
+        document.getElementById("ContenedorCursos1").style.display = "none";
+        document.getElementById("ContenedorCursos2").style.display = "inline-block";
+
+    }
+
+    
+
+
+</script>

@@ -1,0 +1,2161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="TestVocacional.css">
+    <meta name="description" content="Preuniversitario Alexander Graham Bell, Aprueba el Examen TRANSFORMAR y estudia la carrera de tus sueños">
+    <meta name="keywords" content="Preuniversitario, Examen, TRANSFORMAR, Capacitación, Simuladores, Universidad,Test Vocacional">
+    <meta name="author" content="IDE Programming">
+    <link rel="shortcut icon" href="iconoWebC.png"> 
+    <title>Test Vocacional</title>
+</head>
+<body>   
+    <section>        
+        <div id="DatosPersonales">
+            <h1 id="TestName">Test Vocacional</h1>
+            <br>
+            <h1>Datos Personales</h1>
+            <br>       
+            <input class="Entry" id="Nombre" type="text" placeholder="Ingrese su nombre">        
+            <input class="Entry" id="Telefono"  maxlength="10" type="text" placeholder="Ingrese el número de telefono">
+            <input class="Entry" id="Cedula"  maxlength="10" type="text" placeholder="Ingrese el número de cedula">
+            <br><br>
+            <h3>Seleccione la Unidad Educativa</h3>
+            <br>
+            <select class="Combobox" id="comboboxUnidadEdu">            
+            </select>
+            <br><br>
+            <h3>Seleccione el Test</h3>
+            <br>
+            <select class="Combobox" id="comboboxTest">            
+            </select>
+            <br><br>
+            <button id="Acceder" class="cta">
+                <span>Validar Datos Personales</span>
+                <svg viewBox="0 0 13 10" height="10px" width="15px">
+                <path d="M1,5 L11,5"></path>
+                <polyline points="8 1 12 5 8 9"></polyline>
+                </svg>
+            </button>
+            <br><br>
+
+        </div>
+               
+
+        <div id="Formulario">
+            <div id="FormularioPreguntas">
+
+           </div>        
+        </div>
+
+        <br>
+            <button id="Subir" class="cta">
+            <span>Subir Test</span>
+            <svg viewBox="0 0 13 10" height="10px" width="15px">
+            <path d="M1,5 L11,5"></path>
+            <polyline points="8 1 12 5 8 9"></polyline>
+            </svg>
+        </button>
+        <br><br><br>
+
+    </section>
+    
+    
+</body>
+</html>
+
+<script type="module">
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-analytics.js";
+    
+    const firebaseConfig = {
+        apiKey: "AIzaSyBOEpPGa8Q9mgSST7WQnLZ85BpOkYrYtfk",
+        authDomain: "alumnos-72c02.firebaseapp.com",
+        databaseURL: "https://alumnos-72c02-default-rtdb.firebaseio.com",
+        projectId: "alumnos-72c02",
+        storageBucket: "alumnos-72c02.appspot.com",
+        messagingSenderId: "294563889409",
+        appId: "1:294563889409:web:27cc27392864ed7c8ddb00",
+        measurementId: "G-E70XQ46MVS"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+
+    import {getDatabase,ref,set,child,update,remove,get,push}
+    from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+    const db =getDatabase();
+
+    Test();
+    PeriodoExistente();
+
+    var Colegio = document.getElementById("comboboxUnidadEdu");
+    var TestTipo = document.getElementById("comboboxTest");
+    var Nombre = document.getElementById("Nombre");
+    var Telefono = document.getElementById("Telefono");
+    var Cedula = document.getElementById("Cedula");
+    var PeriodoSubir = "";
+
+     function PeriodoExistente(){
+        const dbRef = ref(getDatabase());
+            get(child(dbRef, "PeriodoActual")).then((snapshot) => {
+            if (snapshot.exists()) {
+                    var Periodo = snapshot.val().PeriodoActual;
+                    PeriodoSubir = Periodo;
+                    Colegios(Periodo);
+            }
+            else {
+                alert("Unidades Educativas no registradas")
+            }
+            }).catch((error) => {
+                alert("Intente nuevamente");
+            });
+        
+    }
+
+    function Colegios(Periodo){
+        var ListaColegios = [];            
+            const dbRef = ref(getDatabase());
+            get(child(dbRef, Periodo)).then((snapshot) => {
+                if(snapshot.exists()){
+                    var colegios = snapshot.val().UnidadEducativa;
+                    ListaColegios = colegios.split(",[],");                    
+                    for(var i = 0 ; i <ListaColegios.length; i++){
+                        var combo = document.getElementById("comboboxUnidadEdu");
+                        var option = document.createElement('option');
+                        combo.options.add(option, i);
+                        combo.options[i].innerText = ListaColegios[i]; 
+                    }                    
+                }   
+                else{
+                    alert("Unidades Educativas no registradas")
+                }             
+            }).catch((error) => {
+                    alert("Intente nuevamente");
+            });
+
+
+    }
+
+
+    function Test(){
+            var Test =["Seleccione","Test de Aptitudes","Test de Intereses Profesional","Test Profesional"] ;
+
+            for(var i = 0; i < Test.length;i++){
+                var combo = document.getElementById("comboboxTest");
+                var option = document.createElement('option');
+                combo.options.add(option, i);
+                combo.options[i].innerText = Test[i];
+            }
+    }   
+    function Aptitudes(){
+        var ValorTestTipo = TestTipo.value;
+        if(ValorTestTipo == "Test de Aptitudes"){
+
+            var SeccionA =["A0","Seleccione","Escribir","Construir algo","Dibujar o pintar","Leer","Ver una serie o película","A1","Seleccione","Sí","No"
+        ,"A2","Seleccione","Haciendo algo por mi cuenta","Compartiendo con las demás personas","Ayudando en la cocina","Ninguna de las anteriores",
+        "A3","Seleccione","Sí","No","A4","Seleccione","Sí","No","A5","Seleccione","La naturaleza (flora y fauna)","Las personas y sus costumbres","La música","Los edificios, casas, monumentos y distintas construcciones","A6","Seleccione","Sí","No",
+        "A7","Seleccione","Analizo y/u observo a las personas que se encuentran allí","Observo cómo están colocados los muebles y la decoración","No me fijo en nada, solo entro a cumplir lo que debo hacer allí","A8","Seleccione","Casi siempre","Pocas veces","Nunca"
+        ,"N","N0","Seleccione","Busco formas de solucionarlo y analizo la situación","Siento angustia o ansiedad, luego pienso en su solución","Pido ayuda, me siento más cómodo estando acompañado"
+        ,"N1","Seleccione","Sí","No"
+        ,"N2","Seleccione","SI","NO"
+        ,"N3","Seleccione","Pacífico/a","Sensible","Ambicioso/a","Creativo/a","Ninguna de las anteriores"
+        ,"N4","Seleccione","Sí","No"
+        ,"N5","Seleccione","Analítico/a o pensativo/a","Soñador/a","Creativo/a","Amable"
+        ,"N6","Seleccione","La mayoría de las veces","Muy pocas veces"
+        ,"P",'P0',"Seleccione",' Escribir ',' Construir algo ',' Dibujar o pintar ',' Leer '
+        ,'P1',"Seleccione",' Me alejo, no es de mi incumbencia y prefiero no interferir ',' Escojo un bando para apoya ',' Hago de mediador/a, pienso en lo que sería justo para ambos '
+        ,'P2',"Seleccione",' Me pongo muy nervioso, prefiero no hacerlo ',' Me siento poco nervioso, las palabras fluyen y puedo hacerlo fácilmente ',' Ninguna de las anteriores '
+        ,'P3',"Seleccione",' Sí ',' No '
+        ,'P4',"Seleccione",' El porqué de las cosas, cómo funciona el mundo o la naturaleza ',' Resolución de conflictos en la sociedad, cómo acabar con las injusticias ',' Las personas y sus costumbres ',' Las emociones y el pensamiento '
+        ,'P5',"Seleccione",' Justicia ',' Paciencia ',' Amor ',' Humildad ',' Libertad '
+        ,'P6',"Seleccione",' Casi siempre ',' Pocas veces ',' Nunca '
+        ,'P7',"Seleccione",' Matemáticas ',' Lengua y literatura ',' Emprendimiento y Gestión ',' Biología ',' Física '
+        ,'P8',"Seleccione",' Matemáticas ',' Ciencias Sociales ',' Emprendimiento y Gestión ',' Biología ',' Física '
+        ,'B','B0',"Seleccione",' Casi siempre ',' A veces ',' Nunca '
+        ,'B1',"Seleccione",' Atento/a ',' Servicial ',' Despreocupado/a ',' Amable '
+        ,'B2',"Seleccione",' SI ',' No '
+        ,'B3',"Seleccione",' Sí ',' No '
+        ,'B4',"Seleccione",' Busco formas de solucionarlo y analizo la situación con cabeza fría ',' Siento angustia o ansiedad, luego pienso en su solución ',' Me paralizo, normalmente son los demás quienes ayudan o toman las riendas ',' Pido ayuda, me siento más cómodo estando acompañado '
+        ,'B5',"Seleccione",' Prefiero no hacerlo ',' Lo digo lo más rápido y directo posible, sin pensarlo mucho ',' Pienso en los sentimientos de la persona que recibe la noticia y escojo las palabras adecuadas '
+        ,'B6',"Seleccione",' Soy alguien empático/a que siempre piensa en el bienestar y felicidad de los demás ',' Me preocupo mucho por mí mismo/a, siento que debo ocuparme de mis sentimientosy necesidades antes que de los de los demás ',' Soy una persona fría, me cuesta mucho relacionarme con los demás ',' Me gusta ayudar a las demás personas de forma indirecta: descubriendo o inventandocosas que sirvan para la sociedad '
+        ,'B7',"Seleccione",' Telescopio ',' Cámara profesional ',' Tableta gráfica ',' Microscopio ',' Una biblioteca en mi casa '
+        ,'B8',"Seleccione",' Sí ',' No '
+        ,'B9',"Seleccione",' Me dan igual, no me disgustan pero tampoco me apasionan ',' Siento amor por ellos, nunca los lastimaría y me gusta cuidarlos ',' No me gustan ',' No me siento capaz de cuidarlos '
+        ,"E",'E0',"Seleccione",' Casi siempre ',' A veces ',' Nunca '
+        ,'E1',"Seleccione",' Lo hago fácilmente, las personas suelen entenderme ',' Me cuesta encontrar las palabras adecuadas, sé del tema pero no cómo explicarlo ',' Le digo que no soy la persona adecuada para hacerlo '
+        ,'E2',"Seleccione",' Sí ',' No '
+        ,'E3',"Seleccione",' Adquirir conocimientos solo es útil porque debo pasar mis materias ',' Me apasiona aprender y compartir mis conocimientos ',' Siempre aprendo por mi cuenta, pero me da igual si lo comparto con los demás ',' No me considero alguien curioso, casi nunca quiero saber más sobre algún tema '
+        ,'E4',"Seleccione",' Casi siempre ',' Casi nunca '
+        ,'E5',"Seleccione",' Me cuesta sentir empatía con las personas, dudo que pueda hacer algo por él/ella ',' Prefiero no acercarme, pues soy una persona fría y de seguro no podré ayudarlo/a ',' Me doy cuenta fácilmente de lo que le pasa y me dispongo a apoyarlo emocionalmente (soy empático/a '
+        ,'E6',"Seleccione",' Muchas veces ',' Casi nunca '
+        ,'E7',"Seleccione",' Tiendo a ser muy práctico/a, busco que la tarea cumpla con el objetivo ',' Las hago igual que las tareas de las otras materias ','Soy creativo/a, intento presentar la tarea con diversos recursos (imágenes, organizadores gráficos, presentaciones, entre otros).'
+        ,'E8',"Seleccione",' Sí, bastante ',' A veces lo disfruto y a veces me es indiferente ',' No mucho, no lo hago '
+        ,'E9',"Seleccione",' Muchas veces ',' Pocas veces '
+        ,"F",'F0',"Seleccione",' Primero me desespero y luego busco formas de solucionarlo ',' Prefiero analizar la situación y busco una solución lo más rápido posible ',' Pido ayuda a alguien más ',' Pienso en mis emociones antes que analizar lógicamente '
+        ,'F1',"Seleccione",' Casi siempre ',' Rara vez, solo con cosas puntuales '
+        ,'F2',"Seleccione",' Sí ',' No '
+        ,'F3',"Seleccione",' Sí, bastante ',' No mucho, pero puedo soportarlo ',' Para nada '
+        ,'F4',"Seleccione",' Sí ',' No '
+        ,'F5',"Seleccione",' Sí, una vez ',' Más de una vez ',' No, nunca '
+        ,'F6',"Seleccione",' Me dedico enteramente a ello y busco hacerlo realidad ',' Procrastino mucho, siempre lo dejo para después ',' Trabajo en ello a veces, no soy muy constante pero cumplo mis objetivos al final '
+        ,'F7',"Seleccione",' Que las personas tengan acceso al mundo laboral ',' Que la sociedad cuente con tecnología para facilitar ciertos procesos ',' Que exista acceso a la salud mental gratuita ',' Que las personas estén bien informadas sobre lo que sucede en el país '
+        ,"L",'L0',"Seleccione",' Muchas veces ',' Casi nunca '
+        ,'L1',"Seleccione",' Activo/a ',' Analítico/a ',' Práctico/a ',' Creativo/a '
+        ,'L2',"Seleccione",' El arte ',' La lectura ',' Los números ',' La tecnología '
+        ,'L3',"Seleccione",' No, muy poco ',' Sí, bastante '
+        ,'L4',"Seleccione",' Que las personas tengan acceso al mundo laboral ',' Que la sociedad cuente con tecnología para facilitar ciertos procesos ',' Que las personas estén bien informadas sobre lo que sucede en el país '
+        ,'L5',"Seleccione",' No mucho ',' Rara vez, solo con personas específicas ',' Casi siempre '
+        ,'L6',"Seleccione",' Sí ',' No '
+        ,'L7',"Seleccione",' No tanto, puedo seguir con mi vida aún si no sé ciertas cosas ',' Claro que sí, quiero estar bien informado/a ',' Si veo que es algo de suma importancia, lo averiguo. Si no es así, prefiero alejarme '
+        ,'L8',"Seleccione",' La ciencia y sus alcances ',' Dios y la religión ',' La existencia ',' El por qué del mundo ',' Todas las anteriores '
+        ,"H",'H0',"Seleccione",' Las cumplo todas e intento que el resto también lo haga ',' Pienso que es normal romper una que otra regla ',' No me importan las reglas, pienso que no deberían existir '
+        ,'H1',"Seleccione",' Sí, me gusta que me feliciten ',' No mucho, puedo vivir sin ello '
+        ,'H2',"Seleccione",' Amable ',' Empático ',' Honrado ',' Sensible '
+        ,'H3',"Seleccione",' No, soy paciente y controlo mis emociones lo mejor que puedo ',' A veces me pasa, pero debo estar demasiado enojado/a ',' Sí, es algo que me cuesta mucho evitar '
+        ,'H4',"Seleccione",' Prefiero no entrometerme para no tener problemas ',' Intento encontrar un punto medio entre los involucrados ',' Utilizo mi cuerpo y fuerza para hacerlo '
+        ,'H5',"Seleccione",' Muchas veces ',' Rara vez ',' Nunca '
+        ,'H6',"Seleccione",' Sí, puedo hacerlo sin ningún problema ',' No, me cuesta mucho hacer lo que alguien más me exige '
+        ,'H7',"Seleccione",' SI ',' NO '
+        ,'H8',"Seleccione",' Lo haría de forma intelectual, aportando ideas, informando o emitiendo opinionessobre lo que sucede a nivel nacional ',' Sacrificaría lo que sea necesario por ello ',' Siento que no podría, alguien más puede hacerlo '
+        ,"O",'O0',"Seleccione",' Su cultura ',' Sus expresiones artísticas ',' Las costumbres de sus habitantes ',' El aspecto social, político y económico ',' Ninguna de las anteriores '
+        ,'O1',"Seleccione",' Muy buena, me apasionan las matemáticas ',' Aceptable, conozco las matemáticas y no me molesta trabajar con números ',' Mala, no me gustan las matemáticas '
+        ,'O2',"Seleccione",' Lengua y literatura ',' Biología ',' Física ',' Inglés (idiomas) ',' Estudios sociales '
+        ,'O3',"Seleccione",' Muchas veces ',' Casi nunca '
+        ,'O4',"Seleccione",' Prefiero realizar una planificación y seguir los pasos ',' Trabajo según me inspire ',' Ninguna de las anteriores '
+        ,'O5',"Seleccione",' Sí ',' No '
+        ,'O6',"Seleccione",' Me pongo muy nervioso, prefiero no hacerlo ',' Me siento poco nervioso, las palabras fluyen y puedo hacerlo fácilmente ',' Ninguna de las anteriores '
+        ,'O7',"Seleccione",' Casi siempre ',' Pocas veces ',' Nunca '
+        ,'O8',"Seleccione",' Sensible ',' Amable ',' Empático/a ',' Curioso/a '
+        ,"C",'C0',"Seleccione",' Sí, ya lo he conseguido en ocasiones pasadas ',' Lo logré un par de veces, pero no me sentí cómodo haciéndolo ',' No, siento que sería muy malo vendiendo '
+        ,'C1',"Seleccione",' Sí ',' No '
+        ,'C2',"Seleccione",' Las personas que se encuentran allí dentro ',' La disposición de los muebles y decoración ',' Cómo están colocados los productos y la publicidad '
+        ,'C3',"Seleccione",' Prácticas ',' Creativas ',' Útiles ',' Locas ',' Ninguna de las anteriores '
+        ,'C4',"Seleccione",' Sí, un par de veces ',' Seguramente solo una vez ',' Nunca '
+        ,'C5',"Seleccione",' Cliente consumidor ',' Vendedor '
+        ,'C6',"Seleccione",' Sí ',' No '
+        ,'C7',"Seleccione",' Nunca había pensado en ello ',' Sí, un par de veces '
+        ,'C8',"Seleccione",' Me siento incómodo/a y prefiero quedarme en silencio ',' Me molesta, casi nunca las escucho ',' Las acepto y reflexiono para realizar los cambios y mejoras necesarias '
+
+
+
+    ] ;      
+
+        }
+        if(ValorTestTipo == "Test de Intereses Profesional"){
+
+            var SeccionA = ['A0',"Seleccione"
+,'Director de Orquesta'
+,'Asesor Crédito'
+,'A1',"Seleccione"
+,'Cantante'
+,'Embajador  (https://www.definicionabc.com/politica/embajador.php)'
+,'A2',"Seleccione"
+,'Caricaturista'
+,'Cirujano'
+,'A3',"Seleccione"
+,'Violinista'
+,'Profesor de Ingles'
+,'A4',"Seleccione"
+,'Critico de Cine'
+,'Ing. en Alimentos (https://psu.cl/2014/11/13/10-cosas-en-las-que-trabaja-un-ingeniero-en-alimentos/)'
+,'A5',"Seleccione"
+,'Pintor'
+,'Director de una revista'
+,'A6',"Seleccione"
+,'Director de Teatro'
+,'Piloto'
+,'A7',"Seleccione"
+,'Actor / Actriz'
+,'Traductor de Obras'
+,'A8',"Seleccione"
+,'Coreógrafo'
+,'Community Manager (https://rockcontent.com/es/blog/que-hace-un-community-manager/)'
+,'A9',"Seleccione"
+,'Escultor'
+,'Pianista'
+,'N'
+,'N0',"Seleccione"
+,'Comerciante (Vendedor)'
+,'Chef'
+,'N1',"Seleccione"
+,'Banquero'
+,'Analista Contable (https://www.smarttalent.uy/innovaportal/v/2646/15/innova.front/analista-_-asistente-contable.html)'
+,'N2',"Seleccione"
+,'Auditor Financiero (https://neuvoo.es/neuvooPedia/es/auditor/)'
+,'Ministro'
+,'N3',"Seleccione"
+,'Economista'
+,'Laboratorista'
+,'N4',"Seleccione"
+,'Gerente'
+,'Profesor Universitario'
+,'N5',"Seleccione"
+,'Cajero'
+,'Ing. Químico (https://www.educaweb.com/profesion/ingeniero-quimico-404/)'
+,'N6',"Seleccione"
+,'Asesor Bancario'
+,'Piloto de Helicóptero'
+,'N7',"Seleccione"
+,'Asistente Contable'
+,'Escritor de Teatro'
+,'N8',"Seleccione"
+,'Agente de Seguros'
+,'Administrador de Restaurantes'
+,'N9',"Seleccione"
+,'Negocios Internacionales (https://www.occ.com.mx/blog/estudiar-negocios-internacionales/)'
+,'Fotógrafo'
+,'P'
+,'P0',"Seleccione"
+,'Abogado'
+,'Dibujante'
+,'P1',"Seleccione"
+,'Asesor Legal (https://url2.cl/3NePd)'
+,'Agente Comercial'
+,'P2',"Seleccione"
+,'Político'
+,'Asambleísta'
+,'P3',"Seleccione"
+,'Presidente'
+,'Neurólogo (https://url2.cl/VM18l)'
+,'P4',"Seleccione"
+,'Agente Público'
+,'Decano (Rector de una facultad)'
+,'P5',"Seleccione"
+,'Alcalde'
+,'Constructor'
+,'P6',"Seleccione"
+,'Consejal (https://url2.cl/6l9b8)'
+,'Profesor de Literatura'
+,'P7',"Seleccione"
+,'Legislador (Político)'
+,'Capitán de Barcos'
+,'P8',"Seleccione"
+,'Dirigente Político'
+,'Asistente de Gerente'
+,'P9',"Seleccione"
+,'Penalista (https://url2.cl/6VwMF)'
+,'Editor de revistas'
+
+,'B'
+,'B0',"Seleccione"
+,'Zoólogo (https://url2.cl/wzgSS)'
+,'Compositor'
+,'B1',"Seleccione"
+,'Oncólogo (https://url2.cl/A1f7L)'
+,'Inspector de Bancos'
+,'B2',"Seleccione"
+,'Farmacéutica'
+,'Contralor (https://url2.cl/MzTY4)'
+,'B3',"Seleccione"
+,'Medico'
+,'Bioquímico (https://url2.cl/JmwTd)'
+,'B4',"Seleccione"
+,'Veterinario'
+,'Profesor de educación básica (Escuela)'
+,'B5',"Seleccione"
+,'Botánico (https://url2.cl/DnvvJ-)'
+,'Inventor'
+,'B6',"Seleccione"
+,'Cardiólogo'
+,'Biógrafo'
+,'B7',"Seleccione"
+,'Químico'
+,'Agente del GIR'
+,'B8',"Seleccione"
+,'Biólogo'
+,'Dueño de franquicia (ejemplo KFC)'
+,'B9',"Seleccione"
+,'Microbiólogo (https://url2.cl/vmyMH)'
+,'Logística en eventos'
+
+,'E'
+,'E0',"Seleccione"
+,'Supervisor Escolar (Distritos de eduación)'
+,'Repostero (Hace pasteles y postres)'
+,'E1',"Seleccione"
+,'Profesor de primaria'
+,'Agente de Seguros'
+,'E2',"Seleccione"
+,'Inspector de Colegios'
+,'Negocios internacionales'
+,'E3',"Seleccione"
+,'Decano'
+,'Jefe de laboratorio'
+,'E4',"Seleccione"
+,'Rector de Escuela'
+,'Parvulario (https://url2.cl/6kAbf)'
+,'E5',"Seleccione"
+,'Investigador'
+,'Ing. Automotriz'
+,'E6',"Seleccione"
+,'Profesor'
+,'Director de periódico'
+,'E7',"Seleccione"
+,'Ministro de Educación'
+,'Embajador'
+,'E8',"Seleccione"
+,'Pedagogía'
+,'Diseñador 3D'
+,'E9',"Seleccione"
+,'Profesor de cultura física'
+,'Escultor'
+
+
+,'F'
+,'F0',"Seleccione"
+,'Ing. Mecánico'
+,'Ing. Audio (https://url2.cl/pCgWk)'
+,'F1',"Seleccione"
+,'Ing. Automatización (https://url2.cl/1Ntlm)'
+,'Estadista'
+,'F2',"Seleccione"
+,'Ing. Petróleos'
+,'Asesor Jurídico'
+,'F3',"Seleccione"
+,'Ing. Electrónico'
+,'Fisiólogo (https://url2.cl/bS5Ym)'
+,'F4',"Seleccione"
+,'Ing. Civil'
+,'Motivador'
+,'F5',"Seleccione"
+,'Ing. Ambiental (https://url2.cl/M6q3w)'
+,'Ing. Industrial (https://url2.cl/WQKNl'
+,'F6',"Seleccione"
+,'Robótica'
+,'Historiador'
+,'F7',"Seleccione"
+,'Físico'
+,'Agente de Aduanas'
+,'F8',"Seleccione"
+,'Ing. Sistemas'
+,'Vendedor'
+,'F9',"Seleccione"
+,'Ing. Seguridad'
+,'Diseñador Gráfico'
+
+,'L'
+,'L0',"Seleccione"
+,'Escritor - Investigador'
+,'Crítico de música'
+,'L1',"Seleccione"
+,'Psicólogo Industrial (https://url2.cl/edtMM)'
+,'Inversionista'
+,'L2',"Seleccione"
+,'Periodista'
+,'Intendente Político'
+,'L3',"Seleccione"
+,'Psicólogo Clínico (https://url2.cl/crfWu)'
+,'Terapista de pareja'
+,'L4',"Seleccione"
+,'Orador'
+,'Telecomunicaciones'
+,'L5',"Seleccione"
+,'Autor de Obras'
+,'Pedagógico'
+,'L6',"Seleccione"
+,'Critico de Literario'
+,'Agente Aeropuerto'
+,'L7',"Seleccione"
+,'Psicólogo Infantil'
+,'Traductor'
+,'L8',"Seleccione"
+,'Reportero'
+,'Programador de Eventos'
+,'L9',"Seleccione"
+,'Comunicador Social'
+,'Militar'
+
+
+,'H'
+,'H0',"Seleccione"
+,'Comandante'
+,'Expositor de Arte'
+,'H1',"Seleccione"
+,'Policía'
+,'Negociante'
+,'H2',"Seleccione"
+,'Marino'
+,'Juez'
+,'H3',"Seleccione"
+,'Militar'
+,'Inspector sanitario'
+,'H4',"Seleccione"
+,'Bombero'
+,'Parvulario'
+,'H5',"Seleccione"
+,'Cadete'
+,'Ing. Naval'
+,'H6',"Seleccione"
+,'Coronel'
+,'Locutor'
+,'H7',"Seleccione"
+,'Agente de transito'
+,'Oficial'
+,'H8',"Seleccione"
+,'Forense'
+,'Interprete'
+,'H9',"Seleccione"
+,'Inspector de seguridad'
+,'Diseñador de modas'
+
+
+,'O'
+,'O0',"Seleccione"
+,'Adm. Hotel'
+,'Prof. Música'
+,'O1',"Seleccione"
+,'Guía Turismo'
+,'Bienes raíces'
+,'O2',"Seleccione"
+,'Embajador'
+,'Forense'
+,'O3',"Seleccione"
+,'Master en Administración de empresas'
+,'Ginecólogo'
+,'O4',"Seleccione"
+,'Traductor'
+,'Cuidado de niños'
+,'O5',"Seleccione"
+,'Gerente de hotel'
+,'Ing. Mecatronico'
+,'O6',"Seleccione"
+,'Jefe de cocina'
+,'Critico de Novelas'
+,'O7',"Seleccione"
+,'Gerente de un colegio'
+,'Francotirador'
+,'O8',"Seleccione"
+,'Prof. Idiomas'
+,'Adm de museo'
+,'O9',"Seleccione"
+,'Vice alcalde'
+,'Reportero'
+
+,'C'
+,'C0',"Seleccione"
+,'Diseñador Publicidad'
+,'Cocinero'
+,'C1',"Seleccione"
+,'Diseñador de interiores'
+,'Administrador de equipos'
+,'C2',"Seleccione"
+,'Diseñador de modas'
+,'Fiscal'
+,'C3',"Seleccione"
+,'Vendedor'
+,'Gerente Hospital'
+,'C4',"Seleccione"
+,'Diseñador de jardines'
+,'Profesor de química'
+,'C5',"Seleccione"
+,'Publicista'
+,'Ing. instrumentación (https://url2.cl/u1PzG)'
+,'C6',"Seleccione"
+,'Promotor de Eventos'
+,'Caricaturista'
+,'C7',"Seleccione"
+,'Jefe de ventas'
+,'Oficial de marina'
+,'C8',"Seleccione"
+,'Supervisor de ventas'
+,'Gerente de empresa'
+,'C9',"Seleccione"
+,'Diseñador de logo'
+,'Asistente de Marketing'
+
+
+
+
+            ];
+
+        }
+
+         if(ValorTestTipo == "Test Profesional"){
+             var SeccionA = ['A0',"Seleccione"
+,'Sí'
+,'No'
+,'A1',"Seleccione"
+,'De acuerdo'
+,'En desacuerdo'
+,'A2',"Seleccione"
+,'Sí, algunas veces'
+,'Sí, pero solo una vez'
+,'No, nunca'
+,'A3',"Seleccione"
+,'No mucho, me parece muy tedioso'
+,'Sí, siempre intentaba ser creativo/a en eso'
+,'No lo disfrutaba, pero tampoco me disgustaba completamente'
+,'A4',"Seleccione"
+,'Nunca lo he intentado'
+,'Sí, lo he hecho varias veces'
+,'Lo he intentado, pero se me complica bastante'
+,'A5',"Seleccione"
+,'Pintar y dibujar'
+,'Leer'
+,'Escribir/redactar'
+,'Jugar videojuegos'
+,'A6',"Seleccione"
+,'Coser'
+,'Tomar y editar fotografías'
+,'Deportes'
+,'Cocinar'
+,'A7',"Seleccione"
+,'Sí, es un tema que me interesa bastante'
+,'No, prefiero investigar sobre otros temas'
+,'Sé poco, solo lo que me han enseñado'
+,'A8',"Seleccione"
+,'No, solo son una expresión cultural de un país o pueblo'
+,'Sí, siento que se puede transmitir a través de la comida'
+,'Nunca he pensado en ello'
+,'A9',"Seleccione"
+,'Psicología'
+,'Ingeniería'
+,'Artes'
+,'Diseño gráfico'
+,'N'
+,'N0',"Seleccione"
+,'SI'
+,'No'
+,'N1',"Seleccione"
+,'Escribir ensayos, informes, reportes, relatos, noticias'
+,'Investigar acerca de otros países aspectos como el desempleo, sueldo básico, nivel de pobreza.'
+,'Investigar sobre los seres vivos o la naturaleza'
+,'Leer artículos sobre el comportamiento humano, el porqué de nuestras acciones y/o decisiones'
+,'Ninguna de las anteriores'
+,'N2',"Seleccione"
+,'SI'
+,'No'
+,'N3',"Seleccione"
+,'No me entero de ese tipo de noticias'
+,'Pienso en los motivos detrás de ello'
+,'No hago nada'
+,'Pienso en las personas que quedarán desempleadas'
+,'N4',"Seleccione"
+,'Considero que no tengo suficiente dinero como para planificar qué hacer con él'
+,'Lo gasto en lo que necesito sin pensarlo mucho'
+,'Busco ahorrar y tener una planificación de mis gastos'
+,'Solo intento no malgastarlo'
+,'N5',"Seleccione"
+,'No, solo tiene que ver con el dinero'
+,'Sí, además puede relacionarse con otros aspectos'
+,'Puede ser, pero no siento que afecten tanto esos aspectos'
+,'N6',"Seleccione"
+,'No, siento que me aburriría'
+,'No, prefiero hacer cosas más prácticas'
+,'Sí'
+
+
+
+,'P'
+,'P0',"Seleccione"
+,'No sé qué hacen las ONGs'
+,'Sí me gustaría'
+,'Sé lo que hacen, pero no me llama la atención trabajar en eso'
+,'P1',"Seleccione"
+,'No realmente, prefiero no hacerlo'
+,'No me incomoda, pero tampoco me agrada'
+,'Sí, es algo que me gusta hacer'
+,'P2',"Seleccione"
+,'Nunca lo he pensado'
+,'Sí, incluso tengo ideas y posibles soluciones para problemáticas sociales'
+,'No he pensado en cómo solucionarlos, pero considero que son problemáticas importantes'
+,'P3',"Seleccione"
+,'Hospital'
+,'Colegio o universidad'
+,'Gobierno (Presidencia, ministerios, etc.)'
+,'Fábrica'
+,'Oficinas'
+,'P4',"Seleccione"
+,'No, siento que hay tantas cosas negativas que ya no hay vuelta atrás'
+,'Puede ser que lo haga, pero siento que es algo muy complicado que solo pueden realizar grandes políticos o empresarios'
+,'Sí es posible, pues a pesar de todas las cosas negativas hay aspectos por los que vale la pena luchar'
+,'P5',"Seleccione"
+,'Sí'
+,'No'
+,'P6',"Seleccione"
+,'Se me complica, pocas veces lo he logrado'
+,'Sí se me hace fácil, además lo considero necesario pues las emociones pueden nublarnos'
+,'P7',"Seleccione"
+,'Sí, lo he hecho varias veces'
+,'Lo he hecho pocas veces, pero me sentí incómodo/a'
+,'Nunca lo he hecho porque alguien más ya lo hizo'
+,'P8',"Seleccione"
+,'Prefiero no participar en debates o discusiones'
+,'Participo siempre y cuando tenga una guía de lo que diré'
+,'La mayoría de las veces tengo buenos argumentos y se me ocurren fácilmente formas de responder a mi oponente'
+,'Me pongo muy nervioso/a y me cuesta responder con buenos argumentos, después se me ocurren cosas que pude haber respondido'
+,'B'
+,'B0',"Seleccione"
+,'Entre 6 a 10'
+,'Entre 3 a 5'
+,'Menos de 3'
+,'B1',"Seleccione"
+,'Hospital o clínica'
+,'Colegio o universidad'
+,'Gobierno (Presidencia, ministerios, etc.)'
+,'Fábrica'
+,'Oficinas'
+,'B2',"Seleccione"
+,'Me pongo muy nervioso/a y no logro pensar bien'
+,'Tengo carácter fuerte, puedo pensar con cabeza fría'
+,'Me paralizo'
+,'Prefiero evadir la situación (huyo)'
+,'Ayudo poco en lo que pueda'
+,'B3',"Seleccione"
+,'Sí, con gusto lo haría por una buena causa'
+,'No podría, mi tiempo de descanso es igual o más importante que el trabajo'
+,'Solo en ocasiones especiales, por si me necesitan o requiero el dinero de horas extra'
+,'B4',"Seleccione"
+,'Se me dificulta mucho, a veces no lo logro'
+,'Puedo hacerlo, a veces con facilidad y a veces es más complicado, pero la mayoría de las veces lo logro'
+,'Prefiero recurrir a otros métodos que no impliquen aprender de memoria'
+,'B5',"Seleccione"
+,'Analizo las posibles respuestas, investigo hasta llegar a la verdad'
+,'Pregunto a otras personas su opinión'
+,'Investigo un poco, pero si no encuentro respuestas puedo vivir sin ellas'
+,'B6',"Seleccione"
+,'Poder entender el comportamiento de un persona violenta'
+,'Conocer las sustancias que componen nuestros alimentos, bebidas, medicamentos, entre otros'
+,'Comprender cómo funciona la sociedad'
+,'Inventar un artefacto útil para las personas'
+,'B7',"Seleccione"
+,'Descubriendo información útil sobre la naturaleza o el universo'
+,'Inventando cosas que puedan ser útiles y facilitar nuestra vida'
+,'Escuchando lo que tienen por decir'
+,'Curando sus heridas y/o enfermedades'
+,'B8',"Seleccione"
+,'Construir un hospital veterinario público o varios'
+,'Conseguir que todos tengan bienestar'
+,'Erradicar la pobreza extrema'
+,'Asegurar que todos puedan dar su opinión'
+,'B9',"Seleccione"
+,'Resolver ejercicios que impliquen un razonamiento lógico'
+,'Estudiar contenidos verbales, gramática y demás'
+,'Leer una novela'
+,'Hacer un experimento'
+
+
+,'E'
+,'E0',"Seleccione"
+,'Hospital o clínica'
+,'Colegio o universidad'
+,'Gobierno (Presidencia, ministerios, etc.)'
+,'Fábrica'
+,'Oficinas'
+,'E1',"Seleccione"
+,'Haciendo justicia por sus derechos'
+,'Curando heridas o enfermedades'
+,'Explicando y enseñando temas que desconozcan'
+,'Creando inventos que faciliten su vida'
+,'E2',"Seleccione"
+,'No, soy muy distraído/a'
+,'Sí, y me alegro por ellos'
+,'Solo me doy cuenta cuando me lo dicen'
+,'E3',"Seleccione"
+,'La mayoría de las veces sí'
+,'No mucho, prefiero quedarme callado/a en cuanto a lo que siento y pienso'
+,'Lo hago, pero me cuesta mucho'
+,'E4',"Seleccione"
+,'Intento quitarme de en medio para que lo haga otro'
+,'Me gusta y creo que lo hago bien'
+,'Participo en lo que pueda, pero siempre contando con otra persona que me guíe y/o apoye'
+,'E5',"Seleccione"
+,'Siempre hablo y cuento mis experiencias personales, sin dejar de escuchar al resto'
+,'Hablo poco, solo cuando me dejan o preguntan de forma directa'
+,'Si es que me voy, puede que ni se enteren'
+,'E6',"Seleccione"
+,'Casi siempre que se presenta la oportunidad'
+,'En pocas ocasiones'
+,'Casi nunca'
+,'E7',"Seleccione"
+,'Me cuesta mucho seguirlas, prefiero salir de la rutina frecuentemente'
+,'Me dan igual, solo sigo con mi vida'
+,'Me gusta seguir una rutina y un orden'
+,'E8',"Seleccione"
+,'No, normalmente tengo que corregir el error'
+,'No, pues suelo criticar a dichas personas'
+,'Sí, no digo nada en ese momento. Luego intento que comprendan su error si es necesario'
+,'E9',"Seleccione"
+,'Enseñando a las nuevas generaciones'
+,'Creando obras civiles, inventos tecnológicos o maquinaria'
+,'Desarrollando proyectos de investigación científica'
+,'Ser un agente de la salud mental'
+,'F'
+,'F0',"Seleccione"
+,'No, prefiero trabajar solo'
+,'En proyectos grandes si es necesaria la participación de más personas'
+,'Sí, es importante contar con apoyo'
+,'F1',"Seleccione"
+,'Debo hacerlo con la mayor exactitud posible y dar mi mejor esfuerzo'
+,'Me esfuerzo lo necesario para que salga bien, tampoco me preocupa que sea “perfecto”'
+,'Me cuesta mucho concentrarme en ello, normalmente procrastino y solo me preocupo por presentar'
+,'F2',"Seleccione"
+,'Resolver ejercicios que impliquen un razonamiento lógico'
+,'Estudiar contenidos verbales, gramática y demás'
+,'Leer una novela'
+,'Hacer un experimento'
+,'F3',"Seleccione"
+,'Arte'
+,'Historia'
+,'Ciencias'
+,'Tecnología'
+,'F4',"Seleccione"
+,'Personas'
+,'Palabras (hablar, escribir, etc)'
+,'Máquinas'
+,'Animales'
+,'F5',"Seleccione"
+,'Enseñando a las nuevas generaciones'
+,'Creando obras civiles, inventos tecnológicos o maquinaria'
+,'Desarrollando proyectos de investigación científica'
+,'Ser un agente de la salud mental'
+,'F6',"Seleccione"
+,'No mucho, prefiero entretenerme de otras maneras'
+,'Odio ese tipo de juegos, me estreso porque no puedo resolverlos'
+,'Me encantan, soy bueno/a en eso'
+,'F7',"Seleccione"
+,'No, nunca me ha pasado eso'
+,'Me pasa seguido, así pienso mejor'
+,'Me ha pasado una o dos veces, no es algo que aplico'
+
+,'L'
+,'L0',"Seleccione"
+,'Ser quien lidera el grupo de trabajo'
+,'Aportar con ideas para que mis compañeros las desarrollen'
+,'Llevar a la práctica las ideas aportadas por otros compañeros'
+,'L1',"Seleccione"
+,'Desarmar y volver a armar un juguete'
+,'Organizar un evento o fiesta'
+,'Vender algo (convencer a alguien para que lo compre)'
+,'Crear/editar fotos y vídeos'
+,'Ninguna de las anteriores'
+,'L2',"Seleccione"
+,'Escribir un ensayo'
+,'Resolver problemas matemáticos'
+,'Leer sobre nuevos descubrimientos científicos'
+,'Seguir una receta nueva para ti'
+,'L3',"Seleccione"
+,'Tengan salud y bienestar físico'
+,'Sean escuchadas y comprendidas'
+,'Puedan movilizarse sin problemas'
+,'L4',"Seleccione"
+,'Prefiero no hacerlo'
+,'Permito que la persona se desahogue, la escucho y si es necesario la aconsejo'
+,'Acompaño a esa persona, le doy mi mano o un abrazo'
+,'Le digo a la persona lo que debe hacer para sentirse mejor'
+,'L5',"Seleccione"
+,'Lo hago, me considero una persona crítica y pienso mucho antes de emitir una postura'
+,'Prefiero que las ideas permanezcan en mi mente'
+,'Lo hago fácilmente, total solo es mi opinión'
+,'L6',"Seleccione"
+,'No necesariamente'
+,'Sí'
+,'Depende'
+,'L7',"Seleccione"
+,'No, prefiero otras actividades'
+,'Sí, es algo que no me molestaría en lo absoluto'
+,'Me gusta leer, pero siento que no podría hacerlo constantemente'
+,'No, sólo leo cuando es obligatorio hacerlo'
+,'L8',"Seleccione"
+,'No, ni siquiera me preocupo por ello en mi vida diaria'
+,'Me interesaría, pero puedo vivir sin esas respuestas'
+,'Claro que lo haría, son cosas que pienso seguido'
+,'H'
+,'H0',"Seleccione"
+,'Sí, la mayoría de las veces me pasa'
+,'No, en general no soy torpe'
+,'H1',"Seleccione"
+,'¡Sí!'
+,'No es algo que me llame la atención'
+,'Solo lo haría si me obligan'
+,'No lo haría, le temo a esa clase de actividades'
+,'H2',"Seleccione"
+,'Sí, incluso tengo una rutina'
+,'A veces hago actividad física por mi salud'
+,'No, no me gusta'
+,'H3',"Seleccione"
+,'Sí, incluso ya lo he logrado en ocasiones anteriores'
+,'No podría, mis horas de sueño son muy importantes para mí'
+,'H4',"Seleccione"
+,'Activa y con mucha energía'
+,'Inactiva, con poca energía'
+,'H5',"Seleccione"
+,'Procuro no entrometerme, la vida no es siempre justa'
+,'Me indigno mucho, quisiera que cosas así no sucedan'
+,'Me indigno y ayudo/defiendo a la persona en desventaja si puedo hacerlo'
+,'H6',"Seleccione"
+,'Intento evitarlo todo lo que pueda, odio sentir dolor y considero que no lo aguanto'
+,'Reacciono de forma controlada, pues es algo necesario y solo será por unos segundos o minutos'
+,'Me angustio demasiado, siento ganas de llorar'
+,'H7',"Seleccione"
+,'No, sí puedo controlar mis emociones y reacciones ante estos eventos'
+,'Sí, prefiero irme de ese lugar lo más pronto posible'
+,'Sí me impresiono, pero siento mucho interés y/o curiosidad por quedarme'
+,'O'
+,'O0',"Seleccione"
+,'Enseñando a las nuevas generaciones'
+,'Haciendo alianzas y negocios con otros países'
+,'Desarrollando proyectos de investigación científica'
+,'Ser un agente de la salud mental'
+,'O1',"Seleccione"
+,'Desarmar y volver a armar un juguete'
+,'Organizar un evento o fiesta'
+,'Vender algo (convencer a alguien para que lo compre)'
+,'Editar fotos y vídeos'
+,'Ninguna de las anteriores'
+,'O2',"Seleccione"
+,'Sí, nunca he tenido problemas para hacerlo'
+,'No, la mayoría de las veces prefiero no hacerlo'
+,'No tengo mucha oportunidad para hacerlo'
+,'O3',"Seleccione"
+,'Es muy complicado que lo haga, a menos que la otra persona me hable primero'
+,'Prefiero no hacerlo, solo si es necesario'
+,'Lo normal'
+,'Bastante fácil, no tengo problema en ello y me agrada'
+,'O4',"Seleccione"
+,'Hospital o clínica'
+,'Escuela, colegio o universidad'
+,'En una gran empresa'
+,'En un canal de televisión'
+,'O5',"Seleccione"
+,'Apoyar emocionalmente a alguien'
+,'Persuadir o convencer a alguien'
+,'Escuchar a alguien'
+,'Explicar algo a alguien'
+,'O6',"Seleccione"
+,'Pobreza y desempleo en el Ecuador'
+,'Importaciones y exportaciones para mejorar la economía'
+,'Educación de calidad para niños y jóvenes de bajos recursos'
+,'O7',"Seleccione"
+,'Sí y me agrada aprender idiomas'
+,'Sí, pero no me agrada aprender idiomas'
+,'Pienso que no es estrictamente necesario, muchos trabajos no lo requieren'
+,'No'
+,'O8',"Seleccione"
+,'Ser quien lidera el grupo de trabajo y organiza las tareas'
+,'Aportar con ideas para que mis compañeros las desarrollen'
+,'Llevar a la práctica las ideas aportadas por otros compañeros'
+,'C'
+,'C0',"Seleccione"
+,'Sí, lo he notado y los demás me lo han dicho'
+,'No, prefiero que sean prácticas y rápidas'
+,'No, suelen parecerse a las de los demás y me siento bien con eso'
+,'C1',"Seleccione"
+,'Sí'
+,'No'
+,'C2',"Seleccione"
+,'Cómo interactua la gente en ellas'
+,'Las infografías, flyers e ilustraciones'
+,'El humor contenido en los memes'
+,'Páginas donde puedo aprender sobre ciencia'
+,'C3',"Seleccione"
+,'Arte'
+,'Tecnología'
+,'Ventas'
+,'Ciencia'
+,'C4',"Seleccione"
+,'Sí, la mayoría de las veces lo soy'
+,'No mucho'
+,'C5',"Seleccione"
+,'Se me hace fácil encontrar una respuesta apropiada'
+,'Me angustio y digo lo primero que se me ocurra, no siempre es una respuesta apropiada'
+,'Me paralizo y demoro en responder'
+,'C6',"Seleccione"
+,'No, no me gusta dibujar'
+,'Sí, pero se me hizo muy complicado y poco agradable'
+,'Sí, me agrada hacerlo'
+,'C7',"Seleccione"
+,'No realmente'
+,'Sí, bastante seguido'
+,'C8',"Seleccione"
+,'Lo visual, que hagan buenos videos e imágenes'
+,'La trayectoria y renombre de dicha marca'
+,'El impacto que esta genere en el medio ambiente'
+,'La utilidad del producto'
+
+
+             
+             ];
+         }        
+
+        var Parte = "A";
+        var cont = 0;
+        var Posicion = 0;
+        for(var i = 0; i < SeccionA.length;i++){
+
+                  
+            if(SeccionA[i] == Parte+(Posicion+1) || SeccionA[i]=="N"|| SeccionA[i]=="P"|| SeccionA[i]=="B" || SeccionA[i]=="E" || SeccionA[i]=="F"
+            || SeccionA[i]=="L" || SeccionA[i]=="H" || SeccionA[i]=="O" || SeccionA[i]=="C"){  
+                    if(SeccionA[i] == "N"){
+                        Parte = SeccionA[i];
+                        Posicion = -1;
+                    }
+                    if(SeccionA[i] == "P"){
+                        Parte = SeccionA[i];
+                        Posicion = -1;
+                    }
+                    if(SeccionA[i] == "B"){
+                        Parte = SeccionA[i];
+                        Posicion = -1;
+                    }
+                    if(SeccionA[i] == "E"){
+                        Parte = SeccionA[i];
+                        Posicion = -1;
+                    }
+                    if(SeccionA[i] == "F"){
+                        Parte = SeccionA[i];
+                        Posicion = -1;
+                    }
+                    if(SeccionA[i] == "L"){
+                        Parte = SeccionA[i];
+                        Posicion = -1;
+                    }
+                    if(SeccionA[i] == "H"){
+                        Parte = SeccionA[i];
+                        Posicion = -1;
+                    }
+                    if(SeccionA[i] == "O"){
+                        Parte = SeccionA[i];
+                        Posicion = -1;
+                    }
+                    if(SeccionA[i] == "C"){
+                        Parte = SeccionA[i];
+                        Posicion = -1;
+                    }
+                    Posicion = Posicion+1;
+                    cont = 0;                    
+            } 
+
+
+            if(Parte+Posicion != SeccionA[i] && SeccionA[i] !=Parte ){
+                    var combo = document.getElementById(Parte+Posicion);
+                    var option = document.createElement('option');
+                    combo.options.add(option, cont);
+                    combo.options[cont].innerText = SeccionA[i];
+                    cont = cont + 1;
+            }  
+
+
+        }
+    
+    }   
+
+    function CrearPregunta(){
+        var ValorTestTipo = TestTipo.value;
+
+
+    if(ValorTestTipo == "Test de Aptitudes"){
+        var TituloLista = ['A'	,' Si tuvieras que escoger entre distintas actividades para realizar en tu tiempo libre, prefieres: '	,' ¿Las personas a tu alrededor han mencionado que soy creativo/a y que tienes ideas originales y divertidas? '	,' ¿Qué sueles hacer en las reuniones familiares? '	,' Considero que las manualidades son una buena vía para expresarme: '	,' ¿Consideras, o los demás dicen de ti, que eres una persona sensible y en contacto con sus emociones? '	,' Cuando vas de viaje o paseo a algún sitio, te gusta más fijarte en: '	,' ¿Disfrutas realizar manualidades? '	,' ¿Qué es lo primero que haces cuando entras a un lugar nuevo? '	,' ¿Te apasiona el arte en cualquiera de sus formas? '	
+        ,'N'	,' ¿Qué haces cuando se presenta un problema? '	,' ¿Te consideras bueno/a con los números? '	,' ¿Disfrutas imaginando qué pasará a futuro? (predecir) '	,' Escoge qué característica de las siguientes te define de mejor manera: '	,' ¿Te agrada la idea de invertir tu dinero? '	,' Escoge qué característica de las siguientes te define de mejor manera '	,' ¿Tus soluciones a los problemas suelen ser innovadoras o poco comunes? '
+        ,'P'	,' Si tuvieras que escoger entre distintas actividades para realizar en tu tiempo libre, prefieres '	,' ¿Qué haces si dos personas que conoces tienen un conflicto o pelea? '	,' ¿Cómo te sientes cuando debes exponer frente a un público?: '	,' ¿Te has imaginado a ti mismo/a dando discursos importantes? '	,' Prefieres pensar sobre: '	,' ¿Cuál de los siguientes valores te parece el MÁS importante? '	,' ¿Sientes que puedes convencer fácilmente a las personas? '	,' Selecciona la materia que más te agrada de las siguientes: '	,' Selecciona la materia que más te agrada de las siguientes: '
+        ,'B',' ¿Sueles pensar mucho en ayudar a los demás, incluso a costa de tu bienestar? '	,' Escoge la característica que mejor te define de las siguientes: '	,' En general, ¿sientes curiosidad por cómo funciona el cuerpo humano y/o animal? Sí '	,' ¿Te consideras una persona asquienta? (no soporto la sangre, el vómito, heces, etc.) '	,' ¿Qué haces frente a una situación crítica? '	,' Imagina que debes dar una mala noticia, ¿cómo lo haces? '	,' Escoge la opción con la que más te identifiques: '	,' ¿Cuál de los siguientes objetos te gustaría tener? '	,' ¿Te parece interesante el mundo académico-científico y siempre estás dispuesto/a a aprender? '	,' ¿Cómo eres cuando se trata de animales? '
+        ,'E',' Normalmente, ¿te sientes cómodo/a y poco nervioso/a cuando realizas una exposición? '	,' ¿Qué haces cuando debes explicarle algo a alguien? '	,' ¿Te consideras una persona paciente? '	,' Selecciona el enunciado que mejor te describe: '	,' ¿Eres uno de los que más habla en tu grupo de amigos? Es decir, ¿te consideras parlanchín/a? '	,' ¿Cómo reaccionas cuando alguien que conoces está con un estado de ánimo bajo? '	,' ¿Es común que seas escogido/a como líder de grupo, presidente del curso, capitán del equipo, etc.? '	,' ¿Cómo realizas las tareas de la materia que más te gusta? '	,' ¿Disfrutas ayudando a los demás a ser una mejor versión de sí mismos/as? '	,' ¿Has notado que las personas confían en ti fácilmente? '
+        ,'F',' ¿Cómo reaccionas cuando se presenta un problema? '	,' ¿Sientes o has sentido curiosidad por cómo funcionan las cosas que usamos a diario? (máquinas, celulares, herramientas, entre otros) '	,' ¿Alguna vez desarmaste tus juguetes para observar su funcionamiento, piezas y demás? '	,' ¿Te apasionan las matemáticas, los números y su exactitud? '	,' ¿Has pensado en crear inventos que aporten a la humanidad? '	,' ¿Has intentado arreglar un aparato electrónico por tu cuenta? '	,' ¿Cómo eres cuando tienes un proyecto en mente? '	,' ¿Qué es más importante para ti? '
+        ,'L',' ¿Te consideras alguien muy pensativo/a? ',' Escoge la característica que MEJOR te define '	,' ¿Cuál de las siguientes cosas te apasiona? '	,' ¿Te sientes cómodo/a escuchando a los demás y las personas suelen confiar fácilmente en ti? '	,' ¿Qué es más importante para ti? '	,' ¿Te sientes cómodo/a interactuando con otras personas? '	,' ¿Eres bueno expresando tus ideas al escribir? '	,' ¿Te consideras alguien curioso/a, que puede arriesgar y sacrificar muchas cosas con tal de saber la verdad? '	,' ¿Te preguntas constantemente por alguno de los siguientes temas? '
+        ,'H',' ¿Cómo eres frente a las reglas, leyes o normas? ',' ¿Sientes necesidad de ser reconocido/a por tu trabajo? '	,' Escoge la característica que mejor te define '	,' ¿Alguna vez te han dicho, o has considerado que eres explosivo/a cuando te enojas? '	,' ¿Qué prefieres cuando debes defender a alguien? '	,' ¿Te consideras, y los demás dicen de ti, que eres una persona disciplinada? '	,' ¿Te sientes cómodo/a cuando recibes órdenes de alguien más? '	,' Por cumplir con tus obligaciones, ¿estás dispuesto/a a sacrificar tu manera de hacer las cosas, tu tiempo y el pasar con tu familia? '	,' Imagina que debes defender a tu país, ¿cómo reaccionarías? '
+        ,'O',' ¿Qué te gusta conocer de otros países? '	,' ¿Cómo es tu habilidad numérica? '	,' Escoge la materia que más te agrada de las siguientes '	,' ¿Sueles averiguar sobre noticias internacionales y mundiales? '	,' ¿Qué haces cuando debes realizar un deber extenso? '	,' ¿Te agrada el mundo empresarial? '	,' ¿Cómo te sientes cuando debes exponer frente a un público? '	,' ¿Te relacionas fácilmente con personas aún desconocidas? '	,' Escoge la característica que mejor te define '
+        ,'C',' ¿Consideras que sería bueno/a vendiendo una idea o producto a alguien? '	,' ¿Se te hace fácil interactuar con personas de todo tipo? '	,' Cuando entras a un local comercial, ¿qué es lo que más te llama la atención? '	,' ¿Cómo consideras que son la mayoría de tus ideas? '	,' ¿Te han dicho que tus soluciones a los problemas son buenas? '	,' ¿Qué prefieres ser entre las siguientes opciones? '	,' ¿Te gusta dibujar? '	,' ¿Has notado que el comportamiento de una persona se relaciona con su consumo de productos? '	,' ¿Cómo reaccionas cuando recibes una crítica? '];
+       
+    }
+
+
+    if(ValorTestTipo == "Test de Intereses Profesional"){
+        var TituloLista = ['A'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'N'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'P'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'B'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'E'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'F'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'L'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'H'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'O'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'C'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+,'Escoge la opción que más te guste'
+];
+       
+    }
+
+    if(ValorTestTipo == "Test Profesional"){
+        var TituloLista = ['A'
+,'¿Te gusta mezclar y experimentar con sabores, olores y texturas?'
+,'¿Te molesta dibujar a mano, o realizar cosas con tus manos como manualidades y demás?'
+,'¿Has podido identificar los ingredientes de un plato con solo probarlo?'
+,'Cuando debías hacer una maqueta en el colegio, ¿lo has disfrutado?'
+,'¿Se te hace fácil ordenar espacios en tu cabeza? (imaginar dónde puede ir ubicado un adorno, mueble o cúal sería la mejor forma de ordenar una habitación)'
+,'De los siguientes pasatiempos, escoge el que más te agrada y YA REALIZAS'
+,'De los siguientes pasatiempos, escoge el que más te agrada y YA REALIZAS'
+,'¿Conoces sobre Arte? (Historia del arte, obras artísticas y/o artistas de renombre)'
+,'¿Consideras que los platos de comida tienen un significado especial?'
+,'Si lo económico no fuera un problema, y tuvieras todo el dinero necesario para toda tu vida, ¿cuál de las siguientes profesiones escogerías?'
+,'N'
+,'¿Te gusta realizar actividades que impliquen manejar información? (sacar promedio de datos estadísticos, interpretar cifras o un fragmento de texto)'
+,'Cuando trabajas frente al computador, ¿cuál de las siguientes actividades disfrutas más?'
+,' ¿Has planificado cómo invertir tu dinero? '
+,'¿Qué es lo primero que haces cuando te enteras que una empresa o negocio quebró?'
+,'¿Cómo manejas tu dinero?'
+,'¿Has pensado que la economía está relacionada con aspectos como la vida social, la mente de las personas y lo que pasa en el mundo?'
+,'¿Podrías trabajar investigando?'
+,'P'
+,'¿Sabes qué hace una ONG? Si es así, ¿te gustaría trabajar en una?'
+,' ¿Te sientes cómodo/a hablando en público?'
+,'¿Has pensado cómo solucionar problemas sociales? Por ejemplo: la falta de acceso a la salud pública, falencias del sistema educativo, desnutrición infantil en sectores marginados, entre otros. '
+,' Escoge, ¿en cuál de los siguientes lugares te gustaría más trabajar?'
+,'¿Consideras posible que la sociedad mejore?'
+,'¿Sueles averiguar sobre noticias nacionales e internacionales referentes a  la política y sociedad? '
+,' Cuando estás en medio de un conflicto, ¿se te hace fácil controlar tus emociones?'
+,'¿Sueles defender a tus amigos, familiares o conocidos?'
+,'Escoge la opción que más se aplica a tu forma de ser, ¿cómo eres en un debate?'
+,'B'
+,'¿Qué tan cómodo te sientes trabajando en equipo? (Del 1 al 10)'
+,'Escoge, ¿en cuál de los siguientes lugares te gustaría más trabajar?'
+,'¿Cómo te comportas ante una situación crítica?'
+,'¿Estarías dispuesto/a a trabajar durante muchas horas o hasta en horario nocturno?'
+,'¿Cómo eres cuando debes memorizar información?'
+,'¿Qué haces cuando no conoces los motivos de algo?'
+,'Escoge la actividad que te gustaría MÁS hacer de las siguientes:'
+,'Escoge, ¿cómo prefieres ayudar a las personas?'
+,'Escoge, ¿qué es más importante PARA TI de las siguientes opciones?'
+,'Escoge, ¿qué prefieres hacer?'
+,'E'
+,'Escoge, ¿en cuál de los siguientes lugares te gustaría más trabajar?'
+,'¿Cómo prefieres ayudar a las personas?'
+,'¿Sueles darte cuenta cuando uno de tus conocidos ha crecido como persona? (estar al pendiente de sus logros y avances por ejemplo)'
+,'¿Consideras que eres bueno/a comunicando tus ideas, emociones y sentimientos?'
+,'Cuando se debe organizar un equipo (de trabajo, amigos, etc), ¿cómo te comportas?'
+,'¿Qué rol tomas cuando estás en una charla o reunión con amigos?'
+,'¿Cuántas veces te ha tocado (o has escogido) ser el/la jefe de equipo, grupo de amigos, entre otros?'
+,'Escoge, ¿cómo te sientes respecto a las rutinas?'
+,'¿Tus amigos y familia dirían que toleras cuando alguien más habla desde la ignorancia?'
+,'¿Cómo preferirías aportar al desarrollo del país?'
+,'F'
+,'¿Consideras que un buen proyecto se hace mejor en equipo?'
+,' Escoge el enunciado que mejor te describa, ¿cómo eres cuando debes realizar un trabajo/proyecto?'
+,'Escoge, ¿qué prefieres hacer?'
+,'¿Cuál de las siguientes áreas te llama más la atención?'
+,'Escoge, ¿con qué prefieres trabajar?'
+,' ¿Cómo preferirías aportar al desarrollo del país?'
+,'¿Te llaman la atención los juegos mentales como el cubo Rubik o rompecabezas?'
+,'Cuando debes resolver un problema, ¿sueles imaginar las posibles soluciones muy visualmente en tu mente, o hasta “en 3D”?'
+,'L'
+,'¿Qué prefieres hacer cuando trabajas en equipo? '
+,' Escoge, ¿cuál de las siguientes actividades ya has realizado y te agrada?'
+,'¿Cuál de las siguientes actividades prefieres realizar?'
+,'Escoge, ¿Para ti es más importante que las personas…?'
+,'¿Cómo eres cuando debes brindar apoyo emocional?'
+,'¿Qué haces cuando debes dar tu opinión? '
+,'¿Consideras que la verdad debe ser expresada siempre y ante todos?'
+,'¿Estarías dispuesto/a a leer mucho en lo que queda de tu vida?'
+,' Si pudieras obtener respuestas sobre temas trascendentales (sentido de la vida, el universo, las cosas que nos rodean, etc), ¿lo harías?'
+,'H'
+,'¿Consideras que eres torpe o poco hábil al manejar objetos o herramientas? (se te caen de las manos fácilmente, no sabes cómo usarlos, etc,)'
+,'¿Te gustaría hacer actividades arriesgadas como saltar de un paracaídas o pilotear un avión?'
+,'¿Disfrutas realizando actividad física?'
+,' ¿Consideras que podrías permanecer despierto/a por 24 horas seguidas o más?'
+,'Escoge, ¿la mayoría del tiempo eres una persona…?'
+,'¿Cómo reaccionas cuando eres testigo de una injusticia?'
+,'¿Cómo reaccionas cuando te sometes a un procedimiento doloroso y/o incómodo? Por ejemplo: recibir una inyección, que te curen una herida o golpe sin anestesia, aguantar el dolor de una fisura o fractura, entre otros.'
+,'¿Te impresionas fácilmente cuando presencias accidentes graves? (de tránsito, personas heridas o fallecidas, etc.)'
+,'O'
+,'¿Cómo preferirías aportar al desarrollo del país?'
+,'Escoge, ¿cuál de las siguientes actividades ya has realizado y te agrada?'
+,'¿Consideras que eres bueno comunicando tus ideas?'
+,'¿Qué tan fácil es para ti relacionarte con otras personas?'
+,'Escoge, ¿dónde te gustaría más trabajar?'
+,'Escoge, ¿cuál de las siguientes actividades te agrada y se te hace MÁS fácil hacer?'
+,'¿En cuál de las siguientes problemáticas te gustaría MÁS ayudar?'
+,'¿Consideras el aprender idiomas como algo importante?'
+,'¿Qué prefieres hacer cuando trabajas en equipo? '
+,'C'
+,'¿Sueles esforzarte para que tus ideas sean innovadoras y poco comunes?'
+,'¿Serías capaz de trabajar frente a un computador la mayor parte del tiempo?'
+,'¿Qué te llama más la atención cuando navegas en redes sociales?'
+,'¿Cuál de las siguientes áreas te llama más la atención?'
+,' ¿Te consideras alguien carismático?'
+,'¿Cómo reaccionas cuando debes dar una respuesta rápida?'
+,'¿Alguna vez has intentado dibujar en una computadora o dispositivo táctil?'
+,'¿Sueles fijarte en la publicidad de ciertas marcas importantes?'
+,'¿Qué te parece lo más importante en la publicidad de una marca?'
+];
+       
+    }
+ 
+        var cont = 0;
+        var Tipo = "";
+        for(var i = 0; i < TituloLista.length; i++){
+
+            if(TituloLista[i] =='A'){
+                cont = 0;
+                Tipo = 'A';
+            }
+            if(TituloLista[i] =='N'){
+                cont = 0;
+                Tipo = 'N';
+            }
+            if(TituloLista[i] =='P'){
+                cont = 0;
+                Tipo = 'P';
+            }
+            if(TituloLista[i] =='B'){
+                cont = 0;
+                Tipo = 'B';
+            }
+            if(TituloLista[i] =='E'){
+                cont = 0;
+                Tipo = 'E';
+            }
+            if(TituloLista[i] =='F'){
+                cont = 0;
+                Tipo = 'F';
+            }
+            if(TituloLista[i] =='L'){
+                cont = 0;
+                Tipo = 'L';
+            }
+            if(TituloLista[i] =='H'){
+                cont = 0;
+                Tipo = 'H';
+            }
+            if(TituloLista[i] =='O'){
+                cont = 0;
+                Tipo = 'O';
+            }
+            if(TituloLista[i] =='C'){
+                cont = 0;
+                Tipo = 'C';
+            }
+
+            if(TituloLista[i] != Tipo){
+                var LeerDiv = document.getElementById("FormularioPreguntas");
+                var Titulo = document.createElement("h1");
+                Titulo.textContent = TituloLista[i];   
+                let Combobox = document.createElement("select");
+                Combobox.id = Tipo+cont;
+                Combobox.className = "Combobox";            
+                LeerDiv.appendChild(Titulo);
+                LeerDiv.appendChild(Combobox);
+                cont = cont+1;
+            }
+            
+        }        
+
+
+    }
+    document.getElementById("Acceder").onclick = function(e){
+
+        var ValorColegio = Colegio.value;
+        var ValorTestTipo = TestTipo.value;
+        var ValorNombre = Nombre.value;
+        var ValorTelefono = Telefono.value;
+        var ValorCedula = Cedula.value;
+
+        if(ValorColegio != "Seleccione" && ValorTestTipo != "Seleccione" && (ValorNombre != "" && ValorNombre.length > 1)
+        && (ValorTelefono != "" && ValorTelefono.length == 10) && (ValorCedula != "" && ValorCedula.length == 10) ){
+                // Validacion();
+                CrearPregunta();
+                document.getElementById("Formulario").style.display = "inline";
+                document.getElementById("Subir").style.display = "inline";
+                document.getElementById("DatosPersonales").style.display = "none";
+                Aptitudes();
+        }
+        else{
+            alert("Verifique los datos colocados");
+        }   
+    }
+
+    document.getElementById("Subir").onclick = function(e){
+        var ValorTestTipo = TestTipo.value;
+        var ActivadorA = 0;    
+        var SA = 0;
+        var SN = 0;
+        var SP = 0;
+        var SB = 0;
+        var SE = 0;
+        var SF = 0;
+        var SL = 0;
+        var SH = 0;
+        var SO = 0;
+        var SC = 0;
+
+        var Seccion = "";
+        var Contador = 0;
+
+        if(ValorTestTipo == "Test de Aptitudes"){            
+           
+            var SeccionA = ["A","Dibujar o pintar",
+                "Sí",
+                "Ayudando en la cocina",
+                "Sí",
+                "Sí",
+                "Los edificios, casas, monumentos y distintas construcciones",
+                "Sí",
+                'Observo cómo están colocados los muebles y la decoración',
+                "Casi siempre","N","Busco formas de solucionarlo y analizo la situación",
+                "Sí",
+                "SI",
+                "Ambicioso/a",
+                "Sí",
+                "Analítico/a o pensativo/a",
+                "La mayoría de las veces","P",'Leer'
+                ,'Hago de mediador/a, pienso en lo que sería justo para ambos'
+                ,'Me siento poco nervioso, las palabras fluyen y puedo hacerlo fácilmente'
+                ,'Sí'
+                ,'Resolución de conflictos en la sociedad, cómo acabar con las injusticias'
+                ,'Justicia'
+                ,'Casi siempre'
+                ,'Lengua y literatura'
+                ,'Ciencias Sociales'
+                ,'B'
+                ,'Casi siempre'
+                ,'Servicial'
+                ,'SI'
+                ,'No'
+                ,'Me paralizo, normalmente son los demás quienes ayudan o toman las riendas'
+                ,'Pienso en los sentimientos de la persona que recibe la noticia y escojo las palabras adecuadas'
+                ,'Soy alguien empático/a que siempre piensa en el bienestar y felicidad de los demás'
+                ,'Microscopio'
+                ,'Sí'
+                ,'Siento amor por ellos, nunca los lastimaría y me gusta cuidarlos'
+                ,'E'
+,'Casi siempre'
+,'Lo hago fácilmente, las personas suelen entenderme'
+,'Sí'
+,'Me apasiona aprender y compartir mis conocimientos'
+,'Casi siempre'
+,'Me doy cuenta fácilmente de lo que le pasa y me dispongo a apoyarlo emocionalmente (soy empático/a'
+,'Muchas veces'
+,'Soy creativo/a, intento presentar la tarea con diversos recursos (imágenes, organizadores gráficos, presentaciones, entre otros).'
+,'Sí, bastante'
+,'Muchas veces'
+,'F'
+,'Prefiero analizar la situación y busco una solución lo más rápido posible'
+,'Casi siempre'
+,'Sí'
+,'Sí, bastante'
+,'Sí'
+,'Más de una vez'
+,'Me dedico enteramente a ello y busco hacerlo realidad'
+,'Que la sociedad cuente con tecnología para facilitar ciertos procesos'
+,'L'
+,'Muchas veces'
+,'Analítico/a'
+,'La lectura'
+,'Sí, bastante'
+,'Que las personas estén bien informadas sobre lo que sucede en el país'
+,'Casi siempre'
+,'Sí'
+,'Claro que sí, quiero estar bien informado/a'
+,'Todas las anteriores'
+,'H'
+,'Las cumplo todas e intento que el resto también lo haga'
+,'No mucho, puedo vivir sin ello'
+,'Honrado'
+,'No, soy paciente y controlo mis emociones lo mejor que puedo'
+,'Utilizo mi cuerpo y fuerza para hacerlo'
+,'Muchas veces'
+,'Sí, puedo hacerlo sin ningún problema'
+,'SI'
+,'Sacrificaría lo que sea necesario por ello'
+,'O'
+,'El aspecto social, político y económico'
+,'Aceptable, conozco las matemáticas y no me molesta trabajar con números'
+,'Inglés (idiomas)'
+,'Muchas veces'
+,'Prefiero realizar una planificación y seguir los pasos'
+,'Sí'
+,'Me siento poco nervioso, las palabras fluyen y puedo hacerlo fácilmente'
+,'Casi siempre'
+,'Amable'
+,'C'
+,'Sí, ya lo he conseguido en ocasiones pasadas'
+,'Sí'
+,'Cómo están colocados los productos y la publicidad'
+,'Creativas'
+,'Sí, un par de veces'
+,'Vendedor'
+,'Sí'
+,'Sí, un par de veces'
+,'Las acepto y reflexiono para realizar los cambios y mejoras necesarias'
+
+
+
+            ];
+
+        }
+
+        if(ValorTestTipo == "Test de Intereses Profesional"){
+            var SeccionA = ['A'
+            ,'Director de Orquesta'
+            ,'Cantante'
+            ,'Caricaturista'
+            ,'Violinista'
+            ,'Critico de Cine'
+            ,'Pintor'
+            ,'Director de Teatro'
+            ,'Actor / Actriz'
+            ,'Coreógrafo'
+            ,'2'
+            ,'N'
+            ,'Comerciante (Vendedor)'
+            ,'2'
+            ,'Auditor Financiero (https://neuvoo.es/neuvooPedia/es/auditor/)'
+            ,'Economista'
+            ,'Gerente'
+            ,'Cajero'
+            ,'Asesor Bancario'
+            ,'Asistente Contable'
+            ,'Agente de Seguros'
+            ,'Negocios Internacionales (https://www.occ.com.mx/blog/estudiar-negocios-internacionales/)'
+            ,'P'
+            ,'Abogado'
+            ,'Asesor Legal (https://url2.cl/3NePd)'
+            ,'2'
+            ,'Presidente'
+            ,'Agente Público'
+            ,'Alcalde'
+            ,'Consejal (https://url2.cl/6l9b8)'
+            ,'Legislador (Político)'
+            ,'Dirigente Político'
+            ,'Penalista (https://url2.cl/6VwMF)'
+            ,'B'
+            ,'Zoólogo (https://url2.cl/wzgSS)'
+            ,'Oncólogo (https://url2.cl/A1f7L)'           
+            ,'Contralor (https://url2.cl/MzTY4)'
+            ,'2'
+            ,'Veterinario'
+            ,'Botánico (https://url2.cl/DnvvJ-)'
+            ,'Cardiólogo'
+            ,'Químico'
+            ,'Biólogo'
+            ,'Microbiólogo (https://url2.cl/vmyMH)'
+            ,'E'
+            ,'Supervisor Escolar (Distritos de eduación)'
+            ,'Profesor de primaria'
+            ,'Inspector de Colegios'
+            ,'Decano'
+            ,'Rector de Escuela'
+            ,'Investigador'
+            ,'Profesor'
+            ,'Ministro de Educación'
+            ,'Pedagogía'
+            ,'Profesor de cultura física'
+            ,'F'
+            ,'Ing. Mecánico'
+            ,'Ing. Automatización (https://url2.cl/1Ntlm)'
+            ,'Ing. Petróleos'
+            ,'Ing. Electrónico'
+            ,'Ing. Civil'
+            ,'2'
+            ,'Robótica'
+            ,'Físico'
+            ,'Ing. Sistemas'
+            ,'Ing. Seguridad'
+            ,'L'
+            ,'Escritor - Investigador'
+            ,'Psicólogo Industrial (https://url2.cl/edtMM)'
+            ,'Periodista'
+            ,'Psicólogo Clínico (https://url2.cl/crfWu)'
+            ,'Orador'
+            ,'2'
+            ,'Critico de Literario'
+            ,'Psicólogo Infantil'
+            ,'Reportero'
+            ,'Comunicador Social'
+            ,'H'
+            ,'Comandante'
+            ,'Policía'
+            ,'Marino'
+            ,'Militar'
+            ,'Bombero'
+            ,'Cadete'
+            ,'Coronel'
+            ,'Agente de transito'
+            ,'Forense'
+            ,'Inspector de seguridad'
+            ,'O'
+            ,'Adm. Hotel'
+            ,'Guía Turismo'
+            ,'Embajador'
+            ,'Master en Administración de empresas'
+            ,'Traductor'
+            ,'Gerente de hotel'
+            ,'Jefe de cocina'
+            ,'Gerente de un colegio'
+            ,'2'
+            ,'Vice alcalde'
+            ,'C'
+            ,'Diseñador Publicidad'
+            ,'Diseñador de interiores'
+            ,'Diseñador de modas'
+            ,'Vendedor'
+            ,'Diseñador de jardines'
+            ,'Publicista'
+            ,'Promotor de Eventos'
+            ,'Jefe de ventas'
+            ,'Supervisor de ventas'
+            ,'Diseñador de logo'
+
+            ];
+        }
+
+        if(ValorTestTipo == "Test Profesional"){
+            var SeccionA = [
+            'A'
+            ,'Sí'
+            ,'En desacuerdo'
+            ,'Sí, algunas veces'
+            ,'Sí, siempre intentaba ser creativo/a en eso'
+            ,'Sí, lo he hecho varias veces'
+            ,'Pintar y dibujar'
+            ,'Cocinar'
+            ,'Sí, es un tema que me interesa bastante'
+            ,'Sí, siento que se puede transmitir a través de la comida'
+            ,'Artes'
+            ,'N'
+            ,'SI'
+            ,'Investigar acerca de otros países aspectos como el desempleo, sueldo básico, nivel de pobreza.'
+            ,'SI'
+            ,'Pienso en los motivos detrás de ello'
+            ,'Busco ahorrar y tener una planificación de mis gastos'
+            ,'Sí, además puede relacionarse con otros aspectos'
+            ,'Sí'
+            ,'P'
+            ,'Sí me gustaría'
+            ,'Sí, es algo que me gusta hacer'
+            ,'Sí, incluso tengo ideas y posibles soluciones para problemáticas sociales'
+            ,'Gobierno (Presidencia, ministerios, etc.)'
+            ,'Sí es posible, pues a pesar de todas las cosas negativas hay aspectos por los que vale la pena luchar'
+            ,'Sí'
+            ,'Sí se me hace fácil, además lo considero necesario pues las emociones pueden nublarnos'
+            ,'Sí, lo he hecho varias veces'
+            ,'La mayoría de las veces tengo buenos argumentos y se me ocurren fácilmente formas de responder a mi oponente'
+            ,'B'
+            ,'Entre 6 a 10'
+            ,'Hospital o clínica'
+            ,'Tengo carácter fuerte, puedo pensar con cabeza fría'
+            ,'Sí, con gusto lo haría por una buena causa'
+            ,'Puedo hacerlo, a veces con facilidad y a veces es más complicado, pero la mayoría de las veces lo logro'
+            ,'Analizo las posibles respuestas, investigo hasta llegar a la verdad'
+            ,'Conocer las sustancias que componen nuestros alimentos, bebidas, medicamentos, entre otros'
+            ,'Curando sus heridas y/o enfermedades'
+            ,'Construir un hospital veterinario público o varios'
+            ,'Hacer un experimento'
+            ,'E'
+            ,'Colegio o universidad'
+            ,'Explicando y enseñando temas que desconozcan'
+            ,'Sí, y me alegro por ellos'
+            ,'La mayoría de las veces sí'
+            ,'Me gusta y creo que lo hago bien'
+            ,'Siempre hablo y cuento mis experiencias personales, sin dejar de escuchar al resto'
+            ,'Casi siempre que se presenta la oportunidad'
+            ,'Me gusta seguir una rutina y un orden'
+            ,'Sí, no digo nada en ese momento. Luego intento que comprendan su error si es necesario'
+            ,'Enseñando a las nuevas generaciones'
+            ,'F'
+            ,'Sí, es importante contar con apoyo'
+            ,'Debo hacerlo con la mayor exactitud posible y dar mi mejor esfuerzo'
+            ,'Resolver ejercicios que impliquen un razonamiento lógico'
+            ,'Tecnología'
+            ,'Máquinas'
+            ,'Creando obras civiles, inventos tecnológicos o maquinaria'
+            ,'Me encantan, soy bueno/a en eso'
+            ,'Me pasa seguido, así pienso mejor'
+            ,'L'
+            ,'Aportar con ideas para que mis compañeros las desarrollen'
+            ,'Crear/editar fotos y vídeos'
+            ,'Escribir un ensayo'
+            ,'Sean escuchadas y comprendidas'
+            ,'Permito que la persona se desahogue, la escucho y si es necesario la aconsejo'
+            ,'Lo hago, me considero una persona crítica y pienso mucho antes de emitir una postura'
+            ,'Sí'
+            ,'Sí, es algo que no me molestaría en lo absoluto'
+            ,'Claro que lo haría, son cosas que pienso seguido'
+            ,'H'
+            ,'No, en general no soy torpe'
+            ,'¡Sí!'
+            ,'Sí, incluso tengo una rutina'
+            ,'Sí, incluso ya lo he logrado en ocasiones anteriores'
+            ,'Activa y con mucha energía'
+            ,'Me indigno y ayudo/defiendo a la persona en desventaja si puedo hacerlo'
+            ,'Reacciono de forma controlada, pues es algo necesario y solo será por unos segundos o minutos'
+            ,'No, sí puedo controlar mis emociones y reacciones ante estos eventos'
+            ,'O'
+            ,'Haciendo alianzas y negocios con otros países'
+            ,'Vender algo (convencer a alguien para que lo compre)'
+            ,'Sí, nunca he tenido problemas para hacerlo'
+            ,'Bastante fácil, no tengo problema en ello y me agrada'
+            ,'En una gran empresa'
+            ,'Persuadir o convencer a alguien'
+            ,'Importaciones y exportaciones para mejorar la economía'
+            ,'Sí y me agrada aprender idiomas'
+            ,'Ser quien lidera el grupo de trabajo y organiza las tareas'
+            ,'C'
+            ,'Sí, lo he notado y los demás me lo han dicho'
+            ,'Sí'
+            ,'Las infografías, flyers e ilustraciones'
+            ,'Ventas'
+            ,'Sí, la mayoría de las veces lo soy'
+            ,'Se me hace fácil encontrar una respuesta apropiada'
+            ,'Sí, me agrada hacerlo'
+            ,'Sí, bastante seguido'
+            ,'Lo visual, que hagan buenos videos e imágenes'
+
+            ];
+        }
+        
+        for(var i = 0; i < SeccionA.length; i++){
+
+        if(SeccionA[i] == "A"){
+            Seccion = "A";
+            Contador = 0;
+        }
+        if(SeccionA[i] == "N"){
+            Seccion = "N";
+            Contador = 0;
+        }
+        if(SeccionA[i] == "P"){
+            Seccion = "P";
+            Contador = 0;
+        }
+        if(SeccionA[i] == "B"){
+            Seccion = "B";
+            Contador = 0;
+        }
+        if(SeccionA[i] == "E"){
+            Seccion = "E";
+            Contador = 0;
+        }
+        if(SeccionA[i] == "F"){
+            Seccion = "F";
+            Contador = 0;
+        }
+        if(SeccionA[i] == "L"){
+            Seccion = "L";
+            Contador = 0;
+        }
+        if(SeccionA[i] == "H"){
+            Seccion = "H";
+            Contador = 0;
+        }
+        if(SeccionA[i] == "O"){
+            Seccion = "O";
+            Contador = 0;
+        }
+        if(SeccionA[i] == "C"){
+            Seccion = "C";
+            Contador = 0;
+        }
+
+        if(SeccionA[i] != "A" && SeccionA[i] != "N" && SeccionA[i] != "P" && SeccionA[i] != "B"  && SeccionA[i] != "E"  && SeccionA[i] != "F"
+        && SeccionA[i] != "L"  && SeccionA[i] != "H"  && SeccionA[i] != "O"  && SeccionA[i] != "C"){
+    var ComboboxContenido = document.getElementById(Seccion+Contador);
+    var ExtraComboboxContenido = ComboboxContenido.value;
+    if(ExtraComboboxContenido != "Seleccione"){
+
+        if(ExtraComboboxContenido == SeccionA[i] || SeccionA[i] == "2"){
+
+            if(ValorTestTipo == "Test de Aptitudes"){
+
+                if(Seccion == "A"){
+
+                    if(SeccionA[i] == 'Observo cómo están colocados los muebles y la decoración'){
+                        SA = SA + 4;
+                    }
+                    else{
+                        SA = SA + 2;
+                    }
+                }
+                if(Seccion == "N"){
+                if(ExtraComboboxContenido =='Ambicioso/a' || ExtraComboboxContenido == 'Analítico/a o pensativo/a' || ExtraComboboxContenido == 'La mayoría de las veces'){
+                    SN = SN + 4;
+                }
+                else{
+                    SN = SN + 2;
+                }
+                }        
+                if(Seccion == "P"){
+                if(ExtraComboboxContenido == 'Leer'){
+                    SP = SP + 4;
+                }
+                else{
+                    SP = SP + 2;
+                }
+                }           
+                if(Seccion == "B"){               
+                if(Contador == 8 || Contador == 9){
+                    SB = SB + 1;
+                }
+                else{
+                    if(ExtraComboboxContenido == 'Me paralizo, normalmente son los demás quienes ayudan o toman las riendas'){
+                        SB = SB + 4;
+                    }
+                    else{
+                        SB = SB + 2;
+                    }
+                }
+                }       
+
+                if(Seccion == "E"){               
+                SE = SE + 2;
+                }
+
+                if(Seccion == "F"){
+                if(ExtraComboboxContenido == 'Que la sociedad cuente con tecnología para facilitar ciertos procesos'){
+                    SF = SF + 4;
+                }
+                else{
+                    SF = SF + 2;
+                }
+                } 
+
+                if(Seccion == "L"){
+                if(ExtraComboboxContenido == 'Claro que sí, quiero estar bien informado/a'){
+                    SL = SL + 4;
+                }
+                else{
+                    SL = SL + 2;
+                }
+                } 
+
+                if(Seccion == "H"){
+                if(ExtraComboboxContenido == 'SI'){
+                    SH = SH + 4;
+                }
+                else{
+                    SH = SH + 2;
+                }
+                } 
+
+                if(Seccion == "O"){
+                if(ExtraComboboxContenido == 'Me siento poco nervioso, las palabras fluyen y puedo hacerlo fácilmente'){
+                    SO = SO + 4;
+                }
+                else{
+                    SO = SO + 2;
+                }
+                } 
+
+                if(Seccion == "C"){
+                if(ExtraComboboxContenido == 'Las acepto y reflexiono para realizar los cambios y mejoras necesarias'){
+                    SC = SC + 4;
+                }
+                else{
+                    SC = SC + 2;
+                }
+                }                                    
+
+            }
+        
+            if(ValorTestTipo == "Test de Intereses Profesional"){
+                if(Seccion == "A"){ 
+                    SA = SA + 2;
+                }
+                if(Seccion == "N"){ 
+                    SN = SN + 2;
+                }
+                if(Seccion == "P"){ 
+                    SP = SP + 2;
+                }
+                if(Seccion == "B"){ 
+                    SB = SB + 2;
+                }
+                if(Seccion == "E"){ 
+                    SE = SE + 2;
+                }
+                if(Seccion == "F"){ 
+                    SF = SF + 2;
+                }
+                if(Seccion == "L"){ 
+                    SL = SL + 2;
+                }
+                if(Seccion == "H"){ 
+                    SH = SH + 2;
+                }
+                if(Seccion == "O"){ 
+                    SO = SO + 2;
+                }
+                if(Seccion == "C"){ 
+                    SC = SC + 2;
+                }
+            }
+
+            if(ValorTestTipo == "Test Profesional"){
+                if(Seccion == "A"){
+                    SA = SA + 2;
+                }
+
+                if(Seccion == "N"){
+
+                    if(SeccionA[i] == 'Sí'){
+                        SN = SN + 2;
+                    }
+                    else{
+                        SN = SN + 3;
+                    }
+                }
+                
+
+                if(Seccion == "P"){
+
+                    if(SeccionA[i] == 'Sí es posible, pues a pesar de todas las cosas negativas hay aspectos por los que vale la pena luchar'){
+                        SP = SP+ 4;
+                    }
+                    else{
+                        SP = SP + 2;
+                    }
+                }
+
+
+                if(Seccion == "B"){
+                    SB = SB + 2;
+                }
+                            
+                if(Seccion == "E"){
+                    SE = SE + 2;
+                }
+           
+                if(Seccion == "F"){
+
+                    if(SeccionA[i] == 'Debo hacerlo con la mayor exactitud posible y dar mi mejor esfuerzo'
+                    || SeccionA[i] == 'Me pasa seguido, así pienso mejor'){
+                        SF = SF + 4;
+                    }
+                    else{
+                        SF = SF + 2;
+                    }
+                }
+
+                if(Seccion == "L"){
+
+                    if(SeccionA[i] == 'Claro que lo haría, son cosas que pienso seguido'){
+                        SL = SL + 4;
+                    }
+                    else{
+                        SL = SL + 2;
+                    }
+                }
+
+                if(Seccion == "H"){
+
+                    if(SeccionA[i] == 'Reacciono de forma controlada, pues es algo necesario y solo será por unos segundos o minutos'
+                    || SeccionA[i] == 'No, sí puedo controlar mis emociones y reacciones ante estos eventos' ){
+                        SH = SH + 4;
+                    }
+                    else{
+                        SH = SH + 2;
+                    }
+                }
+
+                if(Seccion == "O"){
+
+                if(SeccionA[i] == 'Ser quien lidera el grupo de trabajo y organiza las tareas'){
+                    SO = SO + 4;
+                }
+                else{
+                    SO = SO + 2;
+                }
+                }
+
+                if(Seccion == "C"){
+
+                    if(SeccionA[i] == 'Lo visual, que hagan buenos videos e imágenes'){
+                        SC = SC + 4;
+                    }
+                    else{
+                        SC = SC + 2;
+                    }
+                }
+
+
+
+            }
+
+        }
+    }  
+    else{                    
+        ActivadorA = 1;
+    }       
+
+    Contador = Contador + 1;   
+
+
+    }               
+    }
+
+    if(ActivadorA == 1){
+        alert("Responda todas las preguntas");
+    }
+    else{
+        var ValorColegio = Colegio.value;
+        var ValorTestTipo = TestTipo.value;
+        var ValorNombre = Nombre.value;
+        var ValorTelefono = Telefono.value;
+        var ValorCedula = Cedula.value;
+
+        const dbRef = ref(getDatabase());
+        get(child(dbRef, PeriodoSubir+"/"+ValorColegio+"/ListaEstudiantes")).then((snapshot) => {
+            if(snapshot.exists()){
+
+                var ListaAlumnosExistente = snapshot.val();
+
+                get(child(dbRef, PeriodoSubir+"/"+ValorColegio+"/"+ValorCedula)).then((snapshot) => {
+                if(!snapshot.exists()){
+                    update(ref(db,PeriodoSubir+"/"+ValorColegio),{
+                        ListaEstudiantes:ListaAlumnosExistente+",[],"+ValorCedula                                  
+                    })      
+                    .then(()=>{
+                        
+                        update(ref(db,PeriodoSubir+"/"+ValorColegio+"/"+ValorCedula+"/"+ValorTestTipo),{
+                                SA,
+                                SN,
+                                SP,
+                                SB,
+                                SE,
+                                SF,
+                                SL,
+                                SH,
+                                SO,
+                                SC  
+                        })
+                        update(ref(db,PeriodoSubir+"/"+ValorColegio+"/"+ValorCedula),{
+                                Nombre:ValorNombre,
+                                Colegio:ValorColegio,
+                                Cedula:ValorCedula,
+                                Telefono:ValorTelefono   
+                                        
+                        })      
+                        .then(()=>{
+                            alert("El Test se subió correctamente")
+                            location.reload()
+
+                        })
+                        .catch((error)=>{
+                            alert("Intente de nuevo")
+                        });
+                    
+                    })
+                    .catch((error)=>{
+                        alert("Intente de nuevo")
+                    });
+                } 
+                else{
+                    
+                    update(ref(db,PeriodoSubir+"/"+ValorColegio+"/"+ValorCedula+"/"+ValorTestTipo),{
+                            SA,
+                            SN,
+                            SP,
+                            SB,
+                            SE,
+                            SF,
+                            SL,
+                            SH,
+                            SO,
+                            SC  
+                    })
+                    update(ref(db,PeriodoSubir+"/"+ValorColegio+"/"+ValorCedula),{
+                            Nombre:ValorNombre,
+                            Colegio:ValorColegio,
+                            Cedula:ValorCedula,
+                            Telefono:ValorTelefono   
+                                    
+                    })      
+                    .then(()=>{
+                        alert("El Test se subió correctamente")
+                        location.reload()
+
+                    })
+                    .catch((error)=>{
+                        alert("Intente de nuevo")
+                    });
+                
+                }
+                
+                }).catch((error) => {
+                    alert("Intente de nuevo");
+                });            
+            }               
+            else{
+                update(ref(db,PeriodoSubir+"/"+ValorColegio),{
+                        ListaEstudiantes:ValorCedula                                 
+                })      
+                .then(()=>{
+                    
+                    update(ref(db,PeriodoSubir+"/"+ValorColegio+"/"+ValorCedula+"/"+ValorTestTipo),{
+                        SA,
+                        SN,
+                        SP,
+                        SB,
+                        SE,
+                        SF,
+                        SL,
+                        SH,
+                        SO,
+                        SC  
+                })
+                    update(ref(db,PeriodoSubir+"/"+ValorColegio+"/"+ValorCedula),{
+                            Nombre:ValorNombre,
+                            Colegio:ValorColegio,
+                            Cedula:ValorCedula,
+                            Telefono:ValorTelefono   
+                                    
+                    })      
+                    .then(()=>{
+                        alert("El Test se subió correctamente")
+                        location.reload()
+
+                    })
+                    .catch((error)=>{
+                        alert("Intente de nuevo")
+                    });
+                
+                })
+                .catch((error)=>{
+                    alert("Intente de nuevo")
+                });
+                  
+            }
+        }).catch((error) => {
+            alert("Intente de nuevo");
+        });
+   
+    }
+
+    }
+
+    
+
+
+
+</script>
+
+<script type="module">
+        document.getElementById("Telefono").onkeypress = function() {           
+        if (event.keyCode < 48 || event.keyCode > 57) event.returnValue = false;
+    };  
+    document.getElementById("Cedula").onkeypress = function() {           
+        if (event.keyCode < 48 || event.keyCode > 57) event.returnValue = false;
+    }; 
+    document.getElementById("Nombre").onkeypress = function() {           
+        var key = event.keyCode;
+        var tecla = String.fromCharCode(key).toLowerCase();
+        var letras = " áéíóúabcdefghijklmnñopqrstuvwxyz";
+        var especiales = [8];
+
+        // , 37, 39, 46
+    
+        var tecla_especial = false
+        for(var i in especiales) {
+            if(key == especiales[i]) {
+                tecla_especial = true;
+                break;
+          }
+      }
+  
+      if(letras.indexOf(tecla) == -1 && !tecla_especial)
+          return false;
+    };
+
+</script>

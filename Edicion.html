@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <link rel="stylesheet" type="text/css" href="Edicion.css">
+    <meta name="author" content="IDE Programming">
+    <link rel="shortcut icon" href="iconoWebC.png">
+    <title>Panel de edición</title>
+</head>
+<body>
+
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+  />
+
+    <div class="Contenedor">
+        <div id="Formulario">
+            <h1>PANEL DE EDICIÓN</h1>
+
+           
+            <div id="BuscarContenido">
+                <label><input type="checkbox" class="check" id="cbox1"> Cursos</label>
+                <label><input type="checkbox" class="check" id="cbox2"> Material</label>
+
+                <br>
+                <div id="DivTipoDocumentos">
+                    <label><input type="checkbox" class="check" id="cboxVideos"> Videos</label>
+                    <label><input type="checkbox" class="check" id="cboxDocumentos"> Documentos</label>
+                    <label><input type="checkbox" class="check" id="cboxLinks"> Links</label>
+                </div>
+                
+
+                <br>
+                <select class="Combobox" id="Cursos">            
+                </select>                
+                <br>
+                <button id="VerContenido" class="cta">
+                    <span>Ver contenido</span>
+                    <svg viewBox="0 0 13 10" height="10px" width="15px">
+                      <path d="M1,5 L11,5"></path>
+                      <polyline points="8 1 12 5 8 9"></polyline>
+                    </svg>
+                </button>
+
+            </div>
+
+            <div id="EdicionCursos">
+
+                <h3>Nombre del curso</h3>
+                <input  class="Entry" id="nombre"  maxlength="41" type="text" placeholder="Ingrese un nombre">
+                <br>
+                <h3>Descripción del curso</h3>
+                <textarea  id="descripcion"  maxlength="200" type="text" placeholder="Ingrese una Descripcion"></textarea>
+                <br>
+                <button id="Seleccionar" class="cta">
+                    <span>Subir Imagen</span>
+                    <svg viewBox="0 0 13 10" height="10px" width="15px">
+                      <path d="M1,5 L11,5"></path>
+                      <polyline points="8 1 12 5 8 9"></polyline>
+                    </svg>
+                </button> 
+                <button id="Editar" class="cta">
+                    <span>Editar</span>
+                    <svg viewBox="0 0 13 10" height="10px" width="15px">
+                      <path d="M1,5 L11,5"></path>
+                      <polyline points="8 1 12 5 8 9"></polyline>
+                    </svg>
+                </button> 
+                <button id="VisualizacionPreviaCurso" class="cta">
+                    <span>Visualización</span>
+                    <svg viewBox="0 0 13 10" height="10px" width="15px">
+                      <path d="M1,5 L11,5"></path>
+                      <polyline points="8 1 12 5 8 9"></polyline>
+                    </svg>
+                </button> 
+                <button id="Eliminar" class="cta">
+                    <span>Eliminar</span>
+                    <svg viewBox="0 0 13 10" height="10px" width="15px">
+                      <path d="M1,5 L11,5"></path>
+                      <polyline points="8 1 12 5 8 9"></polyline>
+                    </svg>
+                </button> 
+                <button id="Cancelar" class="cta">
+                    <span>Cancelar</span>
+                    <svg viewBox="0 0 13 10" height="10px" width="15px">
+                      <path d="M1,5 L11,5"></path>
+                      <polyline points="8 1 12 5 8 9"></polyline>
+                    </svg>
+                </button> 
+            </div>
+
+            <div id="EditarMaterial">
+                <select class="Combobox" id="MaterialContenido">            
+                </select>
+                <br>
+                <button id="VerMaterialDisponible" class="cta">
+                    <span>Ver Material</span>
+                    <svg viewBox="0 0 13 10" height="10px" width="15px">
+                      <path d="M1,5 L11,5"></path>
+                      <polyline points="8 1 12 5 8 9"></polyline>
+                    </svg>
+                </button>
+                <button id="CancelarMaterialDisponible" class="cta">
+                    <span>Regresar</span>
+                    <svg viewBox="0 0 13 10" height="10px" width="15px">
+                      <path d="M1,5 L11,5"></path>
+                      <polyline points="8 1 12 5 8 9"></polyline>
+                    </svg>
+                </button>
+            </div>
+
+            <div id="EdicionMaterialSubido">
+
+                <h3>Nombre del material</h3>
+                <input  class="Entry" id="nombreMaterial"  maxlength="41" type="text" placeholder="Ingrese un nombre">
+                <br>               
+                <button id="ModificarContenidoMaterialSub">Editar Contenido</button>
+                <br>
+
+                <button id="SeleccionarImagenMaterial" class="cta">
+                    <span>Subir Imagen</span>
+                    <svg viewBox="0 0 13 10" height="10px" width="15px">
+                      <path d="M1,5 L11,5"></path>
+                      <polyline points="8 1 12 5 8 9"></polyline>
+                    </svg>
+                </button> 
+                <button id="EditarMaterialSubido" class="cta">
+                    <span>Editar</span>
+                    <svg viewBox="0 0 13 10" height="10px" width="15px">
+                      <path d="M1,5 L11,5"></path>
+                      <polyline points="8 1 12 5 8 9"></polyline>
+                    </svg>
+                </button> 
+                <button id="VisualizaciónMaterialSubido" class="cta">
+                    <span>Visualización</span>
+                    <svg viewBox="0 0 13 10" height="10px" width="15px">
+                      <path d="M1,5 L11,5"></path>
+                      <polyline points="8 1 12 5 8 9"></polyline>
+                    </svg>
+                </button>              
+                <button id="EliminarMaterialSubido" class="cta">
+                    <span>Eliminar</span>
+                    <svg viewBox="0 0 13 10" height="10px" width="15px">
+                      <path d="M1,5 L11,5"></path>
+                      <polyline points="8 1 12 5 8 9"></polyline>
+                    </svg>
+                </button> 
+                <button id="CancelarMaterialSubido" class="cta">
+                    <span>Cancelar</span>
+                    <svg viewBox="0 0 13 10" height="10px" width="15px">
+                      <path d="M1,5 L11,5"></path>
+                      <polyline points="8 1 12 5 8 9"></polyline>
+                    </svg>
+                </button> 
+            </div>
+
+            <div id="EdicionMaterialContenidoSubido">
+
+                <h3 id="EtiquetaLinksContenido">Link del material</h3>
+                <input  class="Entry" id="nombreMaterialContenido" type="text" placeholder="Ingrese un nombre">
+                <br>               
+
+                <button id="SeleccionarDocumentoMaterialContenido" class="cta">
+                    <span>Subir Documento</span>
+                    <svg viewBox="0 0 13 10" height="10px" width="15px">
+                      <path d="M1,5 L11,5"></path>
+                      <polyline points="8 1 12 5 8 9"></polyline>
+                    </svg>
+                </button> 
+                <button id="EditarMaterialContenidoSubido" class="cta">
+                    <span>Editar</span>
+                    <svg viewBox="0 0 13 10" height="10px" width="15px">
+                      <path d="M1,5 L11,5"></path>
+                      <polyline points="8 1 12 5 8 9"></polyline>
+                    </svg>
+                </button>                 
+                <button id="CancelarMaterialContenidoSubido" class="cta">
+                    <span>Cancelar</span>
+                    <svg viewBox="0 0 13 10" height="10px" width="15px">
+                      <path d="M1,5 L11,5"></path>
+                      <polyline points="8 1 12 5 8 9"></polyline>
+                    </svg>
+                </button> 
+            </div>
+
+            <div class="Menu">
+                <a href="newCurso.html">
+                    <img class="iconMenu"src="plus1.png"/>
+                </a>
+                <a href="LoginContenido.html">
+                    <img class="iconMenu"src="home1.png"/>
+                </a>
+                <a href="SubirMaterial.html">
+                    <img class="iconMenu"src="cloud1.png"/>
+                </a>
+                <a href="Registro_Alumno.html">
+                    <img class="iconMenu"src="registro1.png"/>
+                </a>
+            </div>
+                                               
+
+        </div>
+        <div class="Contenido">
+
+            <iframe id="gifInicial" ></iframe>
+
+            <div id="Imagen">
+                <img id="imagen">
+                <iframe id="documentoEdicionNuevo" ></iframe>
+
+            </div>
+            <div id="Visualizacion">
+                <iframe id="documentoEdicionNuevo1" ></iframe>
+
+
+                <div id="VisualizacionContenedor">
+                    <img id="imgVisualizacion" >
+                    <div>                    
+                        <h1 id="nameVisualizacion"></h1>
+                        <p id="descripcionVisualizacion"></p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    
+</body>
+</html>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-analytics.js";
+    import { getStorage, ref as sRef, uploadBytes, getDownloadURL,uploadBytesResumable,deleteObject } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-storage.js";
+    const firebaseConfig = {
+        apiKey: "AIzaSyBJCFtSu0OJlqg5rwc1feATIBejX3D0E7Y",
+        authDomain: "nombre-del-proyecto-2321c.firebaseapp.com",
+        databaseURL: "https://nombre-del-proyecto-2321c-default-rtdb.firebaseio.com",
+        projectId: "nombre-del-proyecto-2321c",
+        storageBucket: "nombre-del-proyecto-2321c.appspot.com",
+        messagingSenderId: "672829934203",
+        appId: "1:672829934203:web:12a7ca900dc920f67cb0de",
+        measurementId: "G-5G31BN19HV"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+
+    import {getDatabase,ref,set,child,update,remove,get,push}
+    from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+    const db =getDatabase();
+
+    var files = [];
+    var files1 = [];
+    var ImgName, ImgUrl;
+    var reader = new FileReader();
+    var NombreRepositorios = [];
+    var DescripcionCursos = [];
+    var ImagenCursos = [];
+    var NombresCurso = [];
+    var Curso = document.getElementById('Cursos');
+    var MaterialSeleccionado = document.getElementById('MaterialContenido');
+
+    var NombreRepositoriosMaterialDocumentos = [];
+    var NombreRepositoriosMaterialVideos = [];
+    var NombreRepositoriosMaterialLinks = [];
+
+
+    var NombreRepositoriosMaterial = [];
+    var DescripcionCursosMaterial = [];
+    var ImagenCursosMaterial = [];
+    var NombresCursoMaterial = [];
+
+    var EditarMaterialDireccion = [];
+
+    document.getElementById("gifInicial").src = "https://embed.lottiefiles.com/animation/101573";
+
+
+    LlenarCombobox();
+
+    function LlenarCombobox() {
+            const dbRef = ref(getDatabase());
+            get(child(dbRef,"Cursos/Lista Cursos")).then((snapshot) => {
+            if(snapshot.exists()) {
+                var cursos = snapshot.val().Lista;
+                NombreRepositorios = cursos.split(",");
+                var combo = document.getElementById("Cursos");
+                var option = document.createElement('option');
+                combo.options.add(option, 0);
+                combo.options[0].innerText = "Seleccione un curso";
+                for (var i=0; i < NombreRepositorios.length; i++) {
+                    get(child(dbRef,"Cursos/"+NombreRepositorios[i]+"/Informe")).then((snapshot) => {
+                    if(snapshot.exists()) {
+                        var cursos = snapshot.val().Nombre;
+                        var descripcion = snapshot.val().Descripcion;
+                        var imagen = snapshot.val().Imagen;
+                        DescripcionCursos.push(descripcion);
+                        ImagenCursos.push(imagen);
+                        NombresCurso.push(cursos);
+                        for (var i=0; i < 1; i++) {                            
+                            var combo = document.getElementById("Cursos");
+                            var option = document.createElement('option');
+                            combo.options.add(option, i+1);
+                            combo.options[i+1].innerText = cursos;                                                        
+                        }
+                    }
+                    else {
+                            alert("No existe ningún curso disponible")
+                    }
+                    }).catch((error) => {
+
+                    });
+                }
+            }
+            else {
+                    alert("No existe ningún curso disponible")
+            }
+            }).catch((error) => {
+
+            });
+    }
+
+
+    function LlenarComboboxMaterial(Curso,Formato) {
+            const dbRef = ref(getDatabase());
+            if( (document.getElementById("cbox1").checked && Formato == "Documentos") || document.getElementById("cboxDocumentos").checked){
+                get(child(dbRef,"Cursos/"+Curso+"/Material")).then((snapshot) => {
+                if(snapshot.exists()) {
+                    var cursos = snapshot.val().Documentos;
+                    NombreRepositoriosMaterial = cursos.split(",");
+                    NombreRepositoriosMaterialDocumentos = cursos.split(",");
+                    var combo = document.getElementById("MaterialContenido");
+                    var option = document.createElement('option');
+                    combo.options.add(option, 0);
+                    combo.options[0].innerText = "Seleccione un material";
+                    for (var i=0; i < NombreRepositoriosMaterial.length; i++) {
+                        get(child(dbRef,"Cursos/"+Curso+"/"+Formato+"/"+NombreRepositoriosMaterial[i])).then((snapshot) => {
+                        if(snapshot.exists()) {
+                            var cursos = snapshot.val().Nombre;
+                            var descripcion = snapshot.val().Contenido;
+                            var imagen = snapshot.val().Imagen;
+                            DescripcionCursosMaterial.push(descripcion);
+                            ImagenCursosMaterial.push(imagen);
+                            NombresCursoMaterial.push(cursos);
+                            for (var i=0; i < 1; i++) {                            
+                                var combo = document.getElementById("MaterialContenido");
+                                var option = document.createElement('option');
+                                combo.options.add(option, i+1);
+                                combo.options[i+1].innerText = cursos;                                                        
+                            }
+                        }
+                        else {
+                            if(document.getElementById("cbox2").checked){
+                                alert("No existe ningún curso disponible")                    
+                            }
+                        }
+                        }).catch((error) => {
+
+                        });
+                    }
+                }
+                else {        
+                        alert("No existe ningún curso disponible")
+                }
+                }).catch((error) => {
+
+                });
+            }
+            if( (document.getElementById("cbox1").checked && Formato == "Videos")  || document.getElementById("cboxVideos").checked){
+                get(child(dbRef,"Cursos/"+Curso+"/Material")).then((snapshot) => {
+                if(snapshot.exists()) {
+                    var cursos = snapshot.val().Videos;
+                    NombreRepositoriosMaterial = cursos.split(",");
+                    NombreRepositoriosMaterialVideos = cursos.split(",");
+
+                    var combo = document.getElementById("MaterialContenido");
+                    var option = document.createElement('option');
+                    combo.options.add(option, 0);
+                    combo.options[0].innerText = "Seleccione un material";
+                    for (var i=0; i < NombreRepositoriosMaterial.length; i++) {
+                        get(child(dbRef,"Cursos/"+Curso+"/"+Formato+"/"+NombreRepositoriosMaterial[i])).then((snapshot) => {
+                        if(snapshot.exists()) {
+                            var cursos = snapshot.val().Nombre;
+                            var descripcion = snapshot.val().Contenido;
+                            var imagen = snapshot.val().Imagen;
+                            DescripcionCursosMaterial.push(descripcion);
+                            ImagenCursosMaterial.push(imagen);
+                            NombresCursoMaterial.push(cursos);
+                            for (var i=0; i < 1; i++) {                            
+                                var combo = document.getElementById("MaterialContenido");
+                                var option = document.createElement('option');
+                                combo.options.add(option, i+1);
+                                combo.options[i+1].innerText = cursos;                                                        
+                            }
+                        }
+                        else {
+                            if(document.getElementById("cbox2").checked){
+                                alert("No existe ningún curso disponible")                    
+                            }
+                        }
+                        }).catch((error) => {
+
+                        });
+                    }
+                }
+                else {        
+                        alert("No existe ningún curso disponible")
+                }
+                }).catch((error) => {
+
+                });
+            }
+
+            if( (document.getElementById("cbox1").checked && Formato == "Links")  || document.getElementById("cboxLinks").checked){
+                get(child(dbRef,"Cursos/"+Curso+"/Material")).then((snapshot) => {
+                if(snapshot.exists()) {
+                    var cursos = snapshot.val().Links;
+                    NombreRepositoriosMaterial = cursos.split(",");
+                    NombreRepositoriosMaterialLinks = cursos.split(",");
+
+                    var combo = document.getElementById("MaterialContenido");
+                    var option = document.createElement('option');
+                    combo.options.add(option, 0);
+                    combo.options[0].innerText = "Seleccione un material";
+                    for (var i=0; i < NombreRepositoriosMaterial.length; i++) {
+                        get(child(dbRef,"Cursos/"+Curso+"/"+Formato+"/"+NombreRepositoriosMaterial[i])).then((snapshot) => {
+                        if(snapshot.exists()) {
+                            var cursos = snapshot.val().Nombre;
+                            var descripcion = snapshot.val().Contenido;
+                            var imagen = snapshot.val().Imagen;
+                            DescripcionCursosMaterial.push(descripcion);
+                            ImagenCursosMaterial.push(imagen);
+                            NombresCursoMaterial.push(cursos);
+                            for (var i=0; i < 1; i++) {                            
+                                var combo = document.getElementById("MaterialContenido");
+                                var option = document.createElement('option');
+                                combo.options.add(option, i+1);
+                                combo.options[i+1].innerText = cursos;                                                        
+                            }
+                        }
+                        else {
+                            if(document.getElementById("cbox2").checked){
+                                alert("No existe ningún curso disponible")                    
+                            }
+                        }
+                        }).catch((error) => {
+
+                        });
+                    }
+                }
+                else {        
+                        alert("No existe ningún curso disponible")
+                }
+                }).catch((error) => {
+
+                });
+            }
+    }
+
+
+document.getElementById("VerContenido").onclick = function(e){
+    if(Cursos.value != "Seleccione un curso" && Cursos.value != ""){
+        if(document.getElementById("cbox1").checked){
+            var DireccionRepo = NombreRepositorios[NombreRepositorios.length - Curso.selectedIndex];
+            var DireccionNombre = NombresCurso[NombresCurso.length - Curso.selectedIndex];
+            var DireccionDescripcion = DescripcionCursos[DescripcionCursos.length - Curso.selectedIndex];
+            var DireccionImagen = ImagenCursos[ImagenCursos.length - Curso.selectedIndex];
+            var nombre = document.getElementById("nombre");
+            var descripcion = document.getElementById("descripcion");
+            var habilitar = document.getElementById("EdicionCursos");
+            document.getElementById("BuscarContenido").style.display = "none";
+            document.getElementById("gifInicial").style.display = "none";
+            document.getElementById("Imagen").style.display = "inline";
+            document.getElementById("Visualizacion").style.display = "inline";
+
+            habilitar.style.display = "inline";
+            nombre.value = DireccionNombre;
+            descripcion.value = DireccionDescripcion;
+            LlenarComboboxMaterial(DireccionRepo,"Documentos");
+            LlenarComboboxMaterial(DireccionRepo,"Videos");
+            LlenarComboboxMaterial(DireccionRepo,"Links");
+
+            document.getElementById("nameVisualizacion").innerHTML = DireccionNombre;
+            document.getElementById("descripcionVisualizacion").innerHTML = DireccionDescripcion;
+
+            if(DireccionImagen != "0"){
+                document.getElementById("imagen").src = DireccionImagen;
+                document.getElementById("imgVisualizacion").src = DireccionImagen;
+            }   
+            else{
+                document.getElementById("imagen").src = "cursosinimagen.png";
+                document.getElementById("imgVisualizacion").src = "cursosinimagen.png";
+            } 
+            
+
+        }
+        else{
+
+            if(document.getElementById("cboxDocumentos").checked || document.getElementById("cboxVideos").checked || document.getElementById("cboxLinks").checked){
+                var DireccionRepo = NombreRepositorios[NombreRepositorios.length - Curso.selectedIndex];
+                EditarMaterialDireccion.push(DireccionRepo);
+                document.getElementById("BuscarContenido").style.display = "none";
+                document.getElementById("EditarMaterial").style.display = "inline";
+                if(document.getElementById("cboxVideos").checked){
+                    EditarMaterialDireccion.push("Videos");
+                    LlenarComboboxMaterial(DireccionRepo,"Videos");
+                }
+                if(document.getElementById("cboxDocumentos").checked){
+                    EditarMaterialDireccion.push("Documentos");
+                    LlenarComboboxMaterial(DireccionRepo,"Documentos");
+                }
+                if(document.getElementById("cboxLinks").checked){
+                    EditarMaterialDireccion.push("Links");
+                    LlenarComboboxMaterial(DireccionRepo,"Links");
+                }
+            }
+            else{
+                alert("Llene todos los campos");
+            }
+
+        }
+    }     
+    else{               
+        alert("Seleccione un curso")
+    }   
+}
+
+document.getElementById("Cancelar").onclick = function(e){
+    location.reload()
+}
+
+document.getElementById("CancelarMaterialSubido").onclick = function(e){
+    location.reload()
+}
+document.getElementById("CancelarMaterialDisponible").onclick = function(e){
+    location.reload()
+}
+document.getElementById("CancelarMaterialContenidoSubido").onclick = function(e){
+    location.reload()
+}
+
+
+document.getElementById("ModificarContenidoMaterialSub").onclick = function(e){    
+    var Contenido = DescripcionCursosMaterial[DescripcionCursosMaterial.length - MaterialSeleccionado.selectedIndex];
+    document.getElementById("EdicionMaterialSubido").style.display = "none";
+    document.getElementById("EdicionMaterialContenidoSubido").style.display = "inline";
+
+    if(EditarMaterialDireccion[1] == "Documentos"){
+        document.getElementById("documentoEdicionNuevo1").style.display = "inline";
+        document.getElementById("VisualizacionContenedor").style.display = "none";
+        document.getElementById("nombreMaterialContenido").style.display = "none";
+        document.getElementById("documentoEdicionNuevo1").src = Contenido;
+        document.getElementById("EtiquetaLinksContenido").innerHTML = "Cambiar documento subido";        
+
+    }
+    if(EditarMaterialDireccion[1] == "Links" || EditarMaterialDireccion[1] == "Videos"){
+        document.getElementById("SeleccionarDocumentoMaterialContenido").style.display = "none";
+        document.getElementById("nombreMaterialContenido").value = Contenido;
+    }    
+}
+
+
+
+
+
+document.getElementById("VisualizacionPreviaCurso").onclick = function(e){
+
+    var nombre = document.getElementById("nombre");
+    var descripcion = document.getElementById("descripcion");
+    document.getElementById("nameVisualizacion").innerHTML=nombre.value;
+    document.getElementById("descripcionVisualizacion").innerHTML=descripcion.value;
+
+    if(files[0] != null){
+        reader = new FileReader();
+        reader.onload = function(){
+            document.getElementById("imgVisualizacion").src = reader.result;        
+        }
+        reader.readAsDataURL(files[0]);
+    }
+}
+
+
+
+document.getElementById("VisualizaciónMaterialSubido").onclick = function(e){
+
+var nombre = document.getElementById("nombreMaterial");
+document.getElementById("nameVisualizacion").innerHTML=nombre.value;
+
+if(files[0] != null){
+    reader = new FileReader();
+    reader.onload = function(){
+        document.getElementById("imgVisualizacion").src = reader.result;        
+    }
+    reader.readAsDataURL(files[0]);
+}
+}
+
+document.getElementById("VerMaterialDisponible").onclick = function(e){
+
+
+    if(document.getElementById("MaterialContenido").value != "Seleccione un material"){
+        var DireccionRepo = NombreRepositoriosMaterial[NombreRepositoriosMaterial.length - MaterialSeleccionado.selectedIndex];
+        var Nombre = NombresCursoMaterial[NombresCursoMaterial.length - MaterialSeleccionado.selectedIndex];
+        var Imagen = ImagenCursosMaterial[ImagenCursosMaterial.length - MaterialSeleccionado.selectedIndex];
+
+        
+        EditarMaterialDireccion.push(DireccionRepo);
+
+        document.getElementById("EdicionMaterialSubido").style.display = "inline";
+        document.getElementById("EditarMaterial").style.display = "none";
+
+        document.getElementById("nombreMaterial").value = Nombre;
+        document.getElementById("gifInicial").style.display = "none";
+        document.getElementById("Imagen").style.display = "inline";
+        document.getElementById("Visualizacion").style.display = "inline";
+        document.getElementById("nameVisualizacion").innerHTML = Nombre;
+
+        if(Imagen != "0"){
+            document.getElementById("imagen").src = Imagen;
+            document.getElementById("imgVisualizacion").src = Imagen;
+        }   
+        else{
+            document.getElementById("imagen").src = "cursosinimagen.png";
+            document.getElementById("imgVisualizacion").src = "cursosinimagen.png";
+        }         
+    }
+    else{
+        alert("Llene todos los campos");
+    }
+
+}
+
+
+
+
+
+document.getElementById("EliminarMaterialSubido").onclick = function(e){
+
+var DireccionNombre = NombreRepositoriosMaterial[NombreRepositoriosMaterial.length - MaterialSeleccionado.selectedIndex];
+var DireccionImagen = ImagenCursosMaterial[ImagenCursosMaterial.length - MaterialSeleccionado.selectedIndex];
+var index = NombreRepositoriosMaterial.indexOf(DireccionNombre);
+NombreRepositoriosMaterial.splice(index, 1);
+var listaCursos="";
+const storage = getStorage();
+
+var opcion = confirm("Desea eliminar "+Curso.value);
+if (opcion == true) {        
+    document.getElementById("gifInicial").style.display = "inline";
+    document.getElementById("Imagen").style.display = "none";
+    document.getElementById("Visualizacion").style.display = "none";  
+    document.getElementById("gifInicial").src = "https://embed.lottiefiles.com/animation/99314";
+
+    for(var i =0; i <NombreRepositoriosMaterial.length; i++){
+        if(listaCursos == ""){
+            listaCursos = NombreRepositoriosMaterial[i]
+        }
+        else{
+            listaCursos = listaCursos+","+NombreRepositoriosMaterial[i]
+        }
+    }
+
+
+    if(DireccionImagen != "0"){
+        const desertRef = sRef(storage, EditarMaterialDireccion[0]+"/Img"+EditarMaterialDireccion[2]);
+        deleteObject(desertRef).then(() => {
+        }).catch((error) => {
+        });        
+    }
+
+    if(EditarMaterialDireccion[1] == "Documentos"){
+        const desertRef = sRef(storage, EditarMaterialDireccion[0]+"/"+EditarMaterialDireccion[2]);
+        // // Delete the file
+        deleteObject(desertRef).then(() => {
+        // File deleted successfully
+        }).catch((error) => {
+        // Uh-oh, an error occurred!
+        });  
+    }
+
+
+
+    
+    remove(ref(db,"Cursos/"+EditarMaterialDireccion[0]+"/"+EditarMaterialDireccion[1]+"/"+EditarMaterialDireccion[2])).then(()=>{
+    })
+    .catch((error)=>{
+        location.reload()
+        alert("error")
+    });
+
+
+    if(listaCursos == ""){
+        if(EditarMaterialDireccion[1] == "Documentos"){
+            update(ref(db,"Cursos/"+EditarMaterialDireccion[0]+"/Material/"),{
+                Documentos:"0"
+            })       
+            .then(()=>{
+                alert("Material Eliminado")
+                location.reload()
+
+            })
+            .catch((error)=>{
+                location.reload()
+                alert("Intente de nuevo");
+            });
+        }
+        if(EditarMaterialDireccion[1] == "Videos"){
+            update(ref(db,"Cursos/"+EditarMaterialDireccion[0]+"/Material/"),{
+                Videos:"0"
+            })       
+            .then(()=>{
+                alert("Material Eliminado")
+                location.reload()
+
+            })
+            .catch((error)=>{
+                location.reload()
+                alert("Intente de nuevo");
+            });
+        }
+        if(EditarMaterialDireccion[1] == "Links"){
+            update(ref(db,"Cursos/"+EditarMaterialDireccion[0]+"/Material/"),{
+                Links:"0"
+            })       
+            .then(()=>{
+                alert("Material Eliminado")
+                location.reload()
+
+            })
+            .catch((error)=>{
+                location.reload()
+                alert("Intente de nuevo");
+            });
+        } 
+    }
+    else{
+
+        if(EditarMaterialDireccion[1] == "Documentos"){
+            update(ref(db,"Cursos/"+EditarMaterialDireccion[0]+"/Material/"),{
+                Documentos:listaCursos
+            })       
+            .then(()=>{
+                alert("Material Eliminado")
+                location.reload()
+
+            })
+            .catch((error)=>{
+                location.reload()
+                alert("Intente de nuevo");
+            });
+        }
+        if(EditarMaterialDireccion[1] == "Videos"){
+            update(ref(db,"Cursos/"+EditarMaterialDireccion[0]+"/Material/"),{
+                Videos:listaCursos
+            })       
+            .then(()=>{
+                alert("Material Eliminado")
+                location.reload()
+
+            })
+            .catch((error)=>{
+                location.reload()
+                alert("Intente de nuevo");
+            });
+        }
+        if(EditarMaterialDireccion[1] == "Links"){
+            update(ref(db,"Cursos/"+EditarMaterialDireccion[0]+"/Material/"),{
+                Links:listaCursos
+            })       
+            .then(()=>{
+                alert("Material Eliminado")
+                location.reload()
+
+            })
+            .catch((error)=>{
+                location.reload()
+                alert("Intente de nuevo");
+            });
+        }
+
+       
+    }
+} 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+document.getElementById("Eliminar").onclick = function(e){
+
+    var DireccionNombre = NombreRepositorios[NombreRepositorios.length - Curso.selectedIndex];
+    var DireccionImagen = ImagenCursos[ImagenCursos.length - Curso.selectedIndex];
+    var index = NombreRepositorios.indexOf(DireccionNombre);
+    NombreRepositorios.splice(index, 1);
+    var listaCursos="";
+    const storage = getStorage();
+
+    var opcion = confirm("Desea eliminar "+Curso.value);
+    if (opcion == true) {        
+        document.getElementById("gifInicial").style.display = "inline";
+        document.getElementById("Imagen").style.display = "none";
+        document.getElementById("Visualizacion").style.display = "none";  
+        document.getElementById("gifInicial").src = "https://embed.lottiefiles.com/animation/99314";
+
+        for(var i =0; i <NombreRepositorios.length; i++){
+            if(listaCursos == ""){
+                listaCursos = NombreRepositorios[i]
+            }
+            else{
+                listaCursos = listaCursos+","+NombreRepositorios[i]
+            }
+        }
+
+        if(DireccionImagen != "0"){
+            const desertRef = sRef(storage, "Imagenes Curso/"+DireccionNombre);
+            // // Delete the file
+            deleteObject(desertRef).then(() => {
+            // File deleted successfully
+            }).catch((error) => {
+            // Uh-oh, an error occurred!
+            });        
+        }
+
+        for(var i = 0; i < NombreRepositoriosMaterialDocumentos.length; i++){
+            const desertRef = sRef(storage, DireccionNombre+"/"+NombreRepositoriosMaterialDocumentos[i]);
+            // // Delete the file
+            deleteObject(desertRef).then(() => {
+            // File deleted successfully
+            }).catch((error) => {
+            // Uh-oh, an error occurred!
+            });  
+            const desertRef1 = sRef(storage, DireccionNombre+"/Img"+NombreRepositoriosMaterialDocumentos[i]);
+            // // Delete the file
+            deleteObject(desertRef1).then(() => {
+            // File deleted successfully
+            }).catch((error) => {
+            // Uh-oh, an error occurred!
+            });   
+        }
+        for(var i = 0; i < NombreRepositoriosMaterialVideos.length; i++){           
+            const desertRef1 = sRef(storage, DireccionNombre+"/Img"+NombreRepositoriosMaterialVideos[i]);
+            // // Delete the file
+            deleteObject(desertRef1).then(() => {
+            // File deleted successfully
+            }).catch((error) => {
+            // Uh-oh, an error occurred!
+            });   
+        }
+        for(var i = 0; i < NombreRepositoriosMaterialLinks.length; i++){           
+            const desertRef1 = sRef(storage, DireccionNombre+"/Img"+NombreRepositoriosMaterialLinks[i]);
+            // // Delete the file
+            deleteObject(desertRef1).then(() => {
+            // File deleted successfully
+            }).catch((error) => {
+            // Uh-oh, an error occurred!
+            });   
+        }
+        
+        remove(ref(db,"Cursos/"+DireccionNombre)).then(()=>{
+        })
+        .catch((error)=>{
+            location.reload()
+            alert("error")
+        });
+
+
+        if(listaCursos == ""){
+            remove(ref(db,"Cursos/Lista Cursos")).then(()=>{
+                alert("Curso Eliminado")
+                location.reload()
+            })
+            .catch((error)=>{
+                location.reload()
+                alert("Intente de nuevo")
+            });  
+        }
+        else{
+            update(ref(db,"Cursos/Lista Cursos"),{
+                Lista:listaCursos
+            })       
+            .then(()=>{
+                alert("Curso Eliminado")
+                location.reload()
+
+            })
+            .catch((error)=>{
+                location.reload()
+                alert("Intente de nuevo");
+        });
+        }
+	} 
+}
+
+document.getElementById("SeleccionarDocumentoMaterialContenido").onclick = function(e){
+
+var input = document.createElement('input');
+    input.type = 'file';
+    input.onchange = e => {
+    files1 = e.target.files;
+    reader = new FileReader();
+    reader.onload = function(){
+    document.getElementById("documentoEdicionNuevo").style.display = "inline";    
+    document.getElementById("imagen").style.display = "none";
+
+    document.getElementById("documentoEdicionNuevo").src = reader.result;  
+          
+    }
+    reader.readAsDataURL(files1[0]);
+}
+input.click();
+}
+
+
+document.getElementById("SeleccionarImagenMaterial").onclick = function(e){
+
+var input = document.createElement('input');
+    input.type = 'file';
+    input.onchange = e => {
+    files = e.target.files;
+    reader = new FileReader();
+    reader.onload = function(){
+    document.getElementById("imagen").src = reader.result;        
+    }
+    reader.readAsDataURL(files[0]);
+}
+input.click();
+}
+
+document.getElementById("Seleccionar").onclick = function(e){
+
+    var input = document.createElement('input');
+        input.type = 'file';
+        input.onchange = e => {
+        files = e.target.files;
+        reader = new FileReader();
+        reader.onload = function(){
+        document.getElementById("imagen").src = reader.result;        
+        }
+        reader.readAsDataURL(files[0]);
+    }
+    input.click();
+}
+
+document.getElementById("Editar").onclick = function(e){
+    var nombre = document.getElementById("nombre").value;
+    var descripcion = document.getElementById("descripcion").value;
+    var DireccionNombre = NombreRepositorios[NombreRepositorios.length - Curso.selectedIndex];
+    if(files[0] != null){   
+            if(document.getElementById("cbox1").checked && nombre !="" && descripcion !=""){
+                
+                document.getElementById("gifInicial").style.display = "inline";
+                document.getElementById("Imagen").style.display = "none";
+                document.getElementById("Visualizacion").style.display = "none";  
+                document.getElementById("gifInicial").src = "https://embed.lottiefiles.com/animation/80315";
+
+
+
+                const storage = getStorage();
+                const storageRef = sRef(storage, "Imagenes Curso/"+DireccionNombre);
+                const uploadTask = uploadBytesResumable(storageRef, files[0]);
+
+                uploadTask.on('state_changed',
+                (snapshot) => {
+                    
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    console.log('Upload is ' + progress + '% done');
+                    switch (snapshot.state) {
+                    case 'paused':
+                        console.log('Upload is paused');
+                        break;
+                    case 'running':
+                        console.log('Upload is running');
+                        break;
+                    }
+                },
+                (error) => {
+                    location.reload()
+                    alert("Intente de nuevo")
+                },
+                () => {
+                    getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+
+
+                        update(ref(db,"Cursos/"+DireccionNombre+"/Informe"),{
+                                Descripcion:descripcion,
+                                Nombre:nombre,
+                                Imagen:downloadURL
+                            })
+                            .then(()=>{
+                                location.reload()
+                                alert("El material se edito correctamente")
+
+                            })
+                            .catch((error)=>{
+                                location.reload()
+                                alert("Intente de nuevo")                                
+                            }); 
+                                                     
+                    });
+                }
+                ); 
+        }
+        else{
+                alert("Llene todos los campos");
+            }
+    }
+
+    else{
+        if(nombre !="" && descripcion !=""){
+            document.getElementById("gifInicial").style.display = "inline";
+            document.getElementById("Imagen").style.display = "none";
+            document.getElementById("Visualizacion").style.display = "none";  
+            document.getElementById("gifInicial").src = "https://embed.lottiefiles.com/animation/80315";
+            var DireccionImagen = ImagenCursos[NombreRepositorios.length - Curso.selectedIndex];
+            update(ref(db,"Cursos/"+DireccionNombre+"/Informe"),{
+                Descripcion:descripcion,
+                Nombre:nombre,
+                Imagen:DireccionImagen
+            })
+            .then(()=>{
+                location.reload()
+                alert("El material se edito correctamente")
+            })
+            .catch((error)=>{
+                location.reload()
+                alert("Intente de nuevo")
+            }); 
+        }
+        else{
+            alert("Llene todos los campos");
+        }
+    }
+
+    
+}
+
+
+
+
+
+document.getElementById("EditarMaterialSubido").onclick = function(e){
+    var nombre = document.getElementById("nombreMaterial").value;
+    
+    if(files[0] != null){   
+
+            if(nombre !=""){
+                
+                document.getElementById("gifInicial").style.display = "inline";
+                document.getElementById("Imagen").style.display = "none";
+                document.getElementById("Visualizacion").style.display = "none";  
+                document.getElementById("gifInicial").src = "https://embed.lottiefiles.com/animation/80315";
+
+
+
+                const storage = getStorage();
+                const storageRef = sRef(storage,EditarMaterialDireccion[0]+"/Img"+EditarMaterialDireccion[2]);
+                const uploadTask = uploadBytesResumable(storageRef, files[0]);
+
+                uploadTask.on('state_changed',
+                (snapshot) => {
+                    
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    console.log('Upload is ' + progress + '% done');
+                    switch (snapshot.state) {
+                    case 'paused':
+                        console.log('Upload is paused');
+                        break;
+                    case 'running':
+                        console.log('Upload is running');
+                        break;
+                    }
+                },
+                (error) => {
+                    location.reload()
+                    alert("Intente de nuevo")
+                },
+                () => {
+                    getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+
+
+                        update(ref(db,"Cursos/"+EditarMaterialDireccion[0]+"/"+EditarMaterialDireccion[1]+"/"+EditarMaterialDireccion[2]),{
+                                Nombre:nombre,
+                                Imagen:downloadURL
+                            })
+                            .then(()=>{
+                                location.reload()
+                                alert("El material se edito correctamente")
+
+                            })
+                            .catch((error)=>{
+                                location.reload()
+                                alert("Intente de nuevo")                                
+                            }); 
+                                                     
+                    });
+                }
+                ); 
+        }
+        else{
+                alert("Llene todos los campos");
+            }
+    }
+
+    else{
+        if(nombre !=""){
+            document.getElementById("gifInicial").style.display = "inline";
+            document.getElementById("Imagen").style.display = "none";
+            document.getElementById("Visualizacion").style.display = "none";  
+            document.getElementById("gifInicial").src = "https://embed.lottiefiles.com/animation/80315";
+            update(ref(db,"Cursos/"+EditarMaterialDireccion[0]+"/"+EditarMaterialDireccion[1]+"/"+EditarMaterialDireccion[2]),{
+                Nombre:nombre
+            })
+            .then(()=>{
+                location.reload()
+                alert("El material se edito correctamente")
+            })
+            .catch((error)=>{
+                location.reload()
+                alert("Intente de nuevo")
+            }); 
+        }
+        else{
+            alert("Llene todos los campos");
+        }
+    }   
+}
+
+
+document.getElementById("EditarMaterialContenidoSubido").onclick = function(e){
+
+    var nombre = document.getElementById("nombreMaterialContenido").value;
+
+    if(EditarMaterialDireccion[1] == "Documentos"){
+        if(files1[0] != null){   
+            document.getElementById("gifInicial").style.display = "inline";
+                document.getElementById("Imagen").style.display = "none";
+                document.getElementById("Visualizacion").style.display = "none";  
+                document.getElementById("gifInicial").src = "https://embed.lottiefiles.com/animation/80315";
+
+
+
+                const storage = getStorage();
+                const storageRef = sRef(storage,EditarMaterialDireccion[0]+"/"+EditarMaterialDireccion[2]);
+                const uploadTask = uploadBytesResumable(storageRef, files1[0]);
+
+                uploadTask.on('state_changed',
+                (snapshot) => {
+                    
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    console.log('Upload is ' + progress + '% done');
+                    switch (snapshot.state) {
+                    case 'paused':
+                        console.log('Upload is paused');
+                        break;
+                    case 'running':
+                        console.log('Upload is running');
+                        break;
+                    }
+                },
+                (error) => {
+                    location.reload()
+                    alert("Intente de nuevo")
+                },
+                () => {
+                    getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+
+
+                        update(ref(db,"Cursos/"+EditarMaterialDireccion[0]+"/"+EditarMaterialDireccion[1]+"/"+EditarMaterialDireccion[2]),{
+                                Contenido:downloadURL
+                            })
+                            .then(()=>{
+                                location.reload()
+                                alert("El material se edito correctamente")
+
+                            })
+                            .catch((error)=>{
+                                location.reload()
+                                alert("Intente de nuevo")                                
+                            }); 
+                                                    
+                    });
+                }
+                ); 
+        }
+        else{
+            alert("Suba un documento");
+        }
+
+
+    }
+    
+    else{
+        if(nombre !=""){
+            document.getElementById("gifInicial").style.display = "inline";
+            document.getElementById("Imagen").style.display = "none";
+            document.getElementById("Visualizacion").style.display = "none";  
+            document.getElementById("gifInicial").src = "https://embed.lottiefiles.com/animation/80315";
+            update(ref(db,"Cursos/"+EditarMaterialDireccion[0]+"/"+EditarMaterialDireccion[1]+"/"+EditarMaterialDireccion[2]),{
+                Contenido:nombre
+            })
+            .then(()=>{
+                location.reload()
+                alert("El material se edito correctamente")
+            })
+            .catch((error)=>{
+                location.reload()
+                alert("Intente de nuevo")
+            }); 
+        }
+        else{
+             alert("Llene todos los campos");
+        }
+    }   
+
+
+}
+
+
+
+
+
+</script>
+
+<script type="module">
+    document.getElementById("cbox1").checked = true;
+
+    var cbox1 = document.getElementById("cbox1");
+    var cbox2 = document.getElementById("cbox2");
+    var cbox3 = document.getElementById("cboxVideos");
+    var cbox4 = document.getElementById("cboxDocumentos");
+    var cbox5 = document.getElementById("cboxLinks");
+
+   
+    cbox1.addEventListener( 'change', function() {
+        if(this.checked) {
+            document.getElementById("cbox2").checked = false;           
+            document.getElementById("DivTipoDocumentos").style.display = "none";
+
+        }
+          
+    });
+    cbox2.addEventListener( 'change', function() {
+        if(this.checked) {
+            document.getElementById("cbox1").checked = false;
+            document.getElementById("DivTipoDocumentos").style.display = "inline";
+        }
+    });
+
+    cbox3.addEventListener( 'change', function() {
+        if(this.checked) {
+            document.getElementById("cboxDocumentos").checked = false;           
+            document.getElementById("cboxLinks").checked = false;           
+        }
+          
+    });
+    cbox4.addEventListener( 'change', function() {
+        if(this.checked) {
+            document.getElementById("cboxVideos").checked = false;           
+            document.getElementById("cboxLinks").checked = false; 
+        }
+    });
+    cbox5.addEventListener( 'change', function() {
+        if(this.checked) {
+            document.getElementById("cboxDocumentos").checked = false;           
+            document.getElementById("cboxVideos").checked = false; 
+
+        }
+          
+    });
+
+    
+
+</script>

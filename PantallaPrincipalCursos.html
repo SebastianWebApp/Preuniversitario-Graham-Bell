@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Encuentra todos tus cursos al mejor precio, el futuro está en tus manos">
+    <meta name="keywords" content="Cursos, Programación, Tutorias, Capacitación, Diseño">
+    <meta name="author" content="IDE Programming">
+    <link rel="shortcut icon" href="iconoWebC.png">
+    <link rel="stylesheet" type="text/css" href="PantallaPrincipalCursos.css">
+    <title>Tus Cursos</title>
+</head>
+<body>
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3019961485830766"
+    crossorigin="anonymous"></script>
+
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+  />
+
+    <div id="MenuEditor">
+
+        <ul class="menu">
+            <li><a href="newCurso.html">Nuevo Curso</a></li>
+            <li><a href="SubirMaterial.html">Subir Material</a></li>
+            <li><a href="Edicion.html">Editar Contenido</a></li>
+            <li><a href="Registro_Alumno.html">Nuevo Alumno</a></li>
+        </ul>
+    </div>
+    <div id="Present">
+        <div class="Contenido" id="parte1">
+            <img src="InicioPreDirection.png">            
+            <h1>AULA VIRTUAL</h1>
+            <p>Ingresa a nuestro campus virtual y toma tus clases digitales
+            </p>
+        </div>
+        <div class="Contenido" id="parte2">
+            <img src="InicioPreMetodo.png">
+            <h1>MÉTODO DE APRENDIZAGE</h1>
+            <p>Mediante distintos procesos se van personalizando las clases para nuestros alumnos.</p>
+        </div>
+        <div class="Contenido" id="parte3">
+            <img src="InicioPreResultados.png">
+            <h1>RESULTADOS</h1>
+            <br>
+            <p>Nuestra metodología de aprendizaje nos permite poder nivelarte en una semana.</p>
+        </div>
+    </div>
+    <div id="ContenedorCursos">
+
+    </div>
+    <br><br>
+    <div class="Menu" id="MenuTelefonos">
+            <a href="Registro_Alumno.html">
+                <img class="iconMenu"src="registro.png"/>
+            </a>
+            <a href="SubirMaterial.html">
+                <img class="iconMenu"src="cloud.png"/>
+            </a>           
+
+            <a href="Edicion.html">
+                <img class="iconMenu"src="edit.png"/>
+            </a> 
+            <a href="newCurso.html">
+                <img class="iconMenu"src="plus.png"/>
+            </a>         
+        </div>
+</body>
+</html>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-analytics.js";
+    import {getDatabase,ref,set,child,update,remove,get,push} from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBJCFtSu0OJlqg5rwc1feATIBejX3D0E7Y",
+        authDomain: "nombre-del-proyecto-2321c.firebaseapp.com",
+        databaseURL: "https://nombre-del-proyecto-2321c-default-rtdb.firebaseio.com",
+        projectId: "nombre-del-proyecto-2321c",
+        storageBucket: "nombre-del-proyecto-2321c.appspot.com",
+        messagingSenderId: "672829934203",
+        appId: "1:672829934203:web:12a7ca900dc920f67cb0de",
+        measurementId: "G-5G31BN19HV"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const db =getDatabase();
+
+    var BuscarParametro = window.location.search;
+    var ParametroUrl = new URLSearchParams(BuscarParametro);
+    var DatoPasado = ParametroUrl.get('Cursos');
+    var IdPasado = ParametroUrl.get('id');
+
+    if(DatoPasado == null){
+        location.href="LoginContenido.html";    
+    }
+    if(IdPasado == "PreVp1o3dGH"){
+        const pageWidth  = document.documentElement.scrollWidth;
+
+        if(pageWidth>=700){
+            document.getElementById("MenuEditor").style.display = "block";
+            document.getElementById("MenuTelefonos").style.display = "none";
+
+        }
+        else{
+            document.getElementById("MenuEditor").style.display = "none";
+            document.getElementById("MenuTelefonos").style.display = "block";
+        }
+
+    }
+
+    var ListaCursos = [];
+
+    ListaCursos = DatoPasado.split(",");
+
+    LeerBaseDatos();    
+    function LeerBaseDatos(){
+
+        var contador = 0;
+        for(var i = 0; i<ListaCursos.length; i++){
+
+            var CursoActual = ListaCursos[contador];            
+            const dbRef = ref(getDatabase());            
+            get(child(dbRef,"Cursos/"+ListaCursos[i]+"/Informe")).then((snapshot) => {
+            if (snapshot.exists()) {
+
+                var Titulo = snapshot.val().Nombre;
+                var descipcion = snapshot.val().Descripcion;
+                var imagen = snapshot.val().Imagen;
+
+                if(imagen == "0"){
+                    crearElementos(ListaCursos[contador],Titulo,descipcion,"cursosinimagen.png");
+
+                }
+                else{
+                    crearElementos(ListaCursos[contador],Titulo,descipcion,imagen);
+
+                }
+
+                contador = contador+1;
+
+            } 
+            }).catch((error) => {
+                location.href="PantallaPrincipalCursos.html?id="+IdPasado+"&Cursos="+DatoPasado;                                               
+            });
+
+           
+        }
+    }
+
+
+    function crearElementos(Curso,Nombre,descipcion,Imagen){
+        var LeerDiv = document.getElementById("ContenedorCursos");
+        var enlace = document.createElement("a");
+        enlace.href = "PantallaContenido.html?Curso="+String(Curso);
+        var nuevoDiv = document.createElement("div");
+        nuevoDiv.className = "ContenedorEnlace";
+        var imagen = document.createElement("img");
+        imagen.src = Imagen;
+        imagen.className = "ImagenCurso";
+        var Titulo = document.createElement("h1");
+        Titulo.textContent = Nombre;
+        var Descripcion = document.createElement("p");
+        Descripcion.textContent = descipcion;
+        nuevoDiv.appendChild(imagen);
+        nuevoDiv.appendChild(Titulo);
+        nuevoDiv.appendChild(Descripcion);
+        enlace.appendChild(nuevoDiv);
+        LeerDiv.appendChild(enlace);
+    }
+
+</script>

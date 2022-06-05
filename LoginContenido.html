@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="login.css">
+    <meta name="author" content="IDE Programming">
+    <link rel="shortcut icon" href="iconoWebC.png">
+    <title>Inicio</title>
+</head>
+<body>
+    <div class="hero"> 
+        <div class="hero__title">Bienvenido
+            <div class="ContenedorFormulario">
+                <input  class="Entry" id="curso" maxlength="10" type="text" placeholder="Ingrese su número de teléfono">
+                <br>
+                <button id="Acceder" class="cta">
+                    <span>Acceder</span>
+                    <svg viewBox="0 0 13 10" height="10px" width="15px">
+                        <path d="M1,5 L11,5"></path>
+                        <polyline points="8 1 12 5 8 9"></polyline>
+                    </svg>
+                </button>
+            </div>  
+        </div>
+        <div class="cube"></div>
+        <div class="cube"></div>
+        <div class="cube"></div>
+        <div class="cube"></div>
+        <div class="cube"></div>
+        <div class="cube"></div>
+    </div>
+      
+</body>
+</html>
+
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-analytics.js";
+    import {getDatabase,ref,set,child,update,remove,get,push} from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBJCFtSu0OJlqg5rwc1feATIBejX3D0E7Y",
+        authDomain: "nombre-del-proyecto-2321c.firebaseapp.com",
+        databaseURL: "https://nombre-del-proyecto-2321c-default-rtdb.firebaseio.com",
+        projectId: "nombre-del-proyecto-2321c",
+        storageBucket: "nombre-del-proyecto-2321c.appspot.com",
+        messagingSenderId: "672829934203",
+        appId: "1:672829934203:web:12a7ca900dc920f67cb0de",
+        measurementId: "G-5G31BN19HV"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const db =getDatabase();
+
+    var FechaExtraida = [];
+
+    function LeerBaseDatos(telefono){
+        const dbRef = ref(getDatabase());
+            get(child(dbRef,"RegistroAlumnos/"+String(telefono))).then((snapshot) => {
+            if (snapshot.exists()) {
+                ValidarFechas(telefono);
+            } else {
+                alert("Alumno no registrado");
+            }
+            }).catch((error) => {
+                alert("Intente de nuevo");  
+                location.reload()             
+            });
+    }
+
+    function ValidarFechas(telefono){
+        const dbRef = ref(getDatabase());
+            get(child(dbRef,"RegistroAlumnos/"+String(telefono))).then((snapshot) => {
+            if (snapshot.exists()) {
+                var cursos = snapshot.val().Cursos;
+                var Fechas = snapshot.val().FechaLimite;
+
+                var f = new Date();
+                var dia = f.getDate();
+                var mes = f.getMonth()+1;
+                var year = f.getFullYear();
+
+                var FechaActual = "";
+
+                if(dia < 10 || mes < 10){
+                    if(dia < 10){
+                        FechaActual = f.getFullYear()+ "-"+ (f.getMonth()+1)+ "-0" + f.getDate() 
+                    }
+                    if(mes < 10){
+                        FechaActual = f.getFullYear()+ "-0"+ (f.getMonth()+1)+ "-" + f.getDate() 
+                    }
+                    if(mes < 10 && dia < 10){
+                        FechaActual = f.getFullYear()+ "-0"+ (f.getMonth()+1)+ "-0" + f.getDate() 
+                    }
+                }
+                
+                FechaExtraida = Fechas.split("-");
+                
+
+                if( ( parseInt(FechaExtraida[2]) >= dia && parseInt(FechaExtraida[1]) == mes && parseInt(FechaExtraida[0]) == year ) 
+                     || (parseInt(FechaExtraida[1]) > mes  && parseInt(FechaExtraida[0]) == year) || (parseInt(FechaExtraida[0]) > year) ){
+
+                        setTimeout(function(){                            
+                            location.href="PantallaPrincipalCursos.html?id=user&Cursos="+String(cursos);    
+                        }, 1000);                        
+                }
+                else{
+
+                    remove(ref(db,"RegistroAlumnos/"+String(telefono))).then(()=>{
+                        alert("Acceso caducado");
+                        location.reload()             
+                    })
+                    .catch((error)=>{
+                        alert("Intente de nuevo");
+                    });
+
+                }
+                            
+            }
+            }).catch((error) => {
+                alert("Intente de nuevo");  
+            });
+    }
+
+    function ClaveAdministrador(){
+        const dbRef = ref(getDatabase());
+            get(child(dbRef,"Cursos/Lista Cursos")).then((snapshot) => {
+            if (snapshot.exists()) {
+                var cursos = snapshot.val().Lista;               
+                location.href="PantallaPrincipalCursos.html?id=PreVp1o3dGH&Cursos="+String(cursos);                                               
+            }
+            else{
+                location.href="PantallaPrincipalCursos.html?id=PreVp1o3dGH&Cursos=ModoDesarrollador"; 
+            } 
+            }).catch((error) => {
+                alert("Intente de nuevo");  
+            });
+    }
+    
+    document.getElementById("Acceder").onclick = function(e){
+        var telefono = document.getElementById("curso");
+        if(telefono.value != ""){
+            if(telefono.value == "PreGraham"){
+                ClaveAdministrador();
+            }
+            if(telefono.value == "PreTest"){
+                location.href="TestVocacionalControl.html";
+            }
+            if(telefono.value != "PreTest" && telefono.value != "PreGraham"){
+                LeerBaseDatos(telefono.value);
+            }            
+        }
+        else{
+            alert("Llene todos los campos");
+        }
+    }
+
+
+</script>

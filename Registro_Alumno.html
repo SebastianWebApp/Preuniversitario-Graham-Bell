@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Encuentra todos tus cursos al mejor precio, el futuro está en tus manos">
+    <meta name="keywords" content="Cursos, Programación, Tutorias, Capacitación, Diseño">
+    <meta name="author" content="IDE Programming">
+    <link rel="shortcut icon" href="iconoWebC.png">
+    <link rel="stylesheet" type="text/css" href="Registro_Alumno.css">
+    <title>Nuevo Alumno</title>
+</head>
+<body>
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+  />
+
+    <div class="Contenedor">
+
+        <div id="centrar">
+            <h1>Registro del estudiante</h1>
+            <br>
+            <input class="Entry" id="Telefono"  maxlength="10" type="text" placeholder="Ingrese el numero de telefono">
+            <h3>Seleccione la fecha a finalizar el acceso</h3>
+            <input class="Entry" id="fecha" type="date">
+            <br>
+            <h3>Seleccione los cursos a seguir</h3>
+            <div id="ContenedorCursos"></div>
+            <br>
+            <button id="Acceso" class="cta">
+                <span>Crear Acceso</span>
+                <svg viewBox="0 0 13 10" height="10px" width="15px">
+                  <path d="M1,5 L11,5"></path>
+                  <polyline points="8 1 12 5 8 9"></polyline>
+                </svg>
+            </button>   
+            <div class="Menu">
+                <a href="Edicion.html">
+                    <img class="iconMenu"src="edit1.png"/>
+                </a>
+                <a href="newCurso.html">
+                    <img class="iconMenu"src="plus1.png"/>
+                </a>
+                <a href="LoginContenido.html">
+                    <img class="iconMenu"src="home1.png"/>
+                </a>                
+                <a href="SubirMaterial.html">
+                    <img class="iconMenu"src="cloud1.png"/>
+                </a>
+            </div>    
+        </div>
+
+       
+
+    </div>
+
+</body>
+</html>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-analytics.js";
+    import { getStorage, ref as sRef, uploadBytes, getDownloadURL,uploadBytesResumable,deleteObject } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-storage.js";
+    const firebaseConfig = {
+        apiKey: "AIzaSyBJCFtSu0OJlqg5rwc1feATIBejX3D0E7Y",
+        authDomain: "nombre-del-proyecto-2321c.firebaseapp.com",
+        databaseURL: "https://nombre-del-proyecto-2321c-default-rtdb.firebaseio.com",
+        projectId: "nombre-del-proyecto-2321c",
+        storageBucket: "nombre-del-proyecto-2321c.appspot.com",
+        messagingSenderId: "672829934203",
+        appId: "1:672829934203:web:12a7ca900dc920f67cb0de",
+        measurementId: "G-5G31BN19HV"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+
+    import {getDatabase,ref,set,child,update,remove,get,push}
+    from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+    const db =getDatabase();
+
+    var NombreRepositorios = [];
+    var NombresCurso = [];
+    CursosDisponibles();
+    function CursosDisponibles() {
+            const dbRef = ref(getDatabase());
+            get(child(dbRef,"Cursos/Lista Cursos")).then((snapshot) => {
+            if(snapshot.exists()) {
+                var cursos = snapshot.val().Lista;
+                NombreRepositorios = cursos.split(","); 
+                var contador = 0;
+                for (var i=0; i < NombreRepositorios.length; i++) {
+                    get(child(dbRef,"Cursos/"+NombreRepositorios[i]+"/Informe")).then((snapshot) => {
+                    if(snapshot.exists()) {
+                        var cursos = snapshot.val().Nombre;
+                        NombresCurso.push(cursos);                        
+                        for (var j=0; j < 1; j++) {  
+                            CrearSelectores(contador,cursos,NombreRepositorios[contador])                                                  
+                        }
+                        contador = contador+1;
+                    }
+                    else {
+                            alert("No existe ningún curso disponible")
+                    }
+                    }).catch((error) => {
+
+                    });
+                }
+            }
+            else {
+                    alert("No existe ningún curso disponible")
+            }
+            }).catch((error) => {
+
+            });
+    }
+
+
+
+    function CrearSelectores(i,name,valor){
+        var Contenedor = document.getElementById("ContenedorCursos");
+        var newDiv = document.createElement("div");
+        newDiv.className = "Cursos";
+        const texto = document.createElement('label');
+        const entry = document.createElement('input');
+        entry.type = "checkbox";
+        entry.id = "check"+i;
+        entry.className = "check";
+        entry.value = valor;
+        const mensaje = document.createTextNode(name);
+        texto.appendChild(entry);
+        texto.appendChild(mensaje);
+        newDiv.appendChild(texto);
+        Contenedor.appendChild(newDiv);
+
+    }
+
+
+
+    
+    
+    document.getElementById("Acceso").onclick = function(e){
+
+        var Telefono = document.getElementById("Telefono");
+        var Fecha = document.getElementById("fecha");        
+
+        if(Telefono.value != "" && Fecha.value !=""){                 
+            var ListaCursos = [];            
+            for(var i = 0; i<NombresCurso.length;i++){
+                var check = document.getElementById("check"+i);                
+                if(check.checked){
+                    ListaCursos.push(check.value);
+                }            
+            }
+            if(ListaCursos.length != 0 ){
+                var ListaCursosSubir = "";
+                for(var i = 0; i < ListaCursos.length; i++){
+                    if(i == ListaCursos.length-1){
+                        ListaCursosSubir = ListaCursosSubir + ListaCursos[i];
+                    }
+                    else{
+                        ListaCursosSubir = ListaCursosSubir + ListaCursos[i] + ",";
+                    }
+                }
+
+                const dbRef = ref(getDatabase());
+
+                get(child(dbRef, "RegistroAlumnos/"+Telefono.value)).then((snapshot) => {
+                if (snapshot.exists()) {
+                    alert("El estudiante ya se encuentra registrado")
+                } else {
+                    update(ref(db,"RegistroAlumnos/"+Telefono.value),{
+                    FechaLimite: Fecha.value,
+                    Cursos: ListaCursosSubir
+                    })
+                    location.reload()
+                    alert("Estudiante Registrado Correctamente");
+                }
+                }).catch((error) => {
+
+                });
+
+
+               
+            }
+            else{
+                alert("Seleccione un curso");
+            }
+
+        }
+        else{
+            alert("Llene todos los campos");
+        }
+        
+    }
+
+</script>
+

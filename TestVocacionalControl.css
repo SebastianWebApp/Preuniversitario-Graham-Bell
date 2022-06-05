@@ -1,0 +1,264 @@
+*{
+    margin: 0px;
+    padding: 0px;
+}
+
+html,body{
+    font-family: 'Exo', sans-serif;
+    background-color: white;
+    width: 100%;
+    height: 100%;  
+    animation: fadeIn; 
+    animation-duration: 1s;
+    background-color: #ffffff;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 900'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' x2='0' y1='1' y2='0'%3E%3Cstop offset='0' stop-color='%230FF'/%3E%3Cstop offset='1' stop-color='%23CF6'/%3E%3C/linearGradient%3E%3ClinearGradient id='b' x1='0' x2='0' y1='0' y2='1'%3E%3Cstop offset='0' stop-color='%23F00'/%3E%3Cstop offset='1' stop-color='%23FC0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg fill='%23FFF' fill-opacity='0' stroke-miterlimit='10'%3E%3Cg stroke='url(%23a)' stroke-width='2'%3E%3Cpath transform='translate(0 0)' d='M1409 581 1450.35 511 1490 581z'/%3E%3Ccircle stroke-width='4' transform='rotate(0 800 450)' cx='500' cy='100' r='40'/%3E%3Cpath transform='translate(0 0)' d='M400.86 735.5h-83.73c0-23.12 18.74-41.87 41.87-41.87S400.86 712.38 400.86 735.5z'/%3E%3C/g%3E%3Cg stroke='url(%23b)' stroke-width='4'%3E%3Cpath transform='translate(0 0)' d='M149.8 345.2 118.4 389.8 149.8 434.4 181.2 389.8z'/%3E%3Crect stroke-width='8' transform='rotate(0 1089 759)' x='1039' y='709' width='100' height='100'/%3E%3Cpath transform='rotate(0 1400 132)' d='M1426.8 132.4 1405.7 168.8 1363.7 168.8 1342.7 132.4 1363.7 96 1405.7 96z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+
+section{
+    height: 100%;
+    width: 100%;
+    align-items: center;
+    text-align: center;
+    display: flex;
+}
+#DatosPersonales{   
+    width: 100%;
+    margin: 0 auto;
+}
+
+
+#TestName{
+    margin-top: 20px;
+    font-size: 50px;
+    text-align: center;
+}
+#NombrePeriodoActual{
+    margin-top: 20px;
+    font-size: 30px;
+    text-align: center;
+}
+
+.Entry{
+    border-radius: 10px;
+    width: 60%;
+    height: 40px;
+    color: black;
+    text-align: center;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.Combobox{
+    border-radius: 10px;
+    width: 60%;
+    height: 40px;
+    color: black;
+    text-align: center;
+    align-items: center;
+    font-size: 16px;
+    /* border: 1px; */
+    margin-bottom: 15px;
+}
+
+#Subir{
+    display: none;
+    }
+
+.cta {
+    position: relative;
+    margin: auto;
+    margin-top: 10px;
+    padding: 12px 18px;
+    transition: all 0.2s ease;
+    border: none;
+    background: none;
+   }
+   
+   .cta:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    border-radius: 50px;
+    background:linear-gradient(30deg, #002853, #006cdf8e);
+    width: 45px;
+    height: 45px;
+    transition: all 0.3s ease;
+   }
+   
+   .cta span {
+    position: relative;
+    font-family: "Ubuntu", sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: #000000;
+   }
+   
+   .cta svg {
+    position: relative;
+    top: 0;
+    margin-left: 10px;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke: #ffffff;
+    stroke-width: 2;
+    transform: translateX(-5px);
+    transition: all 0.3s ease;
+   }
+   
+   .cta:hover:before {
+    width: 100%;
+    background:linear-gradient(30deg, #002853, #006cdf8e);
+    stroke-width: 3;
+   }
+   
+   .cta:hover span {
+    transform: translateX(0);
+    stroke-width: 3;
+    color: white;
+
+   }
+   
+   .cta:active {
+    transform: scale(0.95);
+   }
+
+button {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    outline: none;
+    border: 0;
+    vertical-align: middle;
+    text-decoration: none;
+    background: transparent;
+    padding: 0;
+    font-size: inherit;
+    font-family: inherit;
+   }
+   
+   button.learn-more {
+    width: 20rem;
+    height: auto;
+   }
+   
+   button.learn-more .circle {
+    transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+    position: relative;
+    display: block;
+    margin: 0;
+    width: 3rem;
+    height: 3rem;
+    background: #282936;
+    border-radius: 1.625rem;
+   }
+   
+   button.learn-more .circle .icon {
+    transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    background: #fff;
+   }
+   
+   button.learn-more .circle .icon.arrow {
+    transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+    left: 0.625rem;
+    width: 1.125rem;
+    height: 0.125rem;
+    background: none;
+   }
+   
+   button.learn-more .circle .icon.arrow::before {
+    position: absolute;
+    content: "";
+    top: -0.29rem;
+    right: 0.0625rem;
+    width: 0.625rem;
+    height: 0.625rem;
+    border-top: 0.125rem solid #fff;
+    border-right: 0.125rem solid #fff;
+    transform: rotate(45deg);
+   }
+   
+   button.learn-more .button-text {
+    transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0.75rem 0;
+    margin: 0 0 0 1.85rem;
+    color: #282936;
+    font-weight: 700;
+    line-height: 1.6;
+    text-align: center;
+    text-transform: uppercase;
+   }
+   
+   button:hover .circle {
+    width: 100%;
+   }
+   
+   button:hover .circle .icon.arrow {
+    background: #fff;
+    transform: translate(1rem, 0);
+   }
+   
+   button:hover .button-text {
+    color: #fff;
+   }
+
+   
+   #BloqueContenido{
+       display: none;
+   }
+
+   #BloqueNewPeriodo{
+       display: none;
+   }
+   #BloqueNew{
+       display: none;
+   }
+   #ContenedorTabla{
+       text-align: center;
+       width: 100%;
+       height: 20%;
+       overflow-y: auto;
+       overflow-x: auto;
+
+   }
+   table{
+       background-color: #ffffff;
+       text-align: center;
+       border-collapse: collapse;
+       width: 80%;
+       height: 2%;
+       margin-left: 10%;
+   }
+
+   th,td{
+       padding: 20px;
+   }
+
+   thead{
+       background-color: #002853;       
+       border-bottom: solid 5px #000000;
+       color: #ffffff;
+   }
+
+ 
+   tr:hover{
+       background-color: #002853;
+       color: #ffffff;
+   }
+
+ 

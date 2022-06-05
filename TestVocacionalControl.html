@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="TestVocacionalControl.css">   
+    <meta name="author" content="IDE Programming">
+    <link rel="shortcut icon" href="iconoWebC.png">  
+    <title>Panel de Control</title>
+</head>
+<body>
+    
+    <section>        
+        <div id="DatosPersonales">
+            <h1 id="TestName">Panel de Control</h1>
+            <h1 id="NombrePeriodoActual"></h1>
+            <div id="BloqueNewPeriodo">
+                <br><br>
+                <h1>Nuevo Período</h1>
+                <br>       
+                <input class="Entry" id="NuevoPeriodo" type="text" placeholder="Ejm. 2022 - 2023">      
+                <br>                                 
+                <button id="ButtonNewPeriodo" class="learn-more">
+                    <span class="circle" aria-hidden="true">
+                    <span class="icon arrow"></span>
+                    </span>
+                    <span class="button-text">Crear Nuevo Periodo</span>
+                  </button>
+                  <br><br><br>              
+                <button id="NewUnidad" class="cta">
+                    <span>Crear Unidad Educativa</span>
+                    <svg viewBox="0 0 13 10" height="10px" width="15px">
+                    <path d="M1,5 L11,5"></path>
+                    <polyline points="8 1 12 5 8 9"></polyline>
+                    </svg>
+                </button>
+                <button id="ExtraerDatos" class="cta">
+                      <span>Extraer Datos</span>
+                      <svg viewBox="0 0 13 10" height="10px" width="15px">
+                      <path d="M1,5 L11,5"></path>
+                      <polyline points="8 1 12 5 8 9"></polyline>
+                      </svg>
+                </button>
+            </div>
+            <div id="BloqueNew">
+                <br><br>
+                <h1>Nueva Unidad Educativa</h1>
+                <br>       
+                <input class="Entry" id="NuevaUnidadEducativa" type="text" placeholder="Ingrese el nombre de la Unidad Educativa">      
+                <br>                                 
+                <button id="ButtonNewUnidadEducativa" class="learn-more">
+                    <span class="circle" aria-hidden="true">
+                    <span class="icon arrow"></span>
+                    </span>
+                    <span class="button-text">Crear Unidad Educativa</span>
+                  </button>
+                  <br><br><br>              
+                  <button id="NewPeriodo" class="cta">
+                      <span>Crear Nuevo Período</span>
+                      <svg viewBox="0 0 13 10" height="10px" width="15px">
+                      <path d="M1,5 L11,5"></path>
+                      <polyline points="8 1 12 5 8 9"></polyline>
+                      </svg>
+                  </button>
+                  <button id="ExtraerDatos1" class="cta">
+                      <span>Extraer Datos</span>
+                      <svg viewBox="0 0 13 10" height="10px" width="15px">
+                      <path d="M1,5 L11,5"></path>
+                      <polyline points="8 1 12 5 8 9"></polyline>
+                      </svg>
+                  </button>
+            </div>
+            <div id="BloqueContenido">
+                <br><br>
+                <h3>Seleccione la Unidad Educativa</h3>
+                <br>
+                <select class="Combobox" id="comboboxUnidadEdu">            
+                </select>
+                <br><br>
+                <button id="ExtraerTabla" class="learn-more">
+                    <span class="circle" aria-hidden="true">
+                    <span class="icon arrow"></span>
+                    </span>
+                    <span class="button-text">Crear Link de Test</span>
+                  </button>
+              
+             
+
+                <br><br>
+                <button id="NewUnidad1" class="cta">
+                    <span>Crear Unidad Educativa</span>
+                    <svg viewBox="0 0 13 10" height="10px" width="15px">
+                    <path d="M1,5 L11,5"></path>
+                    <polyline points="8 1 12 5 8 9"></polyline>
+                    </svg>
+                </button>
+                <button id="NewPeriodo1" class="cta">
+                    <span>Crear Nuevo Período</span>
+                    <svg viewBox="0 0 13 10" height="10px" width="15px">
+                    <path d="M1,5 L11,5"></path>
+                    <polyline points="8 1 12 5 8 9"></polyline>
+                    </svg>
+                </button>                
+            </div>                                              
+        </div>               
+    </section>
+
+
+</body>
+</html>
+
+<script type="module">
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-analytics.js";
+    
+    const firebaseConfig = {
+        apiKey: "AIzaSyBOEpPGa8Q9mgSST7WQnLZ85BpOkYrYtfk",
+        authDomain: "alumnos-72c02.firebaseapp.com",
+        databaseURL: "https://alumnos-72c02-default-rtdb.firebaseio.com",
+        projectId: "alumnos-72c02",
+        storageBucket: "alumnos-72c02.appspot.com",
+        messagingSenderId: "294563889409",
+        appId: "1:294563889409:web:27cc27392864ed7c8ddb00",
+        measurementId: "G-E70XQ46MVS"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+
+    import {getDatabase,ref,set,child,update,remove,get,push}
+    from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+    const db =getDatabase();
+
+
+
+    PeriodoExistente();
+    var ListaColegios = [];
+    var PeriodoDBActual = "";
+
+    
+
+    function PeriodoExistente(){
+        const dbRef = ref(getDatabase());
+            get(child(dbRef, "PeriodoActual")).then((snapshot) => {
+            if (snapshot.exists()) {
+                document.getElementById("BloqueNewPeriodo").style.display = "none";
+                document.getElementById("BloqueNew").style.display = "inline";           
+                document.getElementById("NombrePeriodoActual").innerHTML = snapshot.val().PeriodoActual;
+                PeriodoDBActual = snapshot.val().PeriodoActual;
+                ColegiosExistentes();
+
+            }
+            else {
+                document.getElementById("BloqueNew").style.display = "none";
+                document.getElementById("NewUnidad").style.display = "none";
+                document.getElementById("NewDatos").style.display = "none";
+                document.getElementById("BloqueNewPeriodo").style.display = "inline";
+            }
+            }).catch((error) => {
+                alert("Intente nuevamente");
+            });
+        
+    }
+
+    function ColegiosExistentes(){
+        var NombrePeriodo = document.getElementById("NombrePeriodoActual");
+
+        const dbRef = ref(getDatabase());
+            get(child(dbRef, NombrePeriodo.innerHTML)).then((snapshot) => {
+                var colegios = snapshot.val().UnidadEducativa;
+                ListaColegios = colegios.split(",[],");
+
+                for(var i = 0 ; i <ListaColegios.length; i++){
+                var combo = document.getElementById("comboboxUnidadEdu");
+                var option = document.createElement('option');
+                combo.options.add(option, i);
+                combo.options[i].innerText = ListaColegios[i]; 
+        }
+
+        }).catch((error) => {
+                alert("Intente nuevamente");
+        });
+
+    }
+
+    document.getElementById("NewPeriodo").onclick = function(e){
+        document.getElementById("BloqueNew").style.display = "none";
+        document.getElementById("BloqueNewPeriodo").style.display = "inline";        
+        document.getElementById("BloqueContenido").style.display = "none";     
+
+    }
+  
+    document.getElementById("NewPeriodo1").onclick = function(e){
+        document.getElementById("BloqueNew").style.display = "none";
+        document.getElementById("BloqueNewPeriodo").style.display = "inline";        
+        document.getElementById("BloqueContenido").style.display = "none";     
+
+    }
+   
+    document.getElementById("ExtraerDatos").onclick = function(e){
+        document.getElementById("BloqueNew").style.display = "none";
+        document.getElementById("BloqueNewPeriodo").style.display = "none";        
+        document.getElementById("BloqueContenido").style.display = "inline";            
+    }
+
+    document.getElementById("ExtraerDatos1").onclick = function(e){
+        document.getElementById("BloqueNew").style.display = "none";
+        document.getElementById("BloqueNewPeriodo").style.display = "none";        
+        document.getElementById("BloqueContenido").style.display = "inline";     
+    }
+
+    document.getElementById("NewUnidad").onclick = function(e){
+        document.getElementById("BloqueNewPeriodo").style.display = "none";
+        document.getElementById("BloqueNew").style.display = "inline";
+        document.getElementById("BloqueContenido").style.display = "none";     
+
+    }
+    
+    document.getElementById("NewUnidad1").onclick = function(e){
+        document.getElementById("BloqueNewPeriodo").style.display = "none";
+        document.getElementById("BloqueNew").style.display = "inline";
+        document.getElementById("BloqueContenido").style.display = "none";     
+
+    }
+    
+    document.getElementById("ButtonNewPeriodo").onclick = function(e){
+        var Periodo = document.getElementById("NuevoPeriodo").value;
+
+        if(Periodo != ""){
+            update(ref(db,"PeriodoActual"),{
+            PeriodoActual:Periodo
+            })       
+            update(ref(db,Periodo),{
+                UnidadEducativa:"Seleccione"
+            }) 
+            .then(()=>{
+                location.reload()
+                alert("Período Creado")
+            })
+            .catch((error)=>{
+                location.reload()
+                alert("Intente de nuevo")
+            });
+        }
+        else{
+            alert("Coloque el nombre del nuevo período")
+        }
+
+    }
+    
+    document.getElementById("ButtonNewUnidadEducativa").onclick = function(e){
+        var UnidadEducativa = document.getElementById("NuevaUnidadEducativa").value;
+        if(UnidadEducativa != ""){
+            var Lista = "";
+            for(var i = 0; i < ListaColegios.length ; i++){
+                Lista = Lista + ListaColegios[i] +",[],";
+            }
+
+            var NombrePeriodo = document.getElementById("NombrePeriodoActual");
+            Lista = Lista + UnidadEducativa;
+
+            update(ref(db,NombrePeriodo.innerHTML),{
+                UnidadEducativa:Lista
+            })      
+            .then(()=>{
+                location.reload()
+                alert("Colegio Creado")
+            })
+            .catch((error)=>{
+                location.reload()
+                alert("Intente de nuevo")
+            });
+        }
+        else{
+            alert("Nombre de la Unidad Educativa");
+        }
+
+
+    }
+        
+    document.getElementById("ExtraerTabla").onclick = function(e){
+        var ComboboxDBValor = document.getElementById("comboboxUnidadEdu").value;
+        if(ComboboxDBValor != "Seleccione"){
+            location.href="PuntajeTestVocacionales.html?Periodo="+PeriodoDBActual+"&Colegio="+String(ComboboxDBValor);    
+            
+
+        }
+        else{
+            alert("Seleccione la Unidad Educativa");
+        }
+
+
+    }
+ 
+
+
+</script>
+
+<script type="module">
+      document.getElementById("NuevoPeriodo").onkeypress = function() {           
+        var key = event.keyCode;
+        var tecla = String.fromCharCode(key).toLowerCase();
+        var letras = " 0987654321-";
+        var especiales = [8];    
+        var tecla_especial = false
+        for(var i in especiales) {
+            if(key == especiales[i]) {
+                tecla_especial = true;
+                break;
+          }
+      }  
+      if(letras.indexOf(tecla) == -1 && !tecla_especial)
+          return false;
+    };
+
+</script>
+

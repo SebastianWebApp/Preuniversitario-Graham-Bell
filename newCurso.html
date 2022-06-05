@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="newCurso.css">
+    <meta name="author" content="IDE Programming">
+    <link rel="shortcut icon" href="iconoWebC.png">
+
+    <title>Nuevo Curso</title>
+</head>
+<body>
+
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+  />
+
+
+    <div class="hero"> 
+        <div class="hero__title">Nuevo curso
+            <div class="ContenedorFormulario">
+                <input  class="Entry" id="curso" type="text" maxlength="41" placeholder="Ingrese el nombre del curso">
+                <br>
+                <button id="Acceder" class="cta">
+                    <span>Crear nuevo curso</span>
+                    <svg viewBox="0 0 13 10" height="10px" width="15px">
+                    <path d="M1,5 L11,5"></path>
+                    <polyline points="8 1 12 5 8 9"></polyline>
+                    </svg>
+                </button>
+                <br>
+                <p id="mensaje"></p>
+            </div>   
+        </div>
+        <div class="cube"></div>
+        <div class="cube"></div>
+        <div class="cube"></div>
+        <div class="cube"></div>
+        <div class="cube"></div>
+        <div class="cube"></div>
+             
+
+        
+        <div class="Menu">
+            <a href="Registro_Alumno.html">
+                <img class="iconMenu"src="registro1.png"/>
+            </a>
+            <a href="LoginContenido.html">
+                <img class="iconMenu"src="home1.png"/>
+            </a>
+            <a href="SubirMaterial.html">
+                <img class="iconMenu"src="cloud1.png"/>
+            </a>            
+            <a href="Edicion.html">
+                <img class="iconMenu"src="edit1.png"/>
+            </a>         
+        </div>
+
+    </div>
+
+    <script type="module">
+         // Importamos las librerias
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-analytics.js";
+    import {getDatabase,ref,set,child,update,remove,get,push} from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBJCFtSu0OJlqg5rwc1feATIBejX3D0E7Y",
+        authDomain: "nombre-del-proyecto-2321c.firebaseapp.com",
+        databaseURL: "https://nombre-del-proyecto-2321c-default-rtdb.firebaseio.com",
+        projectId: "nombre-del-proyecto-2321c",
+        storageBucket: "nombre-del-proyecto-2321c.appspot.com",
+        messagingSenderId: "672829934203",
+        appId: "1:672829934203:web:12a7ca900dc920f67cb0de",
+        measurementId: "G-5G31BN19HV"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const db =getDatabase();
+
+    var nombre = document.getElementById("curso");
+    var mensaje = document.getElementById("mensaje");
+    var ListaCursos = "";
+
+
+    function LeerBaseDatos(nombre){
+        if(nombre!= ""){
+            const dbRef = ref(getDatabase());
+            get(child(dbRef,"Cursos/"+String(nombre))).then((snapshot) => {
+            if (snapshot.exists()) {
+                mensaje.style.display = "inline"
+                mensaje.textContent = "Ya existe repositorio con el nombre de "+nombre;
+            } else {
+                RecuperarLista(nombre);
+            }
+            }).catch((error) => {
+                mensaje.style.display = "inline"
+                mensaje.textContent = "Intente de nuevo";
+            });
+        }
+        else{
+            mensaje.style.display = "inline"
+            mensaje.textContent = "Coloque un nombre";
+        }
+    }
+
+    function RecuperarLista(nombre){
+        const dbRef = ref(getDatabase());
+        get(child(dbRef, "Cursos/Lista Cursos")).then((snapshot) => {
+        if (snapshot.exists()) {
+            ListaCursos = snapshot.val().Lista
+            CrearCurso(nombre,ListaCursos+",");
+
+
+        } else {
+            CrearCurso(nombre,"");
+        }
+        }).catch((error) => {
+
+        });
+    }
+
+    function CrearCurso(curso,contenido){
+
+// set sirve para crear la base de datos si utilizamos set para subir datos eliminara los anteriores.
+        set(ref(db,"Cursos/Lista Cursos"),{
+            Lista:contenido+curso
+        })
+        set(ref(db,"Cursos/"+String(curso)+"/Material"),{
+            Videos:"0",
+            Documentos:"0",
+            Links:"0"
+        })
+        set(ref(db,"Cursos/"+String(curso)+"/Informe"),{
+            Nombre:String(curso),
+            Descripcion:"0",
+            Imagen:"0"
+        })
+        .then(()=>{
+            nombre.value = "";
+            mensaje.style.display = "inline"
+            mensaje.textContent = "El curso fue añadido correctamente, Edite su información";   
+            location.href="Edicion.html"; 
+            // setTimeout(function(){
+            //     location.reload()
+            // }, 1000);
+        })
+        .catch((error)=>{
+            mensaje.style.display = "inline"
+            mensaje.textContent = "Intente de nuevo";        
+        });
+    }
+
+    document.getElementById("Acceder").onclick = function(e){
+        mensaje.style.display = "inline"
+        mensaje.textContent = "Espere un momento";        
+
+        var contenidoEntry = nombre.value;
+        contenidoEntry = contenidoEntry.replace(/,/g,"-");
+        LeerBaseDatos(contenidoEntry);
+
+    }
+
+
+
+    </script>
+
+
+
+    
+</body>
+</html>

@@ -1,0 +1,184 @@
+*{
+    padding: 0px;
+    margin: 0px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;  
+}
+html,body{
+    height: 100%;
+}
+
+.Menu{
+    display: flex;
+    flex-wrap: wrap;
+    height: 100%;
+
+}
+
+#Menu{
+    min-width: 250px;
+    background-color: #000000;
+    padding: 2px;
+    width: 200px;
+}
+.Menu:first-child{
+    flex: 1;
+}
+#Contenido{
+    flex: 1;
+}
+
+
+.button {
+    width: 100%;
+    height: 45px;
+    font-size: 20px;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: white;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: 700;
+    position: relative;
+    transition: all 0.5s;
+    z-index: 1;
+    margin-bottom: 20px;
+   }
+   
+   .button::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0px;
+    height: 100%;
+    background-color: white;
+    z-index: -1;
+    transition: all 0.5s;
+   }
+   
+   .button:hover::before {
+    width: 100%;
+   }
+   
+   .button:hover {
+    color: black;
+   }
+   
+   .button:active:before {
+    background: #b9b9b9;
+   }
+
+  
+
+#ContenedorCursos{
+    text-align: center;
+    width: 100%;
+    display: inline-block;
+
+}
+#ContenedorCursos1{
+    display: none;
+    text-align: center;
+    width: 100%;
+
+}
+#ContenedorCursos2{
+    display: none;
+    text-align: center;
+    width: 100%;
+
+}
+
+
+.ContenedorEnlace{
+    display: inline-block;
+    width: 28%;
+    margin: 10px;
+    border:1px solid rgb(0, 0, 0);
+    border-radius:22px;
+    text-align: center;
+    box-shadow: 0 0 20px 8px #d0d0d0;
+
+}
+.ImagenCurso{
+    margin-top: 5px;
+    min-width: 200px;
+    max-width: 200px;
+    min-height: 200px;
+    max-width: 200px;
+    border-radius:10px;
+    background-size: cover;
+    background-repeat: no-repeat;    
+}
+h1{
+    color: black;
+    padding: 5px;
+    min-height: 70px;
+    max-height: 70px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;    
+    -webkit-line-clamp: 2; 
+    -webkit-box-orient: vertical;
+    margin-bottom: 5px;
+
+}
+a{
+    margin: 10px;   
+}
+
+.ContenedorEnlace:hover{
+    animation: pulse;
+    animation-duration: 2s;
+}
+
+.MenuT{
+    width: 100%;
+    display: none;
+}
+
+
+
+
+@media screen  and (max-width:1120px){
+
+    .ContenedorEnlace{
+        width: 40%;     
+    }
+}
+
+@media screen  and (max-width:850px){
+
+    .ContenedorEnlace{
+        width: 75%;     
+    }
+    h1{ 
+        max-height: 120px;
+        -webkit-line-clamp: 3; 
+    }
+    #Menu{
+        display: none;        
+    }
+    .MenuT{
+        display: inline-block;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        margin-left: 10px;
+        margin-right: 10px;
+        text-align: center;
+    }
+    
+    .button {
+        width: 30%;
+        height: 45px;
+        font-size: 20px;
+        text-decoration-line: underline;
+        color: rgb(0, 0, 0);
+        font-family: 'Times New Roman', Times, serif;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+       
+     
+}

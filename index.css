@@ -1,0 +1,299 @@
+*{
+    margin: 0px;
+    padding: 0px;
+}
+
+html,body{
+    font-family: 'Exo', sans-serif;
+    background-color: white;
+    width: 100%;
+    height: 100%;  
+    animation: fadeIn; 
+    animation-duration: 1s;
+}
+header{
+    background:linear-gradient(30deg, #002853, #006cdf8e);
+    height: 80px;
+}
+.navegador{
+    list-style: none;
+    text-align: right;
+}
+.menu li{
+    display: inline-block;
+    margin-top: 25px;
+    margin-right: 10px;
+
+}
+.menu li a{
+    display: block;
+    color: white;
+    margin-right: 10px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: 22px;
+    text-decoration: none;
+    font-weight: 400;
+}
+
+.menu li a:hover{
+    animation: flash; 
+    animation-duration: 3s;
+    font-weight: 700;
+}
+
+.PortadaImg{
+    width: 100%;
+    height: 500px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0.5),
+        rgba(0, 0, 0, 0.5)
+       ),  
+       url("PortadaPregraham.jpg");
+
+    display: flex;
+    flex-wrap: wrap;
+    text-align: center;
+}
+
+.Contenido{
+    margin-top: 130px;  
+    margin-left: 5%;  
+    margin-right: 5%;
+}
+.Contenido img{
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 20%;
+}
+.Contenido{
+    color: white;
+}
+
+#parte1{
+    flex: 1;
+}
+#parte2{
+    flex: 1;
+}
+#parte3{
+    flex: 1;
+}
+
+.Tarjetas{
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    text-align: center;
+}
+#Tarjeta1{
+    flex: 1;
+    border-radius: 50px;
+    background-color: #002853;
+    height: 300px;
+    margin-top: 3%;
+    margin-left: 4%;
+    margin-right: 4%;
+    margin-bottom: 5%;
+    min-width: 180px;
+ 
+}
+#Tarjeta2{
+    flex: 1;
+    border-radius: 50px;
+    background-color: #002853;
+    height: 300px;
+    margin-top: 3%;
+    margin-left: 4%;
+    margin-right: 4%;
+    margin-bottom: 5%;
+    min-width: 180px;
+}
+#Tarjeta3{
+    flex: 1;
+    border-radius: 50px;
+    background-color: #002853;
+    height: 300px;
+    margin-top: 3%;
+    margin-left: 4%;
+    margin-right: 4%;
+    margin-bottom: 5%;
+    min-width: 180px;
+}
+/* From uiverse.io by @alexruix */
+.card {
+    height: 100px;
+    width: 100%;
+    position: relative;
+    transition: all 0.4s cubic-bezier(0.645, 0.045, 0.355, 1);
+    border-radius: 1em;
+    box-shadow: 0 0 20px 8px #d0d0d0;
+    
+   }
+   
+    /*Image*/
+   .card-image {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    border-radius: 20px;
+    transition: all 1s cubic-bezier(0.645, 0.045, 0.355, 1);
+    background: linear-gradient(to top, #4e9ef3, #002853);
+   }
+   .card-image img{
+       margin-top: 15px;
+       width: 40%;
+   }
+   
+   /*Description */
+   .card-description {
+    transform: translateY(10%);
+    display: flex;
+    position: absolute;
+    gap: 1em;
+    flex-direction: column;
+    background-color: #f5f5f5;
+    height: 60%;
+    bottom: 0;
+    border-radius: 1em;
+    transition: all 1s cubic-bezier(0.645, 0.045, 0.355, 1);
+    padding: 1rem;
+    color: black;
+   }
+   
+   /*Text*/
+   .text-title {
+    font-size: 1.4em;
+    font-weight: 700;
+   }
+   
+   .text-body {
+    font-size: 1em;
+    line-height: 150%;
+   }
+   
+   
+   /* Hover states */
+   
+   .card:hover .card-description {
+    transform: translateY(17%);
+    height: 45%;
+
+   }
+   
+   #Maps{
+       width: 100%;
+       height: 340px;
+   }
+   #Maps iframe{
+       width: 100%;
+       height: 100%;
+   }
+
+   .Contacto{
+       margin: 5%;
+       display: flex;
+       flex-wrap: wrap;
+       text-align: center;
+   }
+   .ContactoImagen{
+    border-radius: 50px;
+    box-shadow: 10px 8px 20px 8px #d0d0d0;
+    display: inline;
+   }
+   .Contacto img{       
+       width: 15%;
+       background-size: cover;
+       background-repeat: no-repeat;
+   }
+   
+   .ContactoInformacion{
+    display: inline-block;
+    color: black;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    margin-left: 5px;
+}
+   #Contacto1{
+       flex: 1;
+   }
+   #Contacto2{
+    flex: 1;
+    }
+    .ContactoEdit a:hover{
+        animation: bounceIn; 
+        animation-duration: 3s;
+    }
+
+    @media screen  and (max-width:750px){
+        #parte3{
+            display: none;
+        }
+    }    
+
+    @media screen  and (max-width:650px){
+
+        #Tarjeta1{
+            margin-top: 3%;
+            margin-left: 7%;
+            margin-right: 7%;
+            margin-bottom: 5%;
+            min-width: 280px;
+         
+        }
+        #Tarjeta2{
+
+            margin-top: 3%;
+            margin-left: 7%;
+            margin-right: 7%;
+            margin-bottom: 5%;
+            /* min-width: 280px; */
+
+        }
+        #Tarjeta3{
+
+            margin-top: 3%;
+            margin-left: 7%;
+            margin-right: 7%;
+            margin-bottom: 5%;
+            min-width: 280px;
+        }
+      
+        .card-description {
+            width: 93.5%;
+
+           } 
+
+           .menu li a{  
+            margin-left: 3px;        
+            margin-right: 3px;
+            font-size: 16px;
+            
+        }       
+    }
+
+    @media screen  and (max-width:450px){
+       
+        .card-description {
+            width: 90.5%;
+
+           } 
+
+           .navegador{
+            text-align: center;
+        }
+           .menu li a{  
+            margin-top: 10px;
+            margin-left: 1px;        
+            margin-right: 1px;
+            font-size: 18px;
+            
+        }
+        #parte2{
+            display: none;
+        }
+        #parte3{
+            display: none;
+        }   
+    }

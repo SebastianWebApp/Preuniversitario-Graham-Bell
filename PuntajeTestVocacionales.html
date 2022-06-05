@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="PuntajeTestVocacional.css">   
+    <meta name="author" content="IDE Programming">
+    <link rel="shortcut icon" href="iconoWebC.png">  
+    <meta name="description" content="Preuniversitario Alexander Graham Bell, Aprueba el Examen TRANSFORMAR y estudia la carrera de tus sueños">
+    <meta name="keywords" content="Preuniversitario, Examen, TRANSFORMAR, Capacitación, Simuladores, Universidad,Test Vocacional, Respuestas">    
+    <title>Resultados de los Test</title>
+</head>
+<body>
+    <section>        
+        <div id="DatosPersonales">
+            <h1 id="TestName"></h1>
+            <h1 id="NombrePeriodoActual"></h1>            
+            <div id="BloqueContenido">      
+                <br><br>
+                 
+                <input class="Entry" id="NuevoPeriodo" type="text" placeholder="Filtrar Datos">      
+
+                <div id="ContenedorBotones">
+                    <button id="ExtraerTabla" class="download-button">
+                        <div class="docs"><svg class="css-i6dzq1" stroke-linejoin="round" stroke-linecap="round" fill="none" stroke-width="2" stroke="currentColor" height="20" width="20" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line y2="13" x2="8" y1="13" x1="16"></line><line y2="17" x2="8" y1="17" x1="16"></line><polyline points="10 9 9 9 8 9"></polyline></svg> Descargar</div>
+                        <div class="download">
+                          <svg class="css-i6dzq1" stroke-linejoin="round" stroke-linecap="round" fill="none" stroke-width="2" stroke="currentColor" height="24" width="24" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line y2="3" x2="12" y1="15" x1="12"></line></svg>
+                        </div>
+                      </button>                                    
+                    <button id="TestAptutud" class="button" style="vertical-align:middle"><span>Test de Aptitudes</span></button>
+                    <button id="TestInteres" class="button" style="vertical-align:middle"><span>Test Profesional</span></button>
+                    <button id="TestInteresProfesional" class="button" style="vertical-align:middle"><span>Test de Interes Profesional</span></button>
+    
+                </div>
+                
+
+                <div id="ContenedorTabla">
+                    <table id="productos" border="1">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Cedula</th>
+                                <th>Telefono</th>
+                                <th>A</th>
+                                <th>N</th>
+                                <th>P</th>
+                                <th>B</th>
+                                <th>E</th>
+                                <th>F</th>
+                                <th>L</th>
+                                <th>H</th>
+                                <th>O</th>
+                                <th>C</th>
+                            </tr>  
+                        </thead>
+                                     
+                    </table>
+                </div>
+            
+            </div>                                              
+        </div>               
+    </section>
+</body>
+</html>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-analytics.js";
+    
+    const firebaseConfig = {
+        apiKey: "AIzaSyBOEpPGa8Q9mgSST7WQnLZ85BpOkYrYtfk",
+        authDomain: "alumnos-72c02.firebaseapp.com",
+        databaseURL: "https://alumnos-72c02-default-rtdb.firebaseio.com",
+        projectId: "alumnos-72c02",
+        storageBucket: "alumnos-72c02.appspot.com",
+        messagingSenderId: "294563889409",
+        appId: "1:294563889409:web:27cc27392864ed7c8ddb00",
+        measurementId: "G-E70XQ46MVS"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+
+    import {getDatabase,ref,set,child,update,remove,get,push}
+    from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+    const db =getDatabase();
+
+    let tablaProducto = document.getElementById("productos");
+
+    var BuscarParametro = window.location.search;
+    var ParametroUrl = new URLSearchParams(BuscarParametro);
+    var Periodo = ParametroUrl.get('Periodo');
+    var Colegio = ParametroUrl.get('Colegio');
+ 
+    document.getElementById("TestName").innerHTML = Colegio;
+    document.getElementById("NombrePeriodoActual").innerHTML = "Test de Aptitudes";
+
+    var TestAp = 1;
+    var TestIn = 0;
+    var TestInP = 0;
+    var TipoTest = "";
+
+    var ListaNombresAlumnosDb = [];
+    var ListaTelefonosAlumnosDb = [];
+    var ListaCedulaAlumnosDb = [];
+    var ListaSeccionADb = [];
+    var ListaSeccionNDb = [];
+    var ListaSeccionPDb = [];
+    var ListaSeccionBDb = [];
+    var ListaSeccionEDb = [];
+    var ListaSeccionFDb = [];
+    var ListaSeccionLDb = [];
+    var ListaSeccionHDb = [];
+    var ListaSeccionODb = [];
+    var ListaSeccionCDb = [];
+
+
+    var ContenidoFiltro = "";
+
+DatosTestVocacionales();
+function DatosTestVocacionales(){
+
+    ListaNombresAlumnosDb = [];
+    ListaTelefonosAlumnosDb = [];
+    ListaCedulaAlumnosDb = [];
+    ListaSeccionADb = [];
+    ListaSeccionNDb = [];
+    ListaSeccionPDb = [];
+    ListaSeccionBDb = [];
+    ListaSeccionEDb = [];
+    ListaSeccionFDb = [];
+    ListaSeccionLDb = [];
+    ListaSeccionHDb = [];
+    ListaSeccionODb = [];
+    ListaSeccionCDb = [];
+
+
+
+    var ListaDBAlumno = [];
+    const dbRef = ref(getDatabase());
+            get(child(dbRef, Periodo+"/"+Colegio)).then((snapshot) => {
+            if (snapshot.exists()) {
+            var ListaNumeroEstudiantes = snapshot.val().ListaEstudiantes;
+                ListaDBAlumno = ListaNumeroEstudiantes.split(",[],");
+                var contador = 0;
+                for(var i = 0; i <ListaDBAlumno.length; i++){
+                    get(child(dbRef, Periodo+"/"+Colegio+"/"+ListaDBAlumno[i])).then((snapshot) => {
+                        if (snapshot.exists()) {
+                            var NombreEstudianteDb = snapshot.val().Nombre;
+                            var CedulaDb = snapshot.val().Cedula;
+                            var TelefonoDb = snapshot.val().Telefono;                              
+                            
+                            if(TestAp == 1){
+                                TipoTest = "Test de Aptitudes";                                
+                            }
+                            if(TestIn == 1){
+                                TipoTest = "Test Profesional";
+                            }
+                            if(TestInP == 1){
+                                TipoTest = "Test de Intereses Profesional";
+                            }
+
+                                get(child(dbRef, Periodo+"/"+Colegio+"/"+CedulaDb+"/"+TipoTest)).then((snapshot) => {
+                                if (snapshot.exists()) {                                   
+
+                                    var NA = snapshot.val().SA;
+                                    var NN = snapshot.val().SN;
+                                    var NP = snapshot.val().SP;
+                                    var NB = snapshot.val().SB;
+                                    var NE = snapshot.val().SE;
+                                    var NF = snapshot.val().SF;
+                                    var NL = snapshot.val().SL;
+                                    var NH = snapshot.val().SH;
+                                    var NO = snapshot.val().SO;
+                                    var NC = snapshot.val().SC;
+
+                                    ListaNombresAlumnosDb.push(NombreEstudianteDb);
+                                    ListaTelefonosAlumnosDb.push(TelefonoDb);
+                                    ListaCedulaAlumnosDb.push(CedulaDb);
+                                    ListaSeccionADb.push(NA);
+                                    ListaSeccionNDb.push(NN);
+                                    ListaSeccionPDb.push(NP);
+                                    ListaSeccionBDb.push(NB);
+                                    ListaSeccionEDb.push(NE);
+                                    ListaSeccionFDb.push(NF);
+                                    ListaSeccionLDb.push(NL);
+                                    ListaSeccionHDb.push(NH);
+                                    ListaSeccionODb.push(NO);
+                                    ListaSeccionCDb.push(NC);
+
+
+                                    var Mayor = 0;
+
+                                    var ListaResultadosDb = [NA,NN,NP,NB,NE,NF,NL,NH,NO,NC];
+                                    for(var inicio = 0; inicio<ListaResultadosDb.length;inicio++){
+                                        if(Mayor < ListaResultadosDb[inicio]){
+                                            Mayor = ListaResultadosDb[inicio];
+                                        }
+                                    }                           
+        
+                                    let fila = document.createElement("tr");
+                                    let td = document.createElement("td");
+                                    td.innerText = NombreEstudianteDb;
+                                    fila.appendChild(td);
+
+                                    td = document.createElement("td");
+                                    td.innerText = CedulaDb;                                
+                                    fila.appendChild(td);
+
+                                    td = document.createElement("td");
+                                    td.innerText = TelefonoDb;
+                                    fila.appendChild(td);
+
+                                    td = document.createElement("td");
+                                    td.innerText = snapshot.val().SA;
+                                    if(Mayor == NA){
+                                        td.style.backgroundColor = "#eaee02"
+                                    }
+                                    fila.appendChild(td);
+
+                                    td = document.createElement("td");
+                                    td.innerText = snapshot.val().SN;
+                                    if(Mayor == NN){
+                                        td.style.backgroundColor = "#eaee02"
+                                    }
+                                    fila.appendChild(td);
+
+                                    td = document.createElement("td");
+                                    td.innerText = snapshot.val().SP;
+                                    if(Mayor == NP){
+                                        td.style.backgroundColor = "#eaee02"
+                                    }
+                                    fila.appendChild(td);
+
+                                    td = document.createElement("td");
+                                    td.innerText = snapshot.val().SB;
+                                    if(Mayor == NB){
+                                        td.style.backgroundColor = "#eaee02"
+                                    }
+                                    fila.appendChild(td);
+
+                                    td = document.createElement("td");
+                                    td.innerText = snapshot.val().SE;
+                                    if(Mayor == NE){
+                                        td.style.backgroundColor = "#eaee02"
+                                    }
+                                    fila.appendChild(td);
+
+
+                                    td = document.createElement("td");
+                                    td.innerText = snapshot.val().SF;
+                                    if(Mayor == NF){
+                                        td.style.backgroundColor = "#eaee02"
+                                    }
+                                    fila.appendChild(td);
+
+
+                                    td = document.createElement("td");
+                                    td.innerText = snapshot.val().SL;
+                                    if(Mayor == NL){
+                                        td.style.backgroundColor = "#eaee02"
+                                    }
+                                    fila.appendChild(td);
+
+                                    td = document.createElement("td");
+                                    td.innerText = snapshot.val().SH;
+                                    if(Mayor == NH){
+                                        td.style.backgroundColor = "#eaee02"
+                                    }
+                                    fila.appendChild(td);
+
+                                    td = document.createElement("td");
+                                    td.innerText = snapshot.val().SO;
+                                    if(Mayor == NO){
+                                        td.style.backgroundColor = "#eaee02"
+                                    }
+                                    fila.appendChild(td);
+
+                                    td = document.createElement("td");
+                                    td.innerText = snapshot.val().SC;
+                                    if(Mayor == NC){
+                                        td.style.backgroundColor = "#eaee02"
+                                    }
+                                    fila.appendChild(td);
+                                    tablaProducto.appendChild(fila);
+
+                                }      
+                            }).catch((error) => {
+                                alert("Intente nuevamente");
+                                });
+
+                                            
+                        }                     
+                        }).catch((error) => {
+                            alert("Intente nuevamente");
+                        });
+                }            
+            }
+            else {
+                alert("Test de la Unidad Educativa no existente ")
+            }
+            }).catch((error) => {
+                alert("Intente nuevamente");
+            });
+
+
+}
+
+document.getElementById("ExtraerTabla").onclick = function(e){
+    exportTableToExcel('productos',Colegio+"_"+TipoTest);        
+}
+
+document.getElementById("TestInteres").onclick = function(e){
+        document.getElementById("NombrePeriodoActual").innerHTML = "Test Profesional";
+        document.getElementById("NuevoPeriodo").value = "";
+        var tableHeaderRowCount = 1;
+        var table = document.getElementById('productos');
+        var rowCount = table.rows.length;
+        for (var i = tableHeaderRowCount; i < rowCount; i++) {            
+            table.deleteRow(tableHeaderRowCount);
+        }
+        TestAp = 0;
+        TestIn = 1;
+        TestInP = 0;
+        DatosTestVocacionales();
+}
+
+document.getElementById("TestAptutud").onclick = function(e){
+    document.getElementById("NuevoPeriodo").value = "";
+        document.getElementById("NombrePeriodoActual").innerHTML = "Test de Aptitudes";
+        var tableHeaderRowCount = 1;
+        var table = document.getElementById('productos');
+        var rowCount = table.rows.length;
+        for (var i = tableHeaderRowCount; i < rowCount; i++) {            
+            table.deleteRow(tableHeaderRowCount);
+        }
+        TestAp = 1;
+        TestIn = 0;
+        TestInP = 0;
+        DatosTestVocacionales();
+}
+
+document.getElementById("TestInteresProfesional").onclick = function(e){
+       document.getElementById("NombrePeriodoActual").innerHTML = "Test de Interes Profesional";
+       document.getElementById("NuevoPeriodo").value = "";
+
+        var tableHeaderRowCount = 1;
+        var table = document.getElementById('productos');
+        var rowCount = table.rows.length;
+        for (var i = tableHeaderRowCount; i < rowCount; i++) {            
+            table.deleteRow(tableHeaderRowCount);
+        }
+        TestAp = 0;
+        TestIn = 0;
+        TestInP = 1;
+        DatosTestVocacionales();
+}
+
+     function exportTableToExcel(tableID, filename = ''){
+    var downloadLink;
+    var dataType = 'application/vnd.ms-excel';
+    var tableSelect = document.getElementById(tableID);
+    var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+    
+    // Specify file name
+    filename = filename?filename+'.xls':'excel_data.xlsx';    
+    // Create download link element
+    downloadLink = document.createElement("a");    
+    document.body.appendChild(downloadLink);    
+    if(navigator.msSaveOrOpenBlob){
+        var blob = new Blob(['ufeff', tableHTML], {
+            type: dataType
+        });
+        navigator.msSaveOrOpenBlob( blob, filename);
+    }else{
+        // Create a link to the file
+        downloadLink.href = 'data:' + dataType + ', ' + tableHTML;    
+        // Setting the file name
+        downloadLink.download = filename;        
+        //triggering the function
+        downloadLink.click();
+    }
+}
+
+
+
+
+document.getElementById("NuevoPeriodo").onkeyup = function(){   
+    var Entry = document.getElementById("NuevoPeriodo").value;
+    var key =event.keyCode;
+    if(key == 8){        
+        if(Entry == "" && ContenidoFiltro != ""){  
+            var tableHeaderRowCount = 1;
+            var table = document.getElementById('productos');
+            var rowCount = table.rows.length;
+            for (var i = tableHeaderRowCount; i < rowCount; i++) {            
+                table.deleteRow(tableHeaderRowCount);
+            }         
+            ContenidoFiltro = "";
+            DatosTestVocacionales();
+        }
+
+        if(Entry != ""){
+            var tableHeaderRowCount = 1;
+            var table = document.getElementById('productos');
+            var rowCount = table.rows.length;
+            for (var i = tableHeaderRowCount; i < rowCount; i++) {            
+                table.deleteRow(tableHeaderRowCount);
+            }
+            var ListaFiltro = [];
+        ContenidoFiltro = Entry;
+        var existe = 0;
+        var existecedula = 0;
+        for(var i = 0; i <ListaNombresAlumnosDb.length;i++){
+            if(ListaNombresAlumnosDb[i].toLowerCase().includes(ContenidoFiltro)){
+                  ListaFiltro.push(i);
+                  existe = 1;
+
+            }
+        }   
+        if(existe == 0 ){
+            for(var i = 0; i <ListaCedulaAlumnosDb.length;i++){
+                if(ListaCedulaAlumnosDb[i].toLowerCase().includes(ContenidoFiltro)){
+                    ListaFiltro.push(i);
+                    existecedula = 1;
+                }
+            } 
+        }
+        if(existecedula == 0 ){
+            for(var i = 0; i <ListaTelefonosAlumnosDb.length;i++){
+                if(ListaTelefonosAlumnosDb[i].toLowerCase().includes(ContenidoFiltro)){
+                    ListaFiltro.push(i);
+                }
+            } 
+        }
+        for(var i = 0 ; i <ListaFiltro.length;i++){
+            var Mayor = 0;
+            var ListaResultadosDb = [ListaSeccionADb[ListaFiltro[i]],ListaSeccionNDb[ListaFiltro[i]],
+            ListaSeccionPDb[ListaFiltro[i]],ListaSeccionBDb[ListaFiltro[i]],ListaSeccionEDb[ListaFiltro[i]],
+            ListaSeccionFDb[ListaFiltro[i]],ListaSeccionLDb[ListaFiltro[i]],ListaSeccionHDb[ListaFiltro[i]],
+            ListaSeccionODb[ListaFiltro[i]],ListaSeccionCDb[ListaFiltro[i]]];
+
+            for(var inicio = 0; inicio<ListaResultadosDb.length;inicio++){
+                if(Mayor < ListaResultadosDb[inicio]){
+                    Mayor = ListaResultadosDb[inicio];
+                }
+            } 
+            
+            let fila = document.createElement("tr");
+            let td = document.createElement("td");
+            td.innerText = ListaNombresAlumnosDb[ListaFiltro[i]];
+            fila.appendChild(td);
+
+            td = document.createElement("td");
+            td.innerText = ListaCedulaAlumnosDb[ListaFiltro[i]];                                
+            fila.appendChild(td);
+
+            td = document.createElement("td");
+            td.innerText = ListaTelefonosAlumnosDb[ListaFiltro[i]];
+            fila.appendChild(td);
+
+            td = document.createElement("td");
+            td.innerText = ListaSeccionADb[ListaFiltro[i]];
+            if(Mayor == ListaSeccionADb[ListaFiltro[i]]){
+                td.style.backgroundColor = "#eaee02"
+            }
+            fila.appendChild(td);
+
+            td = document.createElement("td");
+            td.innerText = ListaSeccionNDb[ListaFiltro[i]];
+            if(Mayor == ListaSeccionNDb[ListaFiltro[i]]){
+                td.style.backgroundColor = "#eaee02"
+            }
+            fila.appendChild(td);
+
+            td = document.createElement("td");
+            td.innerText = ListaSeccionPDb[ListaFiltro[i]];
+            if(Mayor == ListaSeccionPDb[ListaFiltro[i]]){
+                td.style.backgroundColor = "#eaee02"
+            }
+            fila.appendChild(td);
+
+            td = document.createElement("td");
+            td.innerText = ListaSeccionBDb[ListaFiltro[i]];
+            if(Mayor == ListaSeccionBDb[ListaFiltro[i]]){
+                td.style.backgroundColor = "#eaee02"
+            }
+            fila.appendChild(td);
+
+            td = document.createElement("td");
+            td.innerText = ListaSeccionEDb[ListaFiltro[i]];
+            if(Mayor == ListaSeccionEDb[ListaFiltro[i]]){
+                td.style.backgroundColor = "#eaee02"
+            }
+            fila.appendChild(td);
+
+
+            td = document.createElement("td");
+            td.innerText = ListaSeccionFDb[ListaFiltro[i]];
+            if(Mayor == ListaSeccionFDb[ListaFiltro[i]]){
+                td.style.backgroundColor = "#eaee02"
+            }
+            fila.appendChild(td);
+
+
+            td = document.createElement("td");
+            td.innerText = ListaSeccionLDb[ListaFiltro[i]];
+            if(Mayor == ListaSeccionLDb[ListaFiltro[i]]){
+                td.style.backgroundColor = "#eaee02"
+            }
+            fila.appendChild(td);
+
+            td = document.createElement("td");
+            td.innerText = ListaSeccionHDb[ListaFiltro[i]];
+            if(Mayor == ListaSeccionHDb[ListaFiltro[i]]){
+                td.style.backgroundColor = "#eaee02"
+            }
+            fila.appendChild(td);
+
+            td = document.createElement("td");
+            td.innerText = ListaSeccionODb[ListaFiltro[i]];
+            if(Mayor == ListaSeccionODb[ListaFiltro[i]]){
+                td.style.backgroundColor = "#eaee02"
+            }
+            fila.appendChild(td);
+
+            td = document.createElement("td");
+            td.innerText = ListaSeccionCDb[ListaFiltro[i]];
+            if(Mayor == ListaSeccionCDb[ListaFiltro[i]]){
+                td.style.backgroundColor = "#eaee02"
+            }
+            fila.appendChild(td);
+            tablaProducto.appendChild(fila);
+            
+        }
+                        
+
+        }
+    }
+
+   
+
+
+
+}
+
+document.getElementById("NuevoPeriodo").onkeypress = function() {   
+    
+    var tableHeaderRowCount = 1;
+        var table = document.getElementById('productos');
+        var rowCount = table.rows.length;
+        for (var i = tableHeaderRowCount; i < rowCount; i++) {            
+            table.deleteRow(tableHeaderRowCount);
+        }
+
+    var ListaFiltro = [];
+        var key =event.keyCode;
+        var tecla = String.fromCharCode(key).toLowerCase();
+        ContenidoFiltro = ContenidoFiltro+tecla;
+        var existe = 0;
+        var existecedula = 0;
+        for(var i = 0; i <ListaNombresAlumnosDb.length;i++){
+            if(ListaNombresAlumnosDb[i].toLowerCase().includes(ContenidoFiltro)){
+                  ListaFiltro.push(i);
+                  existe = 1;
+
+            }
+        }   
+        if(existe == 0 ){
+            for(var i = 0; i <ListaCedulaAlumnosDb.length;i++){
+                if(ListaCedulaAlumnosDb[i].toLowerCase().includes(ContenidoFiltro)){
+                    ListaFiltro.push(i);
+                    existecedula = 1;
+                }
+            } 
+        }
+        if(existecedula == 0 ){
+            for(var i = 0; i <ListaTelefonosAlumnosDb.length;i++){
+                if(ListaTelefonosAlumnosDb[i].toLowerCase().includes(ContenidoFiltro)){
+                    ListaFiltro.push(i);
+                }
+            } 
+        }
+
+        
+
+
+        for(var i = 0 ; i <ListaFiltro.length;i++){
+            var Mayor = 0;
+            var ListaResultadosDb = [ListaSeccionADb[ListaFiltro[i]],ListaSeccionNDb[ListaFiltro[i]],
+            ListaSeccionPDb[ListaFiltro[i]],ListaSeccionBDb[ListaFiltro[i]],ListaSeccionEDb[ListaFiltro[i]],
+            ListaSeccionFDb[ListaFiltro[i]],ListaSeccionLDb[ListaFiltro[i]],ListaSeccionHDb[ListaFiltro[i]],
+            ListaSeccionODb[ListaFiltro[i]],ListaSeccionCDb[ListaFiltro[i]]];
+
+            for(var inicio = 0; inicio<ListaResultadosDb.length;inicio++){
+                if(Mayor < ListaResultadosDb[inicio]){
+                    Mayor = ListaResultadosDb[inicio];
+                }
+            } 
+            
+            let fila = document.createElement("tr");
+            let td = document.createElement("td");
+            td.innerText = ListaNombresAlumnosDb[ListaFiltro[i]];
+            fila.appendChild(td);
+
+            td = document.createElement("td");
+            td.innerText = ListaCedulaAlumnosDb[ListaFiltro[i]];                                
+            fila.appendChild(td);
+
+            td = document.createElement("td");
+            td.innerText = ListaTelefonosAlumnosDb[ListaFiltro[i]];
+            fila.appendChild(td);
+
+            td = document.createElement("td");
+            td.innerText = ListaSeccionADb[ListaFiltro[i]];
+            if(Mayor == ListaSeccionADb[ListaFiltro[i]]){
+                td.style.backgroundColor = "#eaee02"
+            }
+            fila.appendChild(td);
+
+            td = document.createElement("td");
+            td.innerText = ListaSeccionNDb[ListaFiltro[i]];
+            if(Mayor == ListaSeccionNDb[ListaFiltro[i]]){
+                td.style.backgroundColor = "#eaee02"
+            }
+            fila.appendChild(td);
+
+            td = document.createElement("td");
+            td.innerText = ListaSeccionPDb[ListaFiltro[i]];
+            if(Mayor == ListaSeccionPDb[ListaFiltro[i]]){
+                td.style.backgroundColor = "#eaee02"
+            }
+            fila.appendChild(td);
+
+            td = document.createElement("td");
+            td.innerText = ListaSeccionBDb[ListaFiltro[i]];
+            if(Mayor == ListaSeccionBDb[ListaFiltro[i]]){
+                td.style.backgroundColor = "#eaee02"
+            }
+            fila.appendChild(td);
+
+            td = document.createElement("td");
+            td.innerText = ListaSeccionEDb[ListaFiltro[i]];
+            if(Mayor == ListaSeccionEDb[ListaFiltro[i]]){
+                td.style.backgroundColor = "#eaee02"
+            }
+            fila.appendChild(td);
+
+
+            td = document.createElement("td");
+            td.innerText = ListaSeccionFDb[ListaFiltro[i]];
+            if(Mayor == ListaSeccionFDb[ListaFiltro[i]]){
+                td.style.backgroundColor = "#eaee02"
+            }
+            fila.appendChild(td);
+
+
+            td = document.createElement("td");
+            td.innerText = ListaSeccionLDb[ListaFiltro[i]];
+            if(Mayor == ListaSeccionLDb[ListaFiltro[i]]){
+                td.style.backgroundColor = "#eaee02"
+            }
+            fila.appendChild(td);
+
+            td = document.createElement("td");
+            td.innerText = ListaSeccionHDb[ListaFiltro[i]];
+            if(Mayor == ListaSeccionHDb[ListaFiltro[i]]){
+                td.style.backgroundColor = "#eaee02"
+            }
+            fila.appendChild(td);
+
+            td = document.createElement("td");
+            td.innerText = ListaSeccionODb[ListaFiltro[i]];
+            if(Mayor == ListaSeccionODb[ListaFiltro[i]]){
+                td.style.backgroundColor = "#eaee02"
+            }
+            fila.appendChild(td);
+
+            td = document.createElement("td");
+            td.innerText = ListaSeccionCDb[ListaFiltro[i]];
+            if(Mayor == ListaSeccionCDb[ListaFiltro[i]]){
+                td.style.backgroundColor = "#eaee02"
+            }
+            fila.appendChild(td);
+            tablaProducto.appendChild(fila);
+            
+        }
+                        
+
+
+    };
+
+
+
+
+
+</script>
+
+

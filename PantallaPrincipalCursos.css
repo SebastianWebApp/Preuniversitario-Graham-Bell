@@ -1,0 +1,217 @@
+*{
+    margin: 0px;
+    padding: 0px;
+}
+
+#MenuEditor{
+    background:linear-gradient(30deg, #002853, #006cdf8e);
+    height: 45px;
+    text-align: right;
+    display: none;
+}
+
+.menu li{
+    display: inline-block;
+    margin-top: 0px;
+    margin-right: 10px;
+
+}
+.menu li a{
+    display: block;
+    color: white;
+    margin-right: 10px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: 22px;
+    text-decoration: none;
+    font-weight: 400;
+}
+
+.menu li a:hover{
+    animation: flash; 
+    animation-duration: 3s;
+    font-weight: 700;
+}
+
+#ContenedorCursos{
+    display: inline-block;
+    text-align: center;
+    width: 100%;
+}
+
+.ContenedorEnlace{
+    display: inline-block;
+    width: 25%;
+    margin-top: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
+    border:1px solid rgb(0, 0, 0);
+    border-radius:22px;
+    text-align: center;
+    box-shadow: 0 0 20px 8px #d0d0d0;
+}
+
+.ContenedorEnlace:hover{
+    animation: pulse;
+    animation-duration: 2s;
+}
+.ImagenCurso{
+    margin-top: 5px;
+    min-width: 200px;
+    max-width: 200px;
+    min-height: 200px;
+    max-width: 200px;
+    border-radius:10px;
+    background-size: cover;
+    background-repeat: no-repeat;    
+}
+h1{
+    color: black;
+    padding: 5px;
+    min-height: 70px;
+    max-height: 70px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;    
+    -webkit-line-clamp: 2; 
+    -webkit-box-orient: vertical;
+    margin-bottom: 5px;
+
+}
+p{
+    color: darkslategray;
+    min-height: 100px;
+    max-height: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;    
+    -webkit-line-clamp: 4; 
+    -webkit-box-orient: vertical;
+}
+a{
+    margin: 10px;   
+}
+#Present{
+    width: 100%;
+    height: 400px;
+    margin: 0px;
+    background-size: cover;
+    background-repeat: no-repeat;   
+    background-image: linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0.5),
+        rgba(0, 0, 0, 0.5)
+       ),  
+       url("PortadaPregraham.jpg");
+    display: flex;
+    flex-wrap: wrap;
+    text-align: center;
+}
+.Contenido{
+    margin-top: 6%;  
+    margin-left: 5%;  
+    margin-right: 5%;
+}
+.Contenido img{
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 20%;
+}
+.Contenido h1{
+    color: white;
+}
+.Contenido p{
+    color: white;
+}
+
+#parte1{
+    flex: 1;
+}
+#parte2{
+    flex: 1;
+}
+#parte3{
+    flex: 1;
+}
+
+
+.Menu{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+    display: none;
+    margin-left: 5%;
+}
+
+.iconMenu{
+    background-size: cover;
+    width: 8%;
+    margin-right: 20px;
+}
+
+
+
+@media screen  and (max-width:1120px){
+    #Present{
+        height: 400px; 
+    }
+    .ContenedorEnlace{
+        width: 40%;     
+    }
+}
+
+@media screen  and (max-width:850px){
+    #Present{
+        height: 300px;
+        
+    }
+    .ContenedorEnlace{
+        width: 75%;     
+    }
+    h1{ 
+        max-height: 120px;
+        -webkit-line-clamp: 3; 
+    }
+    p{
+        -webkit-line-clamp: 5; 
+    }
+    .menu li a{        
+        font-size: 18px;     
+    }
+}
+@media screen  and (max-width:699px){
+    .Menu{
+        margin-top: 20px;
+        margin-bottom: 20px;
+        text-align: center;
+        display: none;
+    }
+    .Menu a{
+        text-decoration: none;
+    }
+    .iconMenu{
+        background-size: cover;
+        width: 10%;
+        margin-right: 20px;
+    }
+    #MenuEditor{
+        display: none;
+    }
+    .Contenido{
+        margin-top: 6%;         
+    }
+
+    #parte2{
+        display: none;
+    }
+
+    .menu li a{        
+        font-size: 16px;     
+    }
+
+}
+@media screen  and (max-width:599px){
+    .menu li a{        
+        font-size: 13px;     
+    }
+}
+
